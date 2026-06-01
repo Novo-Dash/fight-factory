@@ -7,7 +7,7 @@ export function PatternBg() {
         backgroundImage: 'url(/kids/imagem/pattern.webp)',
         backgroundRepeat: 'repeat',
         backgroundSize: '320px',
-        opacity: 0.08,
+        opacity: 0.03,
         zIndex: 0,
       }}
     />

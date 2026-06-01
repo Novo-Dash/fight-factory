@@ -111,7 +111,7 @@ export function WhyBeginners() {
               }}
             >
               <img
-                src="/images/9.jpg"
+                src="/images/9.webp"
                 alt="Fight Factory Jiu-Jitsu"
                 style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }}
               />

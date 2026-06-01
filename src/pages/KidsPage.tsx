@@ -151,7 +151,7 @@ function Hero() {
 
   return (
     <section style={{ background: '#FFFFFF', minHeight: '100vh', paddingTop: 'clamp(5rem,4rem + 3vw,7rem)', paddingBottom: 'clamp(2rem,1rem + 3vw,4rem)', display: 'flex', flexDirection: 'column', overflow: 'hidden', position: 'relative' }}>
-      <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: 'url(/kids/imagem/pattern.jpg)', backgroundRepeat: 'repeat', backgroundSize: '320px', opacity: 0.08, zIndex: 0 }} />
+      <PatternBg />
 
       <div className="max-w-[1440px] mx-auto px-4 md:px-8 w-full" style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, position: 'relative', zIndex: 1 }}>
         <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)] items-center" style={{ gap: 'clamp(2rem,1rem + 4vw,4rem)', flexGrow: 1 }}>
