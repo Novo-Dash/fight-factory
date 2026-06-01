@@ -38,7 +38,6 @@ export function Hero() {
         style={{ zIndex: 0 }}
       >
         <source src="/videos/1.webm" type="video/webm" />
-        <source src="/videos/1.mp4" type="video/mp4" />
       </video>
 
       {/* Dark overlay */}

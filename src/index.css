@@ -17,6 +17,28 @@
 }
 
 @font-face {
+  font-family: 'SuperbusyActivity';
+  src: url('/kids/fonte/SuperbusyActivity-Regular.ttf') format('truetype');
+  font-display: swap;
+  font-weight: 400;
+}
+
+@keyframes hero-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.75); }
+}
+
+@keyframes facility-scroll-up {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+
+@keyframes testimonials-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@font-face {
   font-family: 'Bebas Neue';
   src: url('/fonts/BebasNeue-Regular.woff2') format('woff2');
   font-display: swap;
