@@ -38,12 +38,13 @@ export function Gallery() {
   useEffect(() => {
     const el = ref.current
     if (!el) return
+    const track = el
     let id: number
     function tick() {
       if (!pausedRef.current) {
-        el.scrollLeft += SPEED
-        if (el.scrollLeft >= el.scrollWidth / 2) {
-          el.scrollLeft = 0
+        track.scrollLeft += SPEED
+        if (track.scrollLeft >= track.scrollWidth / 2) {
+          track.scrollLeft = 0
         }
       }
       id = requestAnimationFrame(tick)
