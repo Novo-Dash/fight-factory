@@ -46,12 +46,6 @@ export function Facility() {
     return () => clearInterval(id)
   }, [paused, total])
 
-  // 3 visible: current, +1, +2
-  const visible = [0, 1, 2].map(offset => ({
-    src: images[(current + offset) % total],
-    idx: (current + offset) % total,
-  }))
-
   return (
     <section style={{ background: '#FFFFFF', padding: '96px 0', position: 'relative', overflow: 'hidden' }}>
       <TrianglePattern opacity={0.10} />

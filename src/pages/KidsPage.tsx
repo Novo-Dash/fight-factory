@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import { BookingProvider } from '../booking/BookingProvider'
 import { KidsNavbar } from '../components/layout/KidsNavbar'
 import { Footer } from '../components/sections/Footer'
-import { Button } from '../components/ui/Button'
 import { Badge } from '../components/ui/Badge'
 import { TrianglePattern } from '../components/ui/TrianglePattern'
 import { PatternBg } from '../components/ui/PatternBg'
@@ -75,18 +74,6 @@ const facilityFeatures = [
   'Clean and organized facility',
 ]
 
-const colA = [
-  { src: '/kids/imagem/gallery/1.webp', alt: 'Kids training' },
-  { src: '/kids/imagem/gallery/2.webp', alt: 'Kids class' },
-  { src: '/kids/imagem/gallery/3.webp', alt: 'Academy' },
-]
-const colB = [
-  { src: '/kids/imagem/gallery/4.webp', alt: 'Training session' },
-  { src: '/kids/imagem/gallery/5.webp', alt: 'Kids program' },
-  { src: '/kids/imagem/gallery/6.webp', alt: 'Facility' },
-]
-const trackA = [...colA, ...colA, ...colA]
-const trackB = [...colB, ...colB, ...colB]
 
 const testimonials = [
   { id: '1', name: 'Vipin T.',   rating: 5, text: "The training here is incredibly technical. What impressed me most is how the upper belts pay close attention to every student, correcting technique and making sure you're learning the right way. Great academy.", timeAgo: '2 months ago', avatarBg: '#4285F4' },
