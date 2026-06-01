@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Badge } from '../ui/Badge'
 import { Button } from '../ui/Button'
 import { TrianglePattern } from '../ui/TrianglePattern'
@@ -23,6 +23,14 @@ const images = [
   '/images/galeira%202/9.webp',
 ]
 
+const track = [...images, ...images]
+
+const CARD_W = 320
+const CARD_H = 420
+const GAP = 12
+const SPEED = 0.5
+const JUMP = 340
+
 function FeatureIcon() {
   return (
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="shrink-0 mt-0.5">
@@ -33,18 +41,38 @@ function FeatureIcon() {
 }
 
 export function Facility() {
-  const [current, setCurrent] = useState(0)
-  const [paused, setPaused] = useState(false)
-  const total = images.length
-
-  function prev() { setPaused(true); setCurrent(i => (i - 1 + total) % total) }
-  function next() { setPaused(true); setCurrent(i => (i + 1) % total) }
+  const ref = useRef<HTMLDivElement>(null)
+  const [hovered, setHovered] = useState(false)
+  const pausedRef = useRef(false)
+  pausedRef.current = hovered
 
   useEffect(() => {
-    if (paused) return
-    const id = setInterval(() => setCurrent(i => (i + 1) % total), 3000)
-    return () => clearInterval(id)
-  }, [paused, total])
+    const el = ref.current
+    if (!el) return
+    const track = el
+    let id: number
+    function tick() {
+      if (!pausedRef.current) {
+        track.scrollLeft += SPEED
+        if (track.scrollLeft >= track.scrollWidth / 2) {
+          track.scrollLeft = 0
+        }
+      }
+      id = requestAnimationFrame(tick)
+    }
+    id = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(id)
+  }, [])
+
+  function go(dir: 'prev' | 'next') {
+    const el = ref.current
+    if (!el) return
+    pausedRef.current = true
+    el.scrollLeft += dir === 'next' ? JUMP : -JUMP
+    if (el.scrollLeft >= el.scrollWidth / 2) el.scrollLeft -= el.scrollWidth / 2
+    if (el.scrollLeft < 0) el.scrollLeft += el.scrollWidth / 2
+    setTimeout(() => { pausedRef.current = hovered }, 600)
+  }
 
   return (
     <section style={{ background: '#FFFFFF', padding: '96px 0', position: 'relative', overflow: 'hidden' }}>
@@ -84,73 +112,62 @@ export function Facility() {
             </Button>
           </div>
 
-          {/* Right: 2-photo carousel */}
-          <div className="md:col-span-7 flex flex-col gap-4">
+          {/* Right: continuous scroll carousel */}
+          <div className="md:col-span-7">
+            <div style={{ position: 'relative' }}>
 
-            {/* 2 photos */}
-            <div className="grid grid-cols-2 gap-3">
-              {[0, 1].map(offset => {
-                const src = images[(current + offset) % total]
-                const tall = offset === 0
-                return (
-                  <div
-                    key={`${current}-${offset}`}
-                    style={{
-                      borderRadius: 16,
-                      overflow: 'hidden',
-                      aspectRatio: tall ? '3/4' : '4/5',
-                      boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
-                      background: '#1c1c1c',
-                      alignSelf: offset === 1 ? 'flex-end' : 'flex-start',
-                      transition: 'opacity 0.35s ease',
-                    }}
-                  >
-                    <img
-                      src={src}
-                      alt={`facility ${(current + offset) % total + 1}`}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                      loading="lazy"
-                    />
+              {/* Fade edges */}
+              <div style={{
+                position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none',
+                background: 'linear-gradient(90deg, #fff 0%, transparent 12%, transparent 88%, #fff 100%)',
+              }} />
+
+              {/* Prev */}
+              <button
+                onClick={() => go('prev')}
+                style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', zIndex: 5, width: 44, height: 44, borderRadius: '50%', background: '#fff', border: '1.5px solid #e0e0e0', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 16px rgba(0,0,0,0.12)' }}
+                onMouseEnter={e => { e.currentTarget.style.background = '#0A0A0A'; e.currentTarget.style.color = '#fff' }}
+                onMouseLeave={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.color = 'inherit' }}
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              </button>
+
+              {/* Next */}
+              <button
+                onClick={() => go('next')}
+                style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', zIndex: 5, width: 44, height: 44, borderRadius: '50%', background: '#fff', border: '1.5px solid #e0e0e0', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 16px rgba(0,0,0,0.12)' }}
+                onMouseEnter={e => { e.currentTarget.style.background = '#0A0A0A'; e.currentTarget.style.color = '#fff' }}
+                onMouseLeave={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.color = 'inherit' }}
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              </button>
+
+              {/* Scrollable track */}
+              <div
+                ref={ref}
+                onMouseEnter={() => setHovered(true)}
+                onMouseLeave={() => setHovered(false)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: GAP,
+                  overflowX: 'auto',
+                  scrollbarWidth: 'none',
+                  width: '100%',
+                  height: CARD_H,
+                }}
+                className="[&::-webkit-scrollbar]:hidden"
+              >
+                {track.map((src, i) => (
+                  <div key={i} style={{ flexShrink: 0, width: CARD_W, height: CARD_H, borderRadius: 14, overflow: 'hidden', background: '#eee' }}>
+                    <img src={src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} loading="lazy" />
                   </div>
-                )
-              })}
-            </div>
-
-            {/* Controls */}
-            <div className="flex items-center justify-between">
-              {/* Dots */}
-              <div className="flex gap-2 items-center">
-                {images.map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => { setPaused(true); setCurrent(i) }}
-                    style={{ width: i === current ? 24 : 8, height: 8, borderRadius: 999, background: i === current ? '#0A0A0A' : '#D8D8D8', border: 'none', cursor: 'pointer', transition: 'all 0.3s ease', padding: 0 }}
-                  />
                 ))}
               </div>
 
-              {/* Arrows */}
-              <div className="flex gap-2">
-                <button
-                  onClick={prev}
-                  style={{ width: 44, height: 44, borderRadius: '50%', border: '1.5px solid #0A0A0A', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s ease' }}
-                  onMouseEnter={e => { e.currentTarget.style.background = '#0A0A0A'; e.currentTarget.style.color = '#fff' }}
-                  onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'inherit' }}
-                >
-                  <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                </button>
-                <button
-                  onClick={next}
-                  style={{ width: 44, height: 44, borderRadius: '50%', border: '1.5px solid #0A0A0A', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s ease' }}
-                  onMouseEnter={e => { e.currentTarget.style.background = '#0A0A0A'; e.currentTarget.style.color = '#fff' }}
-                  onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'inherit' }}
-                >
-                  <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                </button>
-              </div>
             </div>
-
           </div>
+
         </div>
       </div>
     </section>
