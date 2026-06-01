@@ -51,7 +51,7 @@ export function Coach() {
               aspectRatio: '3/4',
             }}>
               <img
-                src="/images/8.webp"
+                src="/images/10.png"
                 alt="Coach Rodrigo Cabral"
                 className="w-full h-full object-cover object-top"
               />
