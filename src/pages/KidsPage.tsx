@@ -469,7 +469,7 @@ function KidsFacility() {
   }, [paused, total])
 
   // Visible: current, next, next+1
-  const visible = [0, 1, 2].map(offset => allFacilityPhotos[(current + offset) % total])
+  const photo = allFacilityPhotos[current]
 
   return (
     <section style={{ background: '#FFFFFF', padding: '96px 0', position: 'relative' }}>
@@ -499,57 +499,53 @@ function KidsFacility() {
             </button>
           </div>
 
-          <div className="md:col-span-7 flex flex-col gap-4">
-            {/* Photos grid */}
-            <div className="grid grid-cols-3 gap-3">
-              {visible.map((photo, i) => (
-                <div
-                  key={`${current}-${i}`}
-                  className="overflow-hidden"
-                  style={{
-                    borderRadius: 14,
-                    aspectRatio: '3/4',
-                    transition: 'opacity 0.4s ease, transform 0.4s ease',
-                    boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
-                    transform: i === 1 ? 'translateY(-16px)' : 'translateY(0)',
-                  }}
-                >
-                  <img
-                    src={photo.src}
-                    alt={photo.alt}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                    loading="lazy"
-                  />
-                </div>
-              ))}
-            </div>
+          <div className="md:col-span-7">
+            {/* 1 large photo with side arrows */}
+            <div style={{ position: 'relative', borderRadius: 20, overflow: 'hidden', aspectRatio: '4/3', boxShadow: '0 16px 56px rgba(0,0,0,0.14)', background: '#1c1c1c' }}>
+              <img
+                key={current}
+                src={photo.src}
+                alt={photo.alt}
+                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', animation: 'fadeIn 0.4s ease' }}
+                loading="lazy"
+              />
 
-            {/* Controls — tudo centralizado */}
-            <div className="flex items-center justify-center gap-4">
+              {/* Left arrow */}
               <button
                 onClick={prev}
-                style={{ width: 40, height: 40, borderRadius: '50%', border: '1.5px solid #0A0A0A', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
-                onMouseEnter={e => { e.currentTarget.style.background = '#0A0A0A'; e.currentTarget.style.color = '#fff' }}
-                onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'inherit' }}
+                style={{ position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)', width: 44, height: 44, borderRadius: '50%', background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(8px)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 12px rgba(0,0,0,0.15)', transition: 'background 0.2s', zIndex: 2 }}
+                onMouseEnter={e => { e.currentTarget.style.background = '#fff' }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.85)' }}
               >
-                <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="#0A0A0A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </button>
 
-              <div className="flex gap-2 items-center">
+              {/* Right arrow */}
+              <button
+                onClick={next}
+                style={{ position: 'absolute', right: 16, top: '50%', transform: 'translateY(-50%)', width: 44, height: 44, borderRadius: '50%', background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(8px)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 12px rgba(0,0,0,0.15)', transition: 'background 0.2s', zIndex: 2 }}
+                onMouseEnter={e => { e.currentTarget.style.background = '#fff' }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.85)' }}
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3L11 8L6 13" stroke="#0A0A0A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              </button>
+
+              {/* Dots overlay bottom */}
+              <div style={{ position: 'absolute', bottom: 16, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 6, zIndex: 2 }}>
                 {allFacilityPhotos.map((_, i) => (
-                  <button key={i} onClick={() => { setPaused(true); setCurrent(i) }} style={{ width: i === current ? 24 : 8, height: 8, borderRadius: 999, background: i === current ? '#CC0000' : '#D8D8D8', border: 'none', cursor: 'pointer', transition: 'all 0.3s ease', padding: 0 }} />
+                  <button key={i} onClick={() => { setPaused(true); setCurrent(i) }}
+                    style={{ width: i === current ? 24 : 8, height: 8, borderRadius: 999, background: i === current ? '#CC0000' : 'rgba(255,255,255,0.6)', border: 'none', cursor: 'pointer', transition: 'all 0.3s ease', padding: 0 }}
+                  />
                 ))}
               </div>
 
-              <button
-                onClick={next}
-                style={{ width: 40, height: 40, borderRadius: '50%', border: '1.5px solid #0A0A0A', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
-                onMouseEnter={e => { e.currentTarget.style.background = '#0A0A0A'; e.currentTarget.style.color = '#fff' }}
-                onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'inherit' }}
-              >
-                <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              </button>
+              {/* Counter */}
+              <div style={{ position: 'absolute', top: 16, right: 16, background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(8px)', color: '#fff', fontSize: '0.75rem', fontWeight: 600, padding: '4px 10px', borderRadius: 999, zIndex: 2 }}>
+                {current + 1} / {total}
+              </div>
             </div>
+
+            <style>{`@keyframes fadeIn { from { opacity: 0.6; } to { opacity: 1; } }`}</style>
           </div>
         </div>
       </div>
