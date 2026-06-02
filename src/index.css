@@ -17,6 +17,13 @@
 }
 
 @font-face {
+  font-family: 'ChildGorlex';
+  src: url('/kids/fonte/Child Gorlex.otf') format('opentype');
+  font-display: swap;
+  font-weight: 400;
+}
+
+@font-face {
   font-family: 'SuperbusyActivity';
   src: url('/kids/fonte/SuperbusyActivity-Regular.ttf') format('truetype');
   font-display: swap;

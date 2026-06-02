@@ -5,7 +5,7 @@ export function KidsMarquee() {
   return (
     <div
       className="overflow-hidden py-4"
-      style={{ background: '#0A0A0A' }}
+      style={{ background: '#1E5EBF' }}
       aria-hidden="true"
     >
       <div
@@ -17,7 +17,7 @@ export function KidsMarquee() {
             key={i}
             className="text-white shrink-0"
             style={{
-              fontFamily: "'SuperbusyActivity', 'Anton', sans-serif",
+              fontFamily: "'ChildGorlex', 'SuperbusyActivity', 'Anton', sans-serif",
               fontSize: 'clamp(1.25rem, 2vw, 1.75rem)',
               letterSpacing: '0.12em',
               paddingRight: '0.5rem',

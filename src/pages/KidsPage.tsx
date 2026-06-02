@@ -18,6 +18,7 @@ const whyBenefits = [
   { text: 'No experience or athletic background required' },
   { text: 'Build confidence before joining advanced groups' },
 ]
+// copy is exact as provided — no modifications
 
 const programs = [
   {
@@ -132,82 +133,67 @@ function CalendarWidget() {
 
 // ─── SECTIONS ──────────────────────────────────────────────────────────────
 
+const heroSlides = [
+  '/kids/imagem/hero/1.webp',
+]
+
 function Hero() {
-  const contentRef = useRef<HTMLDivElement>(null)
   const { openModal } = useModal()
+  const [slide, setSlide] = useState(0)
 
   useEffect(() => {
-    let ctx: any = null
-    async function initGsap() {
-      const { gsap } = await import('gsap')
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-      ctx = gsap.context(() => {
-        gsap.fromTo(contentRef.current, { opacity: 0, y: 32 }, { opacity: 1, y: 0, duration: 0.95, ease: 'power3.out', delay: 0.15 })
-      })
-    }
-    initGsap()
-    return () => ctx?.revert()
+    const id = window.setInterval(() => setSlide(i => (i + 1) % heroSlides.length), 4000)
+    return () => window.clearInterval(id)
   }, [])
 
   return (
-    <section style={{ background: '#FFFFFF', minHeight: '100vh', paddingTop: 'clamp(5rem,4rem + 3vw,7rem)', paddingBottom: 'clamp(2rem,1rem + 3vw,4rem)', display: 'flex', flexDirection: 'column', overflow: 'hidden', position: 'relative' }}>
-      <PatternBg />
+    <section className="relative w-full flex items-center overflow-hidden" style={{ background: '#FFFFFF', minHeight: '100vh', paddingTop: 0 }}>
+      <div className="relative max-w-[1440px] mx-auto w-full px-4 md:px-8" style={{ zIndex: 1 }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center py-12">
 
-      <div className="max-w-[1440px] mx-auto px-4 md:px-8 w-full" style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, position: 'relative', zIndex: 1 }}>
-        <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)] items-center" style={{ gap: 'clamp(2rem,1rem + 4vw,4rem)', flexGrow: 1 }}>
-
-          {/* LEFT: content */}
-          <div ref={contentRef} className="flex flex-col opacity-0" style={{ gap: 'clamp(1.25rem,0.8rem + 1.5vw,2rem)' }}>
-            <p className="inline-flex items-center" style={{ gap: '0.6em', fontFamily: 'Inter Variable,Inter,sans-serif', fontSize: '0.75rem', fontWeight: 500, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(10,10,10,0.45)' }}>
-              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#CC0000', display: 'inline-block', flexShrink: 0, animation: 'hero-pulse 2s ease-in-out infinite' }} />
+          {/* LEFT: text */}
+          <div className="flex flex-col gap-6">
+            <p className="inline-flex items-center gap-2" style={{ fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(10,10,10,0.5)' }}>
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#1E5EBF', display: 'inline-block', animation: 'hero-pulse 2s ease-in-out infinite' }} />
               Austin, TX · Kids Jiu-Jitsu
             </p>
 
-            <h1 className="text-[#0A0A0A]" style={{ fontFamily: "'SuperbusyActivity','Anton',sans-serif", fontSize: 'clamp(1.25rem,1.2rem + 2.2vw,3.2rem)', letterSpacing: '0.01em', lineHeight: '1.05' }}>
-              Help your child build<br />
-              <span style={{ color: '#CC0000', display: 'inline', position: 'relative' }}>confidence</span>{' '}from their <br />
-              very first Jiu-Jitsu class.
+            <h1 style={{ fontFamily: "'ChildGorlex','SuperbusyActivity','Anton',sans-serif", fontSize: 'clamp(2rem, 3.5vw + 0.5rem, 4rem)', letterSpacing: '0.01em', lineHeight: '1.1', textTransform: 'uppercase', color: '#0A0A0A', margin: 0 }}>
+              <span style={{ color: '#1E5EBF' }}>Help your child<br />build confidence</span><br />
+              from their very<br />first Jiu-Jitsu class.
             </h1>
 
-            <p style={{ color: '#555555', maxWidth: '55ch', fontSize: 'clamp(0.75rem, 0.5rem + 1.5vw, 0.9375rem)', lineHeight: '1.65' }}>
-              Fight Factory helps kids in Austin develop confidence through a beginner-friendly Jiu-Jitsu program designed to make their first steps feel safe, fun, and motivating from day one.
+            <p style={{ color: '#555555', fontSize: 'clamp(0.875rem, 0.5vw + 0.8rem, 1rem)', lineHeight: '1.65', maxWidth: '48ch', margin: 0 }}>
+              Fight Factory helps kids in Austin develop confidence through a beginner-friendly Jiu-Jitsu program designed to make their first steps feel safe, fun, and motivating from day&nbsp;one.
             </p>
 
-            <div className="flex flex-wrap items-center gap-5" style={{ color: 'rgba(10,10,10,0.45)', fontSize: '0.8125rem' }}>
-              <span className="flex items-center gap-1.5"><span className="text-[#0A0A0A] font-semibold">250+</span> Students</span>
-              <span style={{ color: 'rgba(10,10,10,0.2)' }}>·</span>
-              <span className="flex items-center gap-1.5">
-                <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1L8.545 5.09H13L9.545 7.59L10.91 12L7 9.41L3.09 12L4.455 7.59L1 5.09H5.455L7 1Z" fill="#FBBC04" /></svg>
-                <span className="text-[#0A0A0A] font-semibold">5.0</span> Google
-              </span>
-              <span style={{ color: 'rgba(10,10,10,0.2)' }}>·</span>
-              <span className="flex items-center gap-1.5"><span className="text-[#0A0A0A] font-semibold">30+</span> Yrs on the Mats</span>
-            </div>
-
-            <div className="flex flex-wrap gap-4 mt-2">
-              <button onClick={openModal} className="inline-flex items-center gap-2.5 text-white font-semibold cursor-pointer transition-all duration-200 hover:scale-[1.02] active:scale-[0.99] min-h-[52px]" style={{ background: '#CC0000', padding: '1.05rem 1.75rem', fontSize: '0.8125rem', letterSpacing: '0.08em', textTransform: 'uppercase', borderRadius: 6 }}>
-                Book a free trial class <span style={{ display: 'inline-block', transition: 'transform 0.25s ease' }}>→</span>
+            <div className="flex flex-wrap gap-4">
+              <button onClick={openModal} className="inline-flex items-center gap-2 font-semibold cursor-pointer transition-all hover:scale-[1.02] active:scale-[0.99] min-h-[52px]" style={{ background: '#1E5EBF', color: '#fff', padding: '1rem 2rem', fontSize: '0.8125rem', letterSpacing: '0.08em', textTransform: 'uppercase', borderRadius: 6 }}>
+                Book a Free Trial Class →
               </button>
-              <a href="#classes" className="inline-flex items-center gap-2 font-semibold transition-all duration-200 min-h-[52px]" style={{ border: '2px solid rgba(10,10,10,0.25)', color: 'rgba(10,10,10,0.7)', padding: '1.05rem 1.75rem', background: 'transparent', fontSize: '0.8125rem', letterSpacing: '0.08em', textTransform: 'uppercase', textDecoration: 'none', borderRadius: 6 }}
-                onMouseEnter={e => { e.currentTarget.style.borderColor = '#0A0A0A'; e.currentTarget.style.color = '#0A0A0A' }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(10,10,10,0.25)'; e.currentTarget.style.color = 'rgba(10,10,10,0.7)' }}
+              <a href="#classes" className="inline-flex items-center gap-2 font-semibold transition-all min-h-[52px]" style={{ border: '2px solid #0A0A0A', color: '#0A0A0A', padding: '1rem 2rem', fontSize: '0.8125rem', letterSpacing: '0.08em', textTransform: 'uppercase', textDecoration: 'none', borderRadius: 6 }}
+                onMouseEnter={e => { e.currentTarget.style.background = '#0A0A0A'; e.currentTarget.style.color = '#fff' }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#0A0A0A' }}
               >
                 See Programs
               </a>
             </div>
+
           </div>
 
-          {/* RIGHT: video */}
-          <div className="relative" style={{ paddingBottom: '16px', paddingRight: '16px' }}>
-            <div className="absolute inset-0" style={{ background: '#0A0A0A', transform: 'translate(16px, 16px)', zIndex: 0 }} />
-            <div className="relative overflow-hidden w-full aspect-[9/16] md:aspect-[4/5] md:h-[min(78vh,720px)]" style={{ background: '#0A0A0A', zIndex: 1 }}>
-              <video autoPlay muted loop playsInline className="absolute inset-0 w-full h-full object-cover" style={{ zIndex: 1 }}>
-                <source src="/kids/video/1.webm" type="video/webm" />
-              </video>
-              <span className="absolute z-10" style={{ top: '1.25rem', right: '1.25rem', background: '#CC0000', color: '#FFFFFF', padding: '0.55rem 0.85rem', fontFamily: 'Inter Variable,Inter,sans-serif', fontSize: '0.7rem', letterSpacing: '0.15em', textTransform: 'uppercase', fontWeight: 600 }}>
-                Austin, TX
-              </span>
-            </div>
+          {/* RIGHT: hero image */}
+          <div style={{ position: 'absolute', top: '50%', transform: 'translateY(-50%)', right: '3%', width: '46%', height: '85%', borderRadius: 6, overflow: 'hidden', border: '2.5px solid #0A0A0A', boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}>
+            <img
+              src="/kids/imagem/hero/hero-new.webp"
+              alt="Kids Jiu-Jitsu"
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                objectPosition: 'center top',
+                display: 'block',
+              }}
+            />
           </div>
 
         </div>
@@ -218,115 +204,157 @@ function Hero() {
 
 function WhyParents() {
   const { openModal } = useModal()
-  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null)
 
   return (
-    <section style={{ background: '#FFFFFF', padding: '96px 0', overflow: 'hidden', position: 'relative' }}>
-      <PatternBg />
-      <div className="max-w-7xl mx-auto px-4 md:px-8 relative" style={{ zIndex: 1 }}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-start">
+    <section style={{ background: '#F5F7FF', padding: '96px 0', overflow: 'hidden' }}>
+      <div className="max-w-7xl mx-auto px-4 md:px-8">
 
-          {/* LEFT */}
-          <div className="flex flex-col gap-8">
-            <h2 style={{ fontFamily: "'SuperbusyActivity','Anton',sans-serif", fontSize: 'clamp(2.25rem,3.5vw + 0.5rem,3.75rem)', lineHeight: '1.05', color: '#0A0A0A', margin: 0 }}>
-              Why do parents choose{' '}<span style={{ color: '#CC0000' }}>Fight Factory?</span>
-            </h2>
-            <p style={{ color: '#555555', fontSize: '1rem', lineHeight: '1.8', margin: 0 }}>
-              Fight Factory offers a kids onboarding system unique in Austin: children begin with 5 introductory classes in a separate group from the regular classes, designed to build confidence in their first steps:
+        {/* Header */}
+        <div className="mb-10">
+          <h2 style={{ fontFamily: "'ChildGorlex','SuperbusyActivity','Anton',sans-serif", fontSize: 'clamp(2rem,3.5vw + 0.5rem,3.5rem)', lineHeight: '1.1', color: '#0A0A0A', margin: 0 }}>
+            Why do parents choose <span style={{ color: '#1E5EBF', whiteSpace: 'nowrap' }}>Fight Factory?</span>
+          </h2>
+        </div>
+
+        {/* Bento grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gridTemplateRows: 'auto auto', gap: 16 }}>
+
+          {/* Big photo — spans 2 rows left */}
+          <div style={{ gridColumn: '1', gridRow: '1 / 3', borderRadius: 20, overflow: 'hidden', minHeight: 480 }}
+            onMouseEnter={e => { (e.currentTarget.querySelector('img') as HTMLElement).style.transform = 'scale(1.06)' }}
+            onMouseLeave={e => { (e.currentTarget.querySelector('img') as HTMLElement).style.transform = 'scale(1)' }}
+          >
+            <img src="/kids/imagem/2.webp" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.5s ease' }} />
+          </div>
+
+          {/* Title card */}
+          <div style={{ gridColumn: '2 / 4', gridRow: '1', borderRadius: 20, background: '#1E5EBF', padding: '32px 36px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 16, minHeight: 200 }}>
+            <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: '0.9rem', lineHeight: '1.7', margin: 0 }}>
+              Fight Factory offers a kids onboarding system unique in Austin: children begin with 5 introductory classes in a separate group from the regular classes, designed to build confidence in their first steps.
             </p>
-            <div className="overflow-hidden" style={{ borderRadius: '16px' }}>
-              <img src="/kids/imagem/2.webp" alt="Fight Factory Kids Jiu-Jitsu class in Austin, TX" className="w-full object-cover" style={{ aspectRatio: '4/3', objectPosition: 'center top', display: 'block' }} />
-            </div>
+            <button onClick={openModal} style={{ alignSelf: 'flex-start', background: '#fff', color: '#1E5EBF', border: 'none', borderRadius: 6, padding: '0.75rem 1.5rem', fontSize: '0.8rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', cursor: 'pointer' }}>
+              Book Free Trial →
+            </button>
           </div>
 
-          {/* RIGHT */}
-          <div className="flex flex-col justify-between" style={{ gap: '0' }}>
-            <div>
-              {whyBenefits.map((b, i) => (
-                <div key={i}>
-                  <div className="flex items-center gap-5 cursor-default" style={{ borderRadius: '14px', padding: '14px 16px', background: hoveredIdx === i ? '#CC0000' : '#FFFFFF', border: hoveredIdx === i ? '1px solid #CC0000' : '1px solid #E8E8E8', boxShadow: hoveredIdx === i ? '0 12px 40px rgba(204,0,0,0.30)' : '0 2px 8px rgba(0,0,0,0.05)', transform: hoveredIdx === i ? 'translateY(-3px) scale(1.01)' : 'translateY(0) scale(1)', transition: 'all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)' }}
-                    onMouseEnter={() => setHoveredIdx(i)} onMouseLeave={() => setHoveredIdx(null)}
-                  >
-                    <div className="shrink-0 flex items-center justify-center rounded-full" style={{ width: 36, height: 36, minWidth: 36, background: hoveredIdx === i ? '#FFFFFF' : '#CC0000', transition: 'background 0.2s ease' }}>
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5L6.5 12L13 5" stroke={hoveredIdx === i ? '#CC0000' : '#FFFFFF'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ transition: 'stroke 0.2s ease' }} /></svg>
-                    </div>
-                    <span style={{ fontSize: 'clamp(1rem,0.4vw + 0.9rem,1.125rem)', fontWeight: 500, lineHeight: '1.45', color: hoveredIdx === i ? '#FFFFFF' : '#0A0A0A', transition: 'color 0.2s ease' }}>{b.text}</span>
-                  </div>
-                  <div style={{ height: '6px' }} />
+          {/* All benefits as individual cards */}
+          <div style={{ gridColumn: '2', gridRow: '2', borderRadius: 20, background: '#fff', padding: '24px', border: '1.5px solid #E8ECF8', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 8 }}>
+            {whyBenefits.map((b, i) => (
+              <div key={i} className="benefit-hover-card" style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', borderRadius: 10, border: '1.5px solid #E8ECF8', background: '#F8F9FF', cursor: 'default', transition: 'all 0.2s ease' }}
+                onMouseEnter={e => {
+                  const el = e.currentTarget
+                  el.style.background = '#1E5EBF'
+                  el.style.borderColor = '#1E5EBF';
+                  (el.querySelector('.b-icon') as HTMLElement).style.background = 'rgba(255,255,255,0.2)';
+                  (el.querySelector('.b-text') as HTMLElement).style.color = '#fff'
+                }}
+                onMouseLeave={e => {
+                  const el = e.currentTarget
+                  el.style.background = '#F8F9FF'
+                  el.style.borderColor = '#E8ECF8';
+                  (el.querySelector('.b-icon') as HTMLElement).style.background = '#1E5EBF';
+                  (el.querySelector('.b-text') as HTMLElement).style.color = '#333'
+                }}
+              >
+                <div className="b-icon" style={{ width: 28, height: 28, borderRadius: '50%', background: '#1E5EBF', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background 0.2s' }}>
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l2.5 2.5L10 3.5" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </div>
-              ))}
-            </div>
-
-            <div className="mt-4 flex flex-col gap-6">
-              <button onClick={openModal} className="inline-flex items-center gap-3 text-white font-bold cursor-pointer transition-all duration-200 hover:scale-[1.02] active:scale-[0.99] min-h-[56px]" style={{ background: '#0A0A0A', padding: '1rem 2rem', borderRadius: 6, fontSize: '0.8125rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-                Book a free trial class
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
-              </button>
-              <div className="overflow-hidden" style={{ borderRadius: '16px' }}>
-                <img src="/kids/imagem/3.webp" alt="Fight Factory Kids Jiu-Jitsu training in Austin, TX" className="w-full object-cover" style={{ aspectRatio: '16/9', display: 'block' }} />
+                <span className="b-text" style={{ fontSize: '0.85rem', color: '#333', lineHeight: '1.4', fontWeight: 500, transition: 'color 0.2s' }}>{b.text}</span>
               </div>
-            </div>
+            ))}
           </div>
+
+          {/* Photo */}
+          <div style={{ gridColumn: '3', gridRow: '2', borderRadius: 20, overflow: 'hidden', minHeight: 280 }}
+            onMouseEnter={e => { (e.currentTarget.querySelector('img') as HTMLElement).style.transform = 'scale(1.06)' }}
+            onMouseLeave={e => { (e.currentTarget.querySelector('img') as HTMLElement).style.transform = 'scale(1)' }}
+          >
+            <img src="/kids/imagem/gallery/2.webp" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.5s ease' }} />
+          </div>
+
         </div>
       </div>
     </section>
   )
 }
 
-function Programs() {
-  const ref = useRef<HTMLDivElement>(null)
-  const { openModal } = useModal()
+const kidsPrograms = [
+  {
+    id: 'beginner',
+    title: 'Beginner Kids Program',
+    desc: 'Built for children with no experience, using a 5-class onboarding system designed to help kids start confidently.',
+    img: '/kids/imagem/4.webp',
+  },
+  {
+    id: 'kids',
+    title: 'Kids Program',
+    desc: 'Children develop discipline, confidence, focus, and resilience in a safe, structured, family-friendly environment.',
+    img: '/kids/imagem/5.webp',
+  },
+]
 
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const cards = el.querySelectorAll<HTMLElement>('[data-animate]')
-    cards.forEach(card => { card.style.opacity = '0'; card.style.transform = 'translateY(24px)' })
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        cards.forEach((card, i) => {
-          setTimeout(() => { card.style.transition = 'opacity 0.6s ease, transform 0.6s cubic-bezier(0.16,1,0.3,1)'; card.style.opacity = '1'; card.style.transform = 'translateY(0)' }, i * 150)
-        })
-        observer.disconnect()
-      }
-    }, { threshold: 0.1 })
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [])
+function Programs() {
+  const { openModal } = useModal()
+  const [hoveredCard, setHoveredCard] = useState<string | null>(null)
 
   return (
-    <section id="classes" style={{ background: '#FFFFFF', padding: '96px 0', position: 'relative', overflow: 'hidden' }}>
-      <PatternBg />
-      <div className="max-w-7xl mx-auto px-4 md:px-8 relative" style={{ zIndex: 1 }}>
-        <div className="mb-12">
-          <h2 style={{ fontFamily: "'SuperbusyActivity','Anton',sans-serif", fontSize: 'clamp(2.25rem,4vw + 0.5rem,4rem)', lineHeight: '1.0', color: '#0A0A0A', margin: 0 }}>
-            Our <span style={{ color: '#CC0000' }}>Programs</span>
+    <section id="classes" style={{ background: '#F5F7FF', padding: '96px 0', position: 'relative', overflow: 'hidden' }}>
+      <div className="max-w-7xl mx-auto px-4 md:px-8">
+
+        {/* Header */}
+        <div className="text-center mb-12">
+          <span style={{ display: 'inline-block', background: 'rgba(30,94,191,0.1)', color: '#1E5EBF', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', borderRadius: 999, padding: '6px 16px', marginBottom: 12 }}>
+            Programs
+          </span>
+          <h2 style={{ fontFamily: "'ChildGorlex','SuperbusyActivity','Anton',sans-serif", fontSize: 'clamp(2rem,4vw,3.5rem)', lineHeight: '1.05', color: '#0A0A0A', margin: 0 }}>
+            Our classes
           </h2>
         </div>
-        <div ref={ref} className="flex flex-col gap-6">
-          {programs.map((program, i) => {
-            const isPrimary = program.variant === 'primary'
-            const imageRight = i % 2 === 0
-            return (
-              <article key={program.id} data-animate className="relative overflow-hidden grid grid-cols-1 lg:grid-cols-2" style={{ borderRadius: '24px', minHeight: '420px', background: isPrimary ? 'linear-gradient(135deg, #1a1a1a 0%, #0A0A0A 100%)' : '#FFFFFF', border: isPrimary ? 'none' : '1px solid #E8E8E8', boxShadow: isPrimary ? '0 24px 64px rgba(0,0,0,0.22)' : '0 8px 32px rgba(0,0,0,0.07)' }}>
-                <div className={`flex flex-col justify-center gap-6 p-8 lg:p-12 ${imageRight ? 'lg:order-1' : 'lg:order-2'}`}>
-                  <div className="flex flex-col gap-5">
-                    <div style={{ color: isPrimary ? 'rgba(255,255,255,0.7)' : '#CC0000' }}>{program.icon}</div>
-                    <h3 style={{ fontFamily: "'SuperbusyActivity','Anton',sans-serif", fontSize: 'clamp(1.75rem,2.5vw + 0.5rem,2.75rem)', lineHeight: '1.05', color: isPrimary ? '#FFFFFF' : '#0A0A0A', margin: 0 }}>{program.title}</h3>
-                    <p style={{ color: isPrimary ? 'rgba(255,255,255,0.72)' : '#555555', fontSize: 'clamp(1rem,0.5vw + 0.875rem,1.125rem)', lineHeight: '1.75', margin: 0 }}>{program.description}</p>
-                  </div>
-                  <button onClick={openModal} className="self-start inline-flex items-center gap-2 font-semibold cursor-pointer transition-all duration-200 hover:scale-[1.02] active:scale-[0.99] min-h-[48px]" style={{ background: isPrimary ? '#FFFFFF' : '#CC0000', color: isPrimary ? '#0A0A0A' : '#FFFFFF', padding: '0.75rem 1.75rem', borderRadius: 6, fontSize: '0.8125rem', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-                    {program.cta} →
-                  </button>
-                </div>
-                <div className={`relative min-h-[280px] lg:min-h-0 overflow-hidden ${imageRight ? 'lg:order-2' : 'lg:order-1'}`}>
-                  <img src={program.imageSrc} alt={`${program.title} class`} className="absolute inset-0 w-full h-full object-cover" loading="lazy" />
-                </div>
-              </article>
-            )
-          })}
+
+        {/* Two cards side by side */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5" style={{ maxWidth: '1100px', margin: '0 auto' }}>
+          {kidsPrograms.map((p) => (
+            <div key={p.id}
+              onMouseEnter={() => setHoveredCard(p.id)}
+              onMouseLeave={() => setHoveredCard(null)}
+              style={{
+                borderRadius: 20, overflow: 'hidden', background: '#0A0A0A', display: 'flex', flexDirection: 'column',
+                border: hoveredCard === p.id ? '2px solid #1E5EBF' : '2px solid #0A0A0A',
+                boxShadow: hoveredCard === p.id ? '0 20px 60px rgba(0,0,0,0.35)' : '0 8px 32px rgba(0,0,0,0.18)',
+                transform: hoveredCard === null ? 'scale(1)' : hoveredCard === p.id ? 'scale(1.02)' : 'scale(0.97)',
+                filter: hoveredCard === null ? 'none' : hoveredCard === p.id ? 'none' : 'blur(2px) brightness(0.6)',
+                transition: 'transform 0.4s ease, filter 0.4s ease, box-shadow 0.4s ease',
+                zIndex: hoveredCard === p.id ? 2 : 1,
+                position: 'relative',
+              }}>
+              {/* Photo — top 60% */}
+              <div style={{ height: 360, overflow: 'hidden', flexShrink: 0 }}>
+                <img
+                  src={p.img}
+                  alt={p.title}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block' }}
+                />
+              </div>
+
+              {/* Text section — below photo */}
+              <div style={{ padding: '28px', display: 'flex', flexDirection: 'column', gap: 14, flexGrow: 1, background: hoveredCard === p.id ? '#1E5EBF' : '#0A0A0A', transition: 'background 0.4s ease' }}>
+                <h3 style={{ fontFamily: "'ChildGorlex','SuperbusyActivity','Anton',sans-serif", fontSize: 'clamp(1.4rem,2vw,1.85rem)', color: '#FFFFFF', lineHeight: '1.05', margin: 0, textTransform: 'uppercase', letterSpacing: '0.02em' }}>
+                  {p.title}
+                </h3>
+                <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '0.9rem', lineHeight: '1.65', margin: 0 }}>
+                  {p.desc}
+                </p>
+                <button onClick={openModal}
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', background: hoveredCard === p.id ? '#FFFFFF' : 'rgba(255,255,255,0.08)', color: hoveredCard === p.id ? '#1E5EBF' : '#fff', border: hoveredCard === p.id ? '1.5px solid #fff' : '1.5px solid rgba(255,255,255,0.18)', borderRadius: 8, padding: '0.875rem 1.5rem', fontSize: '0.8rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer', transition: 'all 0.4s ease', marginTop: 'auto' }}
+                >
+                  Book a free trial class
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10H16M16 10L11 5M16 10L11 15" stroke={hoveredCard === p.id ? '#1E5EBF' : 'white'} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
+
       </div>
     </section>
   )
@@ -455,7 +483,6 @@ function KidsFacility() {
     return () => clearInterval(id)
   }, [paused, total])
 
-  // Visible: current, next, next+1
   const photo = allFacilityPhotos[current]
 
   return (
@@ -463,8 +490,8 @@ function KidsFacility() {
       <TrianglePattern opacity={0.10} />
       <PatternBg />
       <div className="max-w-7xl mx-auto px-4 md:px-8 relative" style={{ zIndex: 1 }}>
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16 items-center">
-          <div className="md:col-span-5">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16 items-stretch">
+          <div className="md:col-span-5 flex flex-col justify-center">
             <h2 className="text-[#0A0A0A] mb-5" style={{ fontFamily: "'SuperbusyActivity','Anton',sans-serif", fontSize: 'clamp(2rem,4vw + 0.75rem,3.5rem)', letterSpacing: '0.01em', lineHeight: '1.05' }}>
               <span style={{ color: '#CC0000' }}>For kids to learn confidently,</span>{' '}they need the right environment.
             </h2>
@@ -486,52 +513,27 @@ function KidsFacility() {
             </button>
           </div>
 
-          <div className="md:col-span-7">
-            {/* 1 large photo with side arrows */}
-            <div style={{ position: 'relative', borderRadius: 20, overflow: 'hidden', aspectRatio: '4/3', boxShadow: '0 16px 56px rgba(0,0,0,0.14)', background: '#1c1c1c' }}>
-              <img
-                key={current}
-                src={photo.src}
-                alt={photo.alt}
-                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', animation: 'fadeIn 0.4s ease' }}
-                loading="lazy"
-              />
-
-              {/* Left arrow */}
-              <button
-                onClick={prev}
-                style={{ position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)', width: 44, height: 44, borderRadius: '50%', background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(8px)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 12px rgba(0,0,0,0.15)', transition: 'background 0.2s', zIndex: 2 }}
-                onMouseEnter={e => { e.currentTarget.style.background = '#fff' }}
-                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.85)' }}
-              >
+          <div className="md:col-span-7" style={{ display: 'flex', flexDirection: 'column' }}>
+            <div style={{ position: 'relative', borderRadius: 20, overflow: 'hidden', flex: 1, minHeight: 400, boxShadow: '0 16px 56px rgba(0,0,0,0.14)', background: '#1c1c1c' }}>
+              <img key={current} src={photo.src} alt={photo.alt} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', animation: 'fadeIn 0.4s ease' }} loading="lazy" />
+              <button onClick={prev} style={{ position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)', width: 44, height: 44, borderRadius: '50%', background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(8px)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 12px rgba(0,0,0,0.15)', transition: 'background 0.2s', zIndex: 2 }}
+                onMouseEnter={e => { e.currentTarget.style.background = '#fff' }} onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.85)' }}>
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="#0A0A0A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </button>
-
-              {/* Right arrow */}
-              <button
-                onClick={next}
-                style={{ position: 'absolute', right: 16, top: '50%', transform: 'translateY(-50%)', width: 44, height: 44, borderRadius: '50%', background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(8px)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 12px rgba(0,0,0,0.15)', transition: 'background 0.2s', zIndex: 2 }}
-                onMouseEnter={e => { e.currentTarget.style.background = '#fff' }}
-                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.85)' }}
-              >
+              <button onClick={next} style={{ position: 'absolute', right: 16, top: '50%', transform: 'translateY(-50%)', width: 44, height: 44, borderRadius: '50%', background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(8px)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 12px rgba(0,0,0,0.15)', transition: 'background 0.2s', zIndex: 2 }}
+                onMouseEnter={e => { e.currentTarget.style.background = '#fff' }} onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.85)' }}>
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3L11 8L6 13" stroke="#0A0A0A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
               </button>
-
-              {/* Dots overlay bottom */}
               <div style={{ position: 'absolute', bottom: 16, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 6, zIndex: 2 }}>
                 {allFacilityPhotos.map((_, i) => (
                   <button key={i} onClick={() => { setPaused(true); setCurrent(i) }}
-                    style={{ width: i === current ? 24 : 8, height: 8, borderRadius: 999, background: i === current ? '#CC0000' : 'rgba(255,255,255,0.6)', border: 'none', cursor: 'pointer', transition: 'all 0.3s ease', padding: 0 }}
-                  />
+                    style={{ width: i === current ? 24 : 8, height: 8, borderRadius: 999, background: i === current ? '#CC0000' : 'rgba(255,255,255,0.6)', border: 'none', cursor: 'pointer', transition: 'all 0.3s ease', padding: 0 }} />
                 ))}
               </div>
-
-              {/* Counter */}
               <div style={{ position: 'absolute', top: 16, right: 16, background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(8px)', color: '#fff', fontSize: '0.75rem', fontWeight: 600, padding: '4px 10px', borderRadius: 999, zIndex: 2 }}>
                 {current + 1} / {total}
               </div>
             </div>
-
             <style>{`@keyframes fadeIn { from { opacity: 0.6; } to { opacity: 1; } }`}</style>
           </div>
         </div>

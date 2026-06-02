@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { testimonials } from '../../data/testimonials'
 import { TrianglePattern } from '../ui/TrianglePattern'
 
@@ -32,19 +32,37 @@ function ChevronRight() {
   )
 }
 
+const CARD_W = 380
+const GAP = 20
+
 export function Testimonials() {
-  const [current, setCurrent] = useState(0)
+  const trackRef = useRef<HTMLDivElement>(null)
   const [hovered, setHovered] = useState<number | null>(null)
+  const [current, setCurrent] = useState(0)
   const total = testimonials.length
 
-  const prev = () => setCurrent((c) => (c - 1 + total) % total)
-  const next = () => setCurrent((c) => (c + 1) % total)
+  function go(dir: 'prev' | 'next') {
+    const el = trackRef.current
+    if (!el) return
+    const newIdx = dir === 'next'
+      ? Math.min(current + 1, total - 1)
+      : Math.max(current - 1, 0)
+    setCurrent(newIdx)
+    const start = el.scrollLeft
+    const distance = dir === 'next' ? CARD_W + GAP : -(CARD_W + GAP)
+    const duration = 500
+    const startTime = performance.now()
+    function ease(t: number) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t }
+    function animate(now: number) {
+      const t = Math.min((now - startTime) / duration, 1)
+      el.scrollLeft = start + distance * ease(t)
+      if (t < 1) requestAnimationFrame(animate)
+    }
+    requestAnimationFrame(animate)
+  }
 
-  const visible = [
-    testimonials[current % total],
-    testimonials[(current + 1) % total],
-    testimonials[(current + 2) % total],
-  ]
+  const prev = () => go('prev')
+  const next = () => go('next')
 
   return (
     <section id="reviews" style={{ background: '#FFFFFF', padding: '96px 0', overflow: 'hidden', position: 'relative' }}>
@@ -80,60 +98,50 @@ export function Testimonials() {
           </div>
         </div>
 
-        {/* Cards — blur only on hover of sibling */}
-        <div
-          className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-12"
-          onMouseLeave={() => setHovered(null)}
-        >
-          {visible.map((t, i) => {
-            const isHovered = hovered === i
-            const isDimmed = hovered !== null && hovered !== i
-
-            return (
-              <div
-                key={`${t.id}-${current}-${i}`}
-                className="flex flex-col justify-between rounded-2xl p-6"
-                style={{
-                  background: '#FFFFFF',
-                  border: isHovered ? '1px solid #D0D0D0' : '1px solid #E8E8E8',
-                  boxShadow: isHovered
-                    ? '0 8px 40px rgba(0,0,0,0.12)'
-                    : '0 1px 4px rgba(0,0,0,0.05)',
-                  transform: isHovered ? 'translateY(-6px)' : 'translateY(0)',
-                  opacity: isDimmed ? 0.4 : 1,
-                  filter: isDimmed ? 'blur(2px)' : 'none',
-                  transition: 'all 0.3s cubic-bezier(0.34, 1.1, 0.64, 1)',
-                  minHeight: '220px',
-                  cursor: 'default',
-                }}
-                onMouseEnter={() => setHovered(i)}
-              >
-                {/* Stars */}
-                <div>
-                  <div className="flex gap-0.5 mb-4">
-                    {[...Array(5)].map((_, i) => <StarFilled key={i} />)}
-                  </div>
-                  <p className="text-[#333333]" style={{ fontSize: '0.9375rem', lineHeight: '1.75' }}>
-                    "{t.text}"
-                  </p>
-                </div>
-
-                {/* Author */}
-                <div className="flex items-center gap-3 mt-6">
-                  <div
-                    className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 text-sm font-bold text-white"
-                    style={{ background: t.avatarBg ?? '#4285F4' }}
-                  >
-                    {getInitials(t.name)}
-                  </div>
+        {/* Scrollable track */}
+        <div style={{ position: 'relative', marginBottom: 40 }} onMouseLeave={() => setHovered(null)}>
+          <div
+            ref={trackRef}
+            style={{ display: 'flex', gap: GAP, overflowX: 'auto', scrollbarWidth: 'none', paddingBottom: 4 }}
+            className="[&::-webkit-scrollbar]:hidden"
+          >
+            {testimonials.map((t, i) => {
+              const isHovered = hovered === i
+              const isDimmed = hovered !== null && hovered !== i
+              return (
+                <div
+                  key={t.id}
+                  className="flex flex-col justify-between rounded-2xl p-6"
+                  style={{
+                    flexShrink: 0, width: CARD_W,
+                    background: '#FFFFFF',
+                    border: isHovered ? '1px solid #D0D0D0' : '1px solid #E8E8E8',
+                    boxShadow: isHovered ? '0 8px 40px rgba(0,0,0,0.12)' : '0 1px 4px rgba(0,0,0,0.05)',
+                    transform: isHovered ? 'translateY(-6px)' : 'translateY(0)',
+                    opacity: isDimmed ? 0.4 : 1,
+                    filter: isDimmed ? 'blur(2px)' : 'none',
+                    transition: 'all 0.3s cubic-bezier(0.34, 1.1, 0.64, 1)',
+                    minHeight: 220, cursor: 'default',
+                  }}
+                  onMouseEnter={() => setHovered(i)}
+                >
                   <div>
-                    <div className="text-[#0A0A0A] font-semibold text-sm">{t.name}</div>
-                    <div className="text-[#AAAAAA] text-xs mt-0.5">{t.timeAgo}</div>
+                    <div className="flex gap-0.5 mb-4">{[...Array(5)].map((_, j) => <StarFilled key={j} />)}</div>
+                    <p className="text-[#333333]" style={{ fontSize: '0.9375rem', lineHeight: '1.75' }}>"{t.text}"</p>
+                  </div>
+                  <div className="flex items-center gap-3 mt-6">
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 text-sm font-bold text-white" style={{ background: t.avatarBg ?? '#4285F4' }}>
+                      {getInitials(t.name)}
+                    </div>
+                    <div>
+                      <div className="text-[#0A0A0A] font-semibold text-sm">{t.name}</div>
+                      <div className="text-[#AAAAAA] text-xs mt-0.5">{t.timeAgo}</div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            )
-          })}
+              )
+            })}
+          </div>
         </div>
 
         {/* Navigation */}
@@ -151,7 +159,23 @@ export function Testimonials() {
             {testimonials.map((_, i) => (
               <button
                 key={i}
-                onClick={() => setCurrent(i)}
+                onClick={() => {
+                  const el = trackRef.current
+                  if (!el) return
+                  setCurrent(i)
+                  const start = el.scrollLeft
+                  const target = i * (CARD_W + GAP)
+                  const distance = target - start
+                  const duration = 500
+                  const startTime = performance.now()
+                  function ease(t: number) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t }
+                  function animate(now: number) {
+                    const t = Math.min((now - startTime) / duration, 1)
+                    el.scrollLeft = start + distance * ease(t)
+                    if (t < 1) requestAnimationFrame(animate)
+                  }
+                  requestAnimationFrame(animate)
+                }}
                 className="rounded-full transition-all duration-300 cursor-pointer"
                 style={{
                   width: '10px',
