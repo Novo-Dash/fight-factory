@@ -1,5 +1,4 @@
 import { useRef, useEffect, useState } from 'react'
-import { Badge } from '../ui/Badge'
 import { Button } from '../ui/Button'
 import { TrianglePattern } from '../ui/TrianglePattern'
 
@@ -55,14 +54,6 @@ function FeatureCard({ text }: { text: string }) {
   )
 }
 
-function FeatureIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="shrink-0 mt-0.5">
-      <circle cx="10" cy="10" r="10" fill="#0A0A0A" fillOpacity="0.1" />
-      <path d="M6 10L8.5 12.5L14 7" stroke="#0A0A0A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  )
-}
 
 export function Facility() {
   const ref = useRef<HTMLDivElement>(null)
@@ -95,9 +86,10 @@ export function Facility() {
     const duration = 600
     const startTime = performance.now()
     function ease(t: number) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t }
+    const track = el
     function animate(now: number) {
       const t = Math.min((now - startTime) / duration, 1)
-      el.scrollLeft = start + distance * ease(t)
+      track.scrollLeft = start + distance * ease(t)
       if (t < 1) requestAnimationFrame(animate)
       else setTimeout(() => { pausedRef.current = hovered }, 200)
     }

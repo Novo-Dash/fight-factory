@@ -54,14 +54,15 @@ export function Gallery() {
     const el = ref.current
     if (!el) return
     pausedRef.current = true
-    const start = el.scrollLeft
+    const track = el
+    const start = track.scrollLeft
     const distance = dir === 'next' ? JUMP : -JUMP
     const duration = 600
     const startTime = performance.now()
     function ease(t: number) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t }
     function animate(now: number) {
       const t = Math.min((now - startTime) / duration, 1)
-      el.scrollLeft = start + distance * ease(t)
+      track.scrollLeft = start + distance * ease(t)
       if (t < 1) requestAnimationFrame(animate)
       else setTimeout(() => { pausedRef.current = hovered }, 200)
     }
