@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { Button } from '../ui/Button'
 import { TrianglePattern } from '../ui/TrianglePattern'
+import { useModal } from '../../hooks/useModal'
 
 const steps = [
   {
@@ -47,6 +48,7 @@ const steps = [
 ]
 
 export function Process() {
+  const { openModal } = useModal()
   const [hovered, setHovered] = useState<number | null>(null)
   const sectionRef = useRef<HTMLDivElement>(null)
   const headerRef = useRef<HTMLDivElement>(null)
@@ -137,7 +139,8 @@ export function Process() {
               <div
                 key={step.number}
                 ref={el => { if (el) rowsRef.current[i] = el }}
-                className="flex items-center gap-5 md:gap-10 cursor-default"
+                onClick={openModal}
+                className="flex items-center gap-5 md:gap-10 cursor-pointer"
                 style={{
                   padding: '28px 28px',
                   borderRadius: '14px',
