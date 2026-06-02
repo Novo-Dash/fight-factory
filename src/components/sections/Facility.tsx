@@ -45,8 +45,7 @@ export function Facility() {
 
   return (
     <>
-      <style>{`@keyframes facilityFade { from { opacity: 0.5; } to { opacity: 1; } }`}</style>
-      <section style={{ background: '#FFFFFF', padding: '96px 0', position: 'relative', overflow: 'hidden' }}>
+        <section style={{ background: '#FFFFFF', padding: '96px 0', position: 'relative', overflow: 'hidden' }}>
         <TrianglePattern opacity={0.10} />
         <div className="max-w-7xl mx-auto px-4 md:px-8 relative" style={{ zIndex: 1 }}>
           <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16 items-stretch">
@@ -83,13 +82,22 @@ export function Facility() {
             {/* RIGHT: photo carousel */}
             <div className="md:col-span-7" style={{ display: 'flex', flexDirection: 'column' }}>
               <div style={{ position: 'relative', borderRadius: 20, overflow: 'hidden', flex: 1, minHeight: 420, boxShadow: '0 16px 56px rgba(0,0,0,0.14)', background: '#1c1c1c' }}>
-                <img
-                  key={current}
-                  src={images[current]}
-                  alt={`facility ${current + 1}`}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', animation: 'facilityFade 0.4s ease' }}
-                  loading="lazy"
-                />
+                {images.map((src, i) => (
+                  <img
+                    key={src}
+                    src={src}
+                    alt={`facility ${i + 1}`}
+                    style={{
+                      position: i === 0 ? 'relative' : 'absolute',
+                      inset: 0, width: '100%', height: '100%',
+                      objectFit: 'cover', display: 'block',
+                      opacity: i === current ? 1 : 0,
+                      transition: 'opacity 0.6s ease',
+                      zIndex: i === current ? 1 : 0,
+                    }}
+                    loading="lazy"
+                  />
+                ))}
 
                 {/* Left arrow */}
                 <button onClick={prev}
