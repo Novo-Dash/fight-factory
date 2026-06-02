@@ -52,10 +52,11 @@ export function Testimonials() {
     const distance = dir === 'next' ? CARD_W + GAP : -(CARD_W + GAP)
     const duration = 500
     const startTime = performance.now()
+    const track = el
     function ease(t: number) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t }
     function animate(now: number) {
       const t = Math.min((now - startTime) / duration, 1)
-      el.scrollLeft = start + distance * ease(t)
+      track.scrollLeft = start + distance * ease(t)
       if (t < 1) requestAnimationFrame(animate)
     }
     requestAnimationFrame(animate)
@@ -168,10 +169,11 @@ export function Testimonials() {
                   const distance = target - start
                   const duration = 500
                   const startTime = performance.now()
+                  const tr = el
                   function ease(t: number) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t }
                   function animate(now: number) {
                     const t = Math.min((now - startTime) / duration, 1)
-                    el.scrollLeft = start + distance * ease(t)
+                    tr.scrollLeft = start + distance * ease(t)
                     if (t < 1) requestAnimationFrame(animate)
                   }
                   requestAnimationFrame(animate)

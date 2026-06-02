@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { BookingProvider } from '../booking/BookingProvider'
 import { KidsNavbar } from '../components/layout/KidsNavbar'
 import { Footer } from '../components/sections/Footer'
@@ -20,34 +20,6 @@ const whyBenefits = [
 ]
 // copy is exact as provided — no modifications
 
-const programs = [
-  {
-    id: 'beginner-kids',
-    icon: (
-      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
-      </svg>
-    ),
-    title: 'Beginner Kids Program',
-    description: 'Built for children with no experience, using a 5-class onboarding system designed to help kids start confidently.',
-    cta: 'Book a free trial class',
-    variant: 'primary' as const,
-    imageSrc: '/kids/imagem/4.webp',
-  },
-  {
-    id: 'kids',
-    icon: (
-      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-      </svg>
-    ),
-    title: 'Kids Program',
-    description: 'Children develop discipline, confidence, focus, and resilience in a safe, structured, family-friendly environment.',
-    cta: 'Book a free trial class',
-    variant: 'secondary' as const,
-    imageSrc: '/kids/imagem/5.webp',
-  },
-]
 
 const steps = [
   { num: '01', color: '#CC0000', label: 'Step 1', text: 'Click the button and fill out the form.' },
@@ -133,18 +105,9 @@ function CalendarWidget() {
 
 // ─── SECTIONS ──────────────────────────────────────────────────────────────
 
-const heroSlides = [
-  '/kids/imagem/hero/1.webp',
-]
 
 function Hero() {
   const { openModal } = useModal()
-  const [slide, setSlide] = useState(0)
-
-  useEffect(() => {
-    const id = window.setInterval(() => setSlide(i => (i + 1) % heroSlides.length), 4000)
-    return () => window.clearInterval(id)
-  }, [])
 
   return (
     <section className="relative w-full flex items-center overflow-hidden" style={{ background: '#FFFFFF', minHeight: '100vh', paddingTop: 0 }}>
