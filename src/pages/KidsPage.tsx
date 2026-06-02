@@ -1,11 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { BookingProvider } from '../booking/BookingProvider'
 import { KidsNavbar } from '../components/layout/KidsNavbar'
-import { Footer } from '../components/sections/Footer'
-import { Badge } from '../components/ui/Badge'
+import { KidsFooter } from '../components/sections/KidsFooter'
 import { TrianglePattern } from '../components/ui/TrianglePattern'
 import { PatternBg } from '../components/ui/PatternBg'
-import { TatamiBg } from '../components/ui/TatamiBg'
 import { useModal } from '../hooks/useModal'
 import { KidsMarquee } from '../components/ui/KidsMarquee'
 
@@ -80,7 +78,7 @@ function CalendarWidget() {
 
   return (
     <div className="rounded-3xl p-5" style={{ background: '#FFFFFF', border: '2px solid rgba(255,255,255,0.12)', boxShadow: '0 8px 0 0 rgba(0,0,0,0.55)' }}>
-      <div className="flex items-center justify-between rounded-2xl px-4 py-3 mb-4" style={{ background: '#CC0000', boxShadow: '0 4px 0 0 rgba(0,0,0,0.25)' }}>
+      <div className="flex items-center justify-between rounded-2xl px-4 py-3 mb-4" style={{ background: '#1E5EBF', boxShadow: '0 4px 0 0 rgba(0,0,0,0.25)' }}>
         <span style={{ fontFamily: "'SuperbusyActivity','Anton',sans-serif", fontSize: '1.25rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#FFFFFF' }}>June</span>
         <div className="flex gap-1.5">{[0,1,2].map(i => <span key={i} className="rounded-full" style={{ width: 10, height: 10, background: 'rgba(255,255,255,0.8)', display: 'inline-block' }} />)}</div>
       </div>
@@ -92,7 +90,7 @@ function CalendarWidget() {
           if (n === null) return <div key={i} aria-hidden style={{ aspectRatio: '1' }} />
           const isHL = n === highlight
           return (
-            <div key={i} className="relative flex items-center justify-center rounded-lg" style={{ aspectRatio: '1', background: isHL ? '#CC0000' : 'rgba(10,10,10,0.05)', boxShadow: isHL ? '0 3px 0 0 rgba(0,0,0,0.4)' : 'none', transition: 'background 0.3s ease, box-shadow 0.3s ease' }}>
+            <div key={i} className="relative flex items-center justify-center rounded-lg" style={{ aspectRatio: '1', background: isHL ? '#1E5EBF' : 'rgba(10,10,10,0.05)', boxShadow: isHL ? '0 3px 0 0 rgba(0,0,0,0.4)' : 'none', transition: 'background 0.3s ease, box-shadow 0.3s ease' }}>
               {isHL && <span className="absolute rounded-full" style={{ width: 8, height: 8, background: '#F9B80E', top: -3, right: -3, zIndex: 2 }} />}
               <span style={{ fontSize: '0.75rem', fontWeight: 600, color: isHL ? '#FFFFFF' : '#0A0A0A', position: 'relative', zIndex: 1 }}>{n}</span>
             </div>
@@ -110,7 +108,7 @@ function Hero() {
   const { openModal } = useModal()
 
   return (
-    <section className="relative w-full flex items-center overflow-hidden" style={{ background: '#FFFFFF', minHeight: '100vh', paddingTop: 0 }}>
+    <section className="relative w-full flex items-center overflow-hidden" style={{ background: '#FFFFFF', minHeight: '100vh', paddingTop: 72 }}>
       <div className="relative max-w-[1440px] mx-auto w-full px-4 md:px-8" style={{ zIndex: 1 }}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center py-12">
 
@@ -121,7 +119,7 @@ function Hero() {
               Austin, TX · Kids Jiu-Jitsu
             </p>
 
-            <h1 style={{ fontFamily: "'ChildGorlex','SuperbusyActivity','Anton',sans-serif", fontSize: 'clamp(2rem, 3.5vw + 0.5rem, 4rem)', letterSpacing: '0.01em', lineHeight: '1.1', textTransform: 'uppercase', color: '#0A0A0A', margin: 0 }}>
+            <h1 style={{ fontFamily: "'ChildGorlex','SuperbusyActivity','Anton',sans-serif", fontSize: 'clamp(1.6rem, 5vw, 4rem)', letterSpacing: '0.01em', lineHeight: '1.1', textTransform: 'uppercase', color: '#0A0A0A', margin: 0 }}>
               <span style={{ color: '#1E5EBF' }}>Help your child<br />build confidence</span><br />
               from their very<br />first Jiu-Jitsu class.
             </h1>
@@ -145,7 +143,7 @@ function Hero() {
           </div>
 
           {/* RIGHT: hero image */}
-          <div style={{ position: 'absolute', top: '50%', transform: 'translateY(-50%)', right: '3%', width: '46%', height: '85%', borderRadius: 6, overflow: 'hidden', border: '2.5px solid #0A0A0A', boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}>
+          <div className="md:absolute md:top-1/2 md:-translate-y-1/2 md:right-[3%] md:w-[46%] md:h-[85%] w-full mt-6 md:mt-0" style={{ borderRadius: 12, overflow: 'hidden', border: '2.5px solid #0A0A0A', boxShadow: '0 8px 32px rgba(0,0,0,0.12)', aspectRatio: '4/3' }}>
             <img
               src="/kids/imagem/hero/hero-new.webp"
               alt="Kids Jiu-Jitsu"
@@ -179,19 +177,48 @@ function WhyParents() {
           </h2>
         </div>
 
-        {/* Bento grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gridTemplateRows: 'auto auto', gap: 16 }}>
-
-          {/* Big photo — spans 2 rows left */}
-          <div style={{ gridColumn: '1', gridRow: '1 / 3', borderRadius: 20, overflow: 'hidden', minHeight: 480 }}
-            onMouseEnter={e => { (e.currentTarget.querySelector('img') as HTMLElement).style.transform = 'scale(1.06)' }}
-            onMouseLeave={e => { (e.currentTarget.querySelector('img') as HTMLElement).style.transform = 'scale(1)' }}
-          >
-            <img src="/kids/imagem/2.webp" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.5s ease' }} />
+        {/* Mobile: stack | Desktop: bento */}
+        <div className="flex flex-col gap-4 md:hidden">
+          {/* Title card */}
+          <div style={{ borderRadius: 20, background: '#1E5EBF', padding: '24px', display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: '0.9rem', lineHeight: '1.7', margin: 0 }}>
+              Fight Factory offers a kids onboarding system unique in Austin: children begin with 5 introductory classes in a separate group, designed to build confidence in their first steps.
+            </p>
+            <button onClick={openModal} style={{ alignSelf: 'flex-start', background: '#fff', color: '#1E5EBF', border: 'none', borderRadius: 6, padding: '0.75rem 1.5rem', fontSize: '0.8rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', cursor: 'pointer' }}>
+              Book Free Trial →
+            </button>
+          </div>
+          {/* Photos row */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+            <div style={{ borderRadius: 16, overflow: 'hidden', aspectRatio: '4/5' }}>
+              <img src="/kids/imagem/2.webp" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+            </div>
+            <div style={{ borderRadius: 16, overflow: 'hidden', aspectRatio: '4/5' }}>
+              <img src="/kids/imagem/gallery/2.webp" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+            </div>
           </div>
 
-          {/* Title card */}
-          <div style={{ gridColumn: '2 / 4', gridRow: '1', borderRadius: 20, background: '#1E5EBF', padding: '32px 36px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 16, minHeight: 200 }}>
+          {/* Benefits */}
+          <div style={{ borderRadius: 20, background: '#fff', padding: '16px', border: '1.5px solid #E8ECF8', display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {whyBenefits.map((b, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 12px', borderRadius: 8, background: '#F8F9FF', border: '1px solid #E8ECF8' }}>
+                <div style={{ width: 22, height: 22, borderRadius: '50%', background: '#1E5EBF', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l2.5 2.5L10 3.5" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                </div>
+                <span style={{ fontSize: '0.85rem', color: '#333', fontWeight: 500 }}>{b.text}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Desktop bento grid */}
+        <div className="hidden md:grid" style={{ gridTemplateColumns: '1fr 1fr 1fr', gridTemplateRows: 'auto auto', gap: 16 }}>
+          <div style={{ gridColumn: '1', gridRow: '1 / 3', borderRadius: 20, overflow: 'hidden', minHeight: 480 }}
+            onMouseEnter={e => { (e.currentTarget.querySelector('img') as HTMLElement).style.transform = 'scale(1.06)' }}
+            onMouseLeave={e => { (e.currentTarget.querySelector('img') as HTMLElement).style.transform = 'scale(1)' }}>
+            <img src="/kids/imagem/2.webp" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.5s ease' }} />
+          </div>
+          <div style={{ gridColumn: '2 / 4', gridRow: '1', borderRadius: 20, background: '#1E5EBF', padding: '32px 36px', display: 'flex', flexDirection: 'column', gap: 16, minHeight: 200 }}>
             <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: '0.9rem', lineHeight: '1.7', margin: 0 }}>
               Fight Factory offers a kids onboarding system unique in Austin: children begin with 5 introductory classes in a separate group from the regular classes, designed to build confidence in their first steps.
             </p>
@@ -199,26 +226,11 @@ function WhyParents() {
               Book Free Trial →
             </button>
           </div>
-
-          {/* All benefits as individual cards */}
-          <div style={{ gridColumn: '2', gridRow: '2', borderRadius: 20, background: '#fff', padding: '24px', border: '1.5px solid #E8ECF8', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 8 }}>
+          <div style={{ gridColumn: '2', gridRow: '2', borderRadius: 20, background: '#fff', padding: '24px', border: '1.5px solid #E8ECF8', display: 'flex', flexDirection: 'column', gap: 8 }}>
             {whyBenefits.map((b, i) => (
               <div key={i} className="benefit-hover-card" style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', borderRadius: 10, border: '1.5px solid #E8ECF8', background: '#F8F9FF', cursor: 'default', transition: 'all 0.2s ease' }}
-                onMouseEnter={e => {
-                  const el = e.currentTarget
-                  el.style.background = '#1E5EBF'
-                  el.style.borderColor = '#1E5EBF';
-                  (el.querySelector('.b-icon') as HTMLElement).style.background = 'rgba(255,255,255,0.2)';
-                  (el.querySelector('.b-text') as HTMLElement).style.color = '#fff'
-                }}
-                onMouseLeave={e => {
-                  const el = e.currentTarget
-                  el.style.background = '#F8F9FF'
-                  el.style.borderColor = '#E8ECF8';
-                  (el.querySelector('.b-icon') as HTMLElement).style.background = '#1E5EBF';
-                  (el.querySelector('.b-text') as HTMLElement).style.color = '#333'
-                }}
-              >
+                onMouseEnter={e => { const el = e.currentTarget; el.style.background = '#1E5EBF'; el.style.borderColor = '#1E5EBF'; (el.querySelector('.b-icon') as HTMLElement).style.background = 'rgba(255,255,255,0.2)'; (el.querySelector('.b-text') as HTMLElement).style.color = '#fff' }}
+                onMouseLeave={e => { const el = e.currentTarget; el.style.background = '#F8F9FF'; el.style.borderColor = '#E8ECF8'; (el.querySelector('.b-icon') as HTMLElement).style.background = '#1E5EBF'; (el.querySelector('.b-text') as HTMLElement).style.color = '#333' }}>
                 <div className="b-icon" style={{ width: 28, height: 28, borderRadius: '50%', background: '#1E5EBF', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background 0.2s' }}>
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l2.5 2.5L10 3.5" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </div>
@@ -226,15 +238,11 @@ function WhyParents() {
               </div>
             ))}
           </div>
-
-          {/* Photo */}
           <div style={{ gridColumn: '3', gridRow: '2', borderRadius: 20, overflow: 'hidden', minHeight: 280 }}
             onMouseEnter={e => { (e.currentTarget.querySelector('img') as HTMLElement).style.transform = 'scale(1.06)' }}
-            onMouseLeave={e => { (e.currentTarget.querySelector('img') as HTMLElement).style.transform = 'scale(1)' }}
-          >
+            onMouseLeave={e => { (e.currentTarget.querySelector('img') as HTMLElement).style.transform = 'scale(1)' }}>
             <img src="/kids/imagem/gallery/2.webp" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.5s ease' }} />
           </div>
-
         </div>
       </div>
     </section>
@@ -266,11 +274,8 @@ function Programs() {
 
         {/* Header */}
         <div className="text-center mb-12">
-          <span style={{ display: 'inline-block', background: 'rgba(30,94,191,0.1)', color: '#1E5EBF', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', borderRadius: 999, padding: '6px 16px', marginBottom: 12 }}>
-            Programs
-          </span>
           <h2 style={{ fontFamily: "'ChildGorlex','SuperbusyActivity','Anton',sans-serif", fontSize: 'clamp(2rem,4vw,3.5rem)', lineHeight: '1.05', color: '#0A0A0A', margin: 0 }}>
-            Our classes
+            Our <span style={{ color: '#1E5EBF' }}>classes</span>
           </h2>
         </div>
 
@@ -327,39 +332,60 @@ function Process() {
   const { openModal } = useModal()
 
   return (
-    <section style={{ background: '#0A0A0A', padding: '96px 0', position: 'relative', overflow: 'hidden' }}>
-      <TatamiBg />
-      <div className="absolute pointer-events-none" style={{ left: '-8rem', top: 0, width: '500px', height: '500px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(204,0,0,0.08) 0%, transparent 70%)', zIndex: 0 }} />
-      <div className="absolute pointer-events-none" style={{ right: '-10rem', bottom: 0, width: '500px', height: '500px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%)', zIndex: 0 }} />
-
+    <section style={{ background: '#1E5EBF', padding: '96px 0', position: 'relative', overflow: 'hidden' }}>
+      {/* Subtle texture */}
+      <div className="absolute inset-0 pointer-events-none" style={{
+        backgroundImage: `
+          repeating-linear-gradient(0deg, rgba(255,255,255,0.06) 0px, rgba(255,255,255,0.06) 1px, transparent 1px, transparent 32px),
+          repeating-linear-gradient(90deg, rgba(255,255,255,0.06) 0px, rgba(255,255,255,0.06) 1px, transparent 1px, transparent 32px)
+        `,
+        zIndex: 0,
+      }} />
+      <div className="absolute inset-0 pointer-events-none" style={{
+        background: 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(255,255,255,0.08) 0%, transparent 70%)',
+        zIndex: 0,
+      }} />
       <div className="max-w-[1320px] mx-auto px-4 md:px-8 relative" style={{ zIndex: 1 }}>
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16">
+
+          {/* LEFT */}
           <div className="md:col-span-5 flex flex-col gap-8">
-            <h2 style={{ fontFamily: "'SuperbusyActivity','Anton',sans-serif", fontSize: 'clamp(2.4rem,5vw,3.6rem)', lineHeight: '1.05', color: '#FFFFFF', margin: 0 }}>How to get started?</h2>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <div style={{ width: 28, height: 2, background: 'rgba(255,255,255,0.4)', borderRadius: 9999 }} />
+              <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.65rem', letterSpacing: '0.2em', textTransform: 'uppercase', fontWeight: 700 }}>3 Simple Steps</span>
+            </div>
+            <h2 style={{ fontFamily: "'ChildGorlex','SuperbusyActivity','Anton',sans-serif", fontSize: 'clamp(2.4rem,5vw,3.6rem)', lineHeight: '1.05', color: '#FFFFFF', margin: 0 }}>
+              How to get started?
+            </h2>
             <CalendarWidget />
           </div>
 
-          <div className="md:col-span-7 flex flex-col gap-5">
+          {/* RIGHT */}
+          <div className="md:col-span-7 flex flex-col gap-5" style={{ paddingTop: '6rem' }}>
             <ol className="flex flex-col gap-4">
-              {steps.map(s => (
+              {steps.map((s, idx) => (
                 <li key={s.num}>
-                  <div className="grid items-center gap-5 rounded-3xl p-5 md:p-7" style={{ gridTemplateColumns: 'auto 1fr', background: 'rgba(255,255,255,0.04)', border: '2px solid rgba(255,255,255,0.07)', boxShadow: '0 5px 0 0 rgba(0,0,0,0.6)' }}>
-                    <span style={{ fontFamily: "'SuperbusyActivity','Anton',sans-serif", fontSize: 'clamp(2.8rem,7vw,5rem)', lineHeight: 1, color: s.color, textShadow: '0.04em 0.05em 0 rgba(0,0,0,0.55)', userSelect: 'none' }}>{s.num}</span>
+                  <div className="grid items-center gap-5 p-5 md:p-6" style={{ gridTemplateColumns: 'auto 1fr', background: '#FFFFFF', border: '1.5px solid #E8ECF8', borderRadius: 16, boxShadow: '0 4px 16px rgba(30,94,191,0.07)', transition: 'box-shadow 0.2s ease' }}
+                    onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 8px 32px rgba(30,94,191,0.14)'; e.currentTarget.style.borderColor = '#1E5EBF' }}
+                    onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 4px 16px rgba(30,94,191,0.07)'; e.currentTarget.style.borderColor = '#E8ECF8' }}
+                  >
+                    <span style={{ fontFamily: "'ChildGorlex','Anton',sans-serif", fontSize: 'clamp(2.5rem,6vw,4.5rem)', lineHeight: 1, color: idx === 0 ? '#1E5EBF' : idx === 1 ? '#F9B80E' : '#0A0A0A', userSelect: 'none', minWidth: 72 }}>{s.num}</span>
                     <div className="min-w-0">
-                      <p style={{ fontSize: '0.625rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: s.color, marginBottom: 8 }}>{s.label}</p>
-                      <p style={{ fontSize: 'clamp(0.9375rem,1.5vw,1.25rem)', lineHeight: '1.5', color: 'rgba(255,255,255,0.85)', margin: 0 }}>{s.text}</p>
+                      <p style={{ fontSize: '0.625rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#1E5EBF', marginBottom: 6 }}>{s.label}</p>
+                      <p style={{ fontSize: 'clamp(0.9375rem,1.5vw,1.125rem)', lineHeight: '1.5', color: '#333', margin: 0 }}>{s.text}</p>
                     </div>
                   </div>
                 </li>
               ))}
             </ol>
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5 pt-8 mt-2" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-              <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9375rem', lineHeight: '1.6', maxWidth: '36ch', margin: 0 }}>The first class is completely free. No commitment. No pressure.</p>
-              <button onClick={openModal} className="shrink-0 font-bold cursor-pointer transition-all duration-200 hover:scale-[1.02] active:scale-[0.99] min-h-[52px] whitespace-nowrap" style={{ background: '#CC0000', color: '#FFFFFF', padding: '0.875rem 2rem', borderRadius: 6, fontSize: '0.8125rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5 pt-6 mt-2" style={{ borderTop: '1px solid rgba(255,255,255,0.2)' }}>
+              <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: '0.9375rem', lineHeight: '1.6', maxWidth: '36ch', margin: 0 }}>The first class is completely free. No commitment. No pressure.</p>
+              <button onClick={openModal} className="shrink-0 font-bold cursor-pointer transition-all duration-200 hover:scale-[1.02] active:scale-[0.99] min-h-[52px] whitespace-nowrap" style={{ background: '#FFFFFF', color: '#1E5EBF', padding: '0.875rem 2rem', borderRadius: 6, fontSize: '0.8125rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
                 Schedule Free Trial Class →
               </button>
             </div>
           </div>
+
         </div>
       </div>
     </section>
@@ -367,7 +393,31 @@ function Process() {
 }
 
 function KidsTestimonials() {
-  const track = [...testimonials, ...testimonials, ...testimonials, ...testimonials]
+  const trackRef = useRef<HTMLDivElement>(null)
+  const [hovered, setHovered] = useState(false)
+  const [hoveredCard, setHoveredCard] = useState<number | null>(null)
+  const pausedRef = useRef(false)
+  pausedRef.current = hovered
+  const CARD_W = 280
+  const GAP = 16
+  const JUMP = CARD_W + GAP
+  const SPEED = 0.5
+
+  useEffect(() => {
+    const el = trackRef.current
+    if (!el) return
+    const t = el
+    let id: number
+    function tick() {
+      if (!pausedRef.current) {
+        t.scrollLeft += SPEED
+        if (t.scrollLeft >= t.scrollWidth - t.clientWidth - 2) t.scrollLeft = 0
+      }
+      id = requestAnimationFrame(tick)
+    }
+    id = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(id)
+  }, [])
 
   function getInitials(name: string) {
     const parts = name.replace(/\./g, '').trim().split(/\s+/)
@@ -375,46 +425,121 @@ function KidsTestimonials() {
     return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
   }
 
+  function go(dir: 'prev' | 'next') {
+    const el = trackRef.current
+    if (!el) return
+    pausedRef.current = true
+    const start = el.scrollLeft
+    const distance = dir === 'next' ? JUMP : -JUMP
+    const duration = 700
+    const startTime = performance.now()
+    const track = el
+    function ease(t: number) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t }
+    function animate(now: number) {
+      const t = Math.min((now - startTime) / duration, 1)
+      track.scrollLeft = start + distance * ease(t)
+      if (t < 1) requestAnimationFrame(animate)
+      else setTimeout(() => { pausedRef.current = hovered }, 300)
+    }
+    requestAnimationFrame(animate)
+  }
+
+  const Stars = () => (
+    <div className="flex gap-0.5">
+      {[...Array(5)].map((_, i) => (
+        <svg key={i} width="14" height="14" viewBox="0 0 16 16" fill="none">
+          <path d="M8 1L9.796 5.879H15L10.854 8.621L12.472 13.5L8 10.677L3.528 13.5L5.146 8.621L1 5.879H6.204L8 1Z" fill="#FBBC04" />
+        </svg>
+      ))}
+    </div>
+  )
+
   return (
     <section id="reviews" style={{ background: '#FFFFFF', padding: '96px 0', overflow: 'hidden', position: 'relative' }}>
       <PatternBg />
-      <div className="relative" style={{ zIndex: 1 }}>
-        <div className="text-center mb-14 px-4">
-          <span style={{ fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#888888' }}>Reviews</span>
-          <h2 className="mt-3" style={{ fontFamily: "'SuperbusyActivity','Anton',sans-serif", fontSize: 'clamp(2rem,4vw + 0.5rem,3.5rem)', lineHeight: '1.0', color: '#0A0A0A', margin: '8px 0 0' }}>
-            Meet some of <span style={{ color: '#CC0000' }}>our students</span>
-          </h2>
-        </div>
+      <div className="max-w-7xl mx-auto px-4 md:px-8 relative" style={{ zIndex: 1 }}>
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16 items-center">
 
-        <div style={{ position: 'relative', width: '100%' }}>
-          <div style={{ position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none', background: 'linear-gradient(90deg, #FFFFFF 0%, transparent 8%, transparent 92%, #FFFFFF 100%)' }} />
-          <div style={{ overflow: 'hidden', width: '100%' }}>
-            <div style={{ display: 'flex', gap: '16px', width: 'max-content', animation: 'testimonials-scroll 60s linear infinite' }}>
-              {track.map((t, i) => (
-                <div key={`${t.id}-${i}`} className="flex flex-col justify-between shrink-0" style={{ width: '300px', background: '#FFFFFF', borderRadius: '16px', padding: '20px', border: '1px solid #E8E8E8', boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }}>
-                  <div>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center gap-3">
-                        <div className="rounded-full flex items-center justify-center text-white font-bold shrink-0" style={{ width: 42, height: 42, background: t.avatarBg, fontSize: '0.875rem' }}>{getInitials(t.name)}</div>
-                        <div>
-                          <div className="font-semibold text-[#0A0A0A]" style={{ fontSize: '0.875rem' }}>{t.name}</div>
-                          <div style={{ fontSize: '0.72rem', color: '#AAAAAA', marginTop: 1 }}>{t.timeAgo}</div>
-                        </div>
-                      </div>
-                      <svg width="18" height="18" viewBox="0 0 48 48">
-                        <path fill="#4285F4" d="M46.145 24.5c0-1.587-.143-3.112-.41-4.58H24v8.66h12.445c-.537 2.895-2.168 5.35-4.618 7.003v5.82h7.475c4.373-4.027 6.843-9.96 6.843-16.903z"/>
-                        <path fill="#34A853" d="M24 47c6.27 0 11.531-2.078 15.375-5.627l-7.475-5.82C29.787 37.08 27.07 37.9 24 37.9c-6.05 0-11.175-4.087-13.005-9.575H3.285v6.012C7.11 42.607 15.01 47 24 47z"/>
-                        <path fill="#FBBC05" d="M10.995 28.325A13.654 13.654 0 0 1 10.35 24c0-1.498.258-2.953.645-4.325v-6.012H3.285A22.966 22.966 0 0 0 1 24c0 3.71.888 7.222 2.285 10.337l7.71-6.012z"/>
-                        <path fill="#EA4335" d="M24 10.1c3.412 0 6.468 1.173 8.876 3.475l6.655-6.655C35.53 3.092 30.268 1 24 1 15.01 1 7.11 5.393 3.285 13.663l7.71 6.012C12.825 14.187 17.95 10.1 24 10.1z"/>
-                      </svg>
-                    </div>
-                    <div className="flex gap-0.5 mb-3">{[...Array(5)].map((_, i) => <svg key={i} width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 1L9.796 5.879H15L10.854 8.621L12.472 13.5L8 10.677L3.528 13.5L5.146 8.621L1 5.879H6.204L8 1Z" fill="#FBBC04" /></svg>)}</div>
-                    <p style={{ fontSize: '0.875rem', lineHeight: '1.65', color: '#333333' }}>"{t.text}"</p>
+          {/* LEFT: title + stats */}
+          <div className="md:col-span-4 flex flex-col gap-6">
+            <h2 style={{ fontFamily: "'ChildGorlex','SuperbusyActivity','Anton',sans-serif", fontSize: 'clamp(2rem,3.5vw,3rem)', lineHeight: '1.1', color: '#0A0A0A', margin: 0 }}>
+              Get to know some of{' '}
+              <span style={{ color: '#1E5EBF' }}>our students</span>
+            </h2>
+
+            {/* Rating */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <div style={{ display: 'flex' }}>
+                {[...Array(3)].map((_, i) => (
+                  <div key={i} style={{ width: 32, height: 32, borderRadius: '50%', background: testimonials[i].avatarBg, border: '2px solid #fff', marginLeft: i > 0 ? -10 : 0, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '0.7rem', fontWeight: 700 }}>
+                    {getInitials(testimonials[i].name)}
                   </div>
+                ))}
+              </div>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <span style={{ fontWeight: 700, fontSize: '0.9rem', color: '#0A0A0A' }}>5/5</span>
+                  <Stars />
+                </div>
+                <div style={{ fontSize: '0.72rem', color: '#888', marginTop: 2 }}>Based on Google reviews</div>
+              </div>
+            </div>
+
+            {/* Arrows */}
+            <div style={{ display: 'flex', gap: 10 }}>
+              <button onClick={() => go('prev')} style={{ width: 44, height: 44, borderRadius: '50%', border: '1.5px solid #0A0A0A', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}
+                onMouseEnter={e => { e.currentTarget.style.background = '#0A0A0A' }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              </button>
+              <button onClick={() => go('next')} style={{ width: 44, height: 44, borderRadius: '50%', border: '1.5px solid #0A0A0A', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}
+                onMouseEnter={e => { e.currentTarget.style.background = '#0A0A0A' }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              </button>
+            </div>
+          </div>
+
+          {/* RIGHT: scrollable cards */}
+          <div className="md:col-span-8" style={{ position: 'relative' }}>
+
+            <div
+              ref={trackRef}
+              onMouseEnter={() => setHovered(true)}
+              onMouseLeave={() => setHovered(false)}
+              style={{ display: 'flex', gap: GAP, overflowX: 'auto', scrollbarWidth: 'none', padding: '12px 8px 16px' }}
+              className="[&::-webkit-scrollbar]:hidden"
+            >
+              {[...testimonials, ...testimonials, ...testimonials].map((t, idx) => (
+                <div key={`${t.id}-${idx}`}
+                  onMouseEnter={() => setHoveredCard(idx)}
+                  onMouseLeave={() => setHoveredCard(null)}
+                  style={{
+                    flexShrink: 0, width: CARD_W, background: '#FAFAFA', borderRadius: 16, padding: 20,
+                    border: hoveredCard === idx ? '1.5px solid #1E5EBF' : '1px solid #E8E8E8',
+                    boxShadow: hoveredCard === idx ? '0 8px 32px rgba(30,94,191,0.15)' : '0 2px 12px rgba(0,0,0,0.05)',
+                    transform: hoveredCard === null ? 'scale(1)' : hoveredCard === idx ? 'scale(1.03)' : 'scale(0.97)',
+                    filter: hoveredCard === null ? 'none' : hoveredCard === idx ? 'none' : 'blur(1.5px) brightness(0.75)',
+                    transition: 'all 0.35s ease',
+                    zIndex: hoveredCard === idx ? 2 : 1,
+                    position: 'relative',
+                  }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+                    <div style={{ width: 40, height: 40, borderRadius: '50%', background: t.avatarBg, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: '0.8rem', flexShrink: 0 }}>
+                      {getInitials(t.name)}
+                    </div>
+                    <div>
+                      <div style={{ fontWeight: 600, fontSize: '0.875rem', color: '#0A0A0A' }}>{t.name}</div>
+                      <div style={{ fontSize: '0.7rem', color: '#AAA', marginTop: 1 }}>{t.timeAgo}</div>
+                    </div>
+                  </div>
+                  <Stars />
+                  <p style={{ fontSize: '0.85rem', lineHeight: '1.65', color: '#444', marginTop: 10 }}>"{t.text}"</p>
                 </div>
               ))}
             </div>
           </div>
+
         </div>
       </div>
     </section>
@@ -431,74 +556,127 @@ const allFacilityPhotos = [
 ]
 
 function KidsFacility() {
-  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null)
-  const [current, setCurrent] = useState(0)
-  const [paused, setPaused] = useState(false)
+  const [hoveredPhoto, setHoveredPhoto] = useState<number | null>(null)
   const { openModal } = useModal()
-  const total = allFacilityPhotos.length
 
-  function prev() { setPaused(true); setCurrent(i => (i - 1 + total) % total) }
-  function next() { setPaused(true); setCurrent(i => (i + 1) % total) }
-
-  useEffect(() => {
-    if (paused) return
-    const id = setInterval(() => setCurrent(i => (i + 1) % total), 3000)
-    return () => clearInterval(id)
-  }, [paused, total])
-
-  const photo = allFacilityPhotos[current]
+  const photos = allFacilityPhotos
 
   return (
-    <section style={{ background: '#FFFFFF', padding: '96px 0', position: 'relative' }}>
-      <TrianglePattern opacity={0.10} />
+    <section style={{ background: '#F5F7FF', padding: '96px 0', position: 'relative', overflow: 'hidden' }}>
       <PatternBg />
+      <style>{`
+        @keyframes kfFloat1 { 0%,100% { transform: translateY(0px) rotate(-2deg); } 50% { transform: translateY(-10px) rotate(-2deg); } }
+        @keyframes kfFloat2 { 0%,100% { transform: translateY(0px) rotate(1.5deg); } 50% { transform: translateY(-8px) rotate(1.5deg); } }
+        @keyframes kfFloat3 { 0%,100% { transform: translateY(0px) rotate(-1deg); } 50% { transform: translateY(-12px) rotate(-1deg); } }
+        @keyframes kfFloat4 { 0%,100% { transform: translateY(0px) rotate(2deg); } 50% { transform: translateY(-6px) rotate(2deg); } }
+      `}</style>
+
       <div className="max-w-7xl mx-auto px-4 md:px-8 relative" style={{ zIndex: 1 }}>
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16 items-stretch">
-          <div className="md:col-span-5 flex flex-col justify-center">
-            <h2 className="text-[#0A0A0A] mb-5" style={{ fontFamily: "'SuperbusyActivity','Anton',sans-serif", fontSize: 'clamp(2rem,4vw + 0.75rem,3.5rem)', letterSpacing: '0.01em', lineHeight: '1.05' }}>
-              <span style={{ color: '#CC0000' }}>For kids to learn confidently,</span>{' '}they need the right environment.
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center">
+
+          {/* LEFT: text */}
+          <div className="flex flex-col gap-6">
+            <h2 style={{ fontFamily: "'ChildGorlex','SuperbusyActivity','Anton',sans-serif", fontSize: 'clamp(2rem,4vw,3.2rem)', lineHeight: '1.1', color: '#0A0A0A', margin: 0 }}>
+              <span style={{ color: '#1E5EBF' }}>For kids to learn confidently,</span>{' '}they need the right environment.
             </h2>
-            <p className="text-[#555555] mb-7" style={{ fontSize: 'clamp(1rem,0.5vw + 0.875rem,1.125rem)', lineHeight: '1.65' }}>
+            <p style={{ color: '#555', fontSize: 'clamp(1rem,0.5vw + 0.875rem,1.125rem)', lineHeight: '1.65', margin: 0 }}>
               Fight Factory was designed to help children feel comfortable from day one, with:
             </p>
-            <ul className="flex flex-col gap-2 mb-8">
-              {facilityFeatures.map((feature, i) => (
-                <li key={feature} className="flex items-center gap-4 px-3 py-3 cursor-default" style={{ borderRadius: '12px', background: hoveredIdx === i ? '#CC0000' : 'transparent', transition: 'background 0.2s ease' }} onMouseEnter={() => setHoveredIdx(i)} onMouseLeave={() => setHoveredIdx(null)}>
-                  <div className="shrink-0 flex items-center justify-center rounded-full" style={{ width: 36, height: 36, minWidth: 36, background: hoveredIdx === i ? '#FFFFFF' : '#CC0000', transition: 'background 0.2s ease' }}>
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5L6.5 12L13 5" stroke={hoveredIdx === i ? '#CC0000' : '#FFFFFF'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ transition: 'stroke 0.2s ease' }} /></svg>
+            <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {facilityFeatures.map(f => (
+                <li key={f} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <div style={{ width: 22, height: 22, borderRadius: '50%', background: '#1E5EBF', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2 6l2.5 2.5L10 3.5" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
                   </div>
-                  <span style={{ lineHeight: '1.45', fontWeight: 500, color: hoveredIdx === i ? '#FFFFFF' : '#0A0A0A', transition: 'color 0.2s ease', fontSize: '0.9375rem' }}>{feature}</span>
+                  <span style={{ fontSize: '0.9375rem', color: '#333', fontWeight: 500 }}>{f}</span>
                 </li>
               ))}
             </ul>
-            <button onClick={openModal} className="inline-flex items-center gap-2 font-semibold cursor-pointer transition-all duration-200 hover:scale-[1.02] active:scale-[0.99] min-h-[44px]" style={{ background: '#CC0000', color: '#FFFFFF', padding: '0.75rem 1.5rem', borderRadius: 6, fontSize: '0.8125rem', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+            <button onClick={openModal} className="inline-flex items-center gap-2 font-semibold cursor-pointer transition-all hover:scale-[1.02] active:scale-[0.99] self-start"
+              style={{ background: '#1E5EBF', color: '#fff', padding: '0.875rem 1.75rem', borderRadius: 8, fontSize: '0.8125rem', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
               Click for a free trial class →
             </button>
           </div>
 
-          <div className="md:col-span-7" style={{ display: 'flex', flexDirection: 'column' }}>
-            <div style={{ position: 'relative', borderRadius: 20, overflow: 'hidden', flex: 1, minHeight: 400, boxShadow: '0 16px 56px rgba(0,0,0,0.14)', background: '#1c1c1c' }}>
-              <img key={current} src={photo.src} alt={photo.alt} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', animation: 'fadeIn 0.4s ease' }} loading="lazy" />
-              <button onClick={prev} style={{ position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)', width: 44, height: 44, borderRadius: '50%', background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(8px)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 12px rgba(0,0,0,0.15)', transition: 'background 0.2s', zIndex: 2 }}
-                onMouseEnter={e => { e.currentTarget.style.background = '#fff' }} onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.85)' }}>
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="#0A0A0A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              </button>
-              <button onClick={next} style={{ position: 'absolute', right: 16, top: '50%', transform: 'translateY(-50%)', width: 44, height: 44, borderRadius: '50%', background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(8px)', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 12px rgba(0,0,0,0.15)', transition: 'background 0.2s', zIndex: 2 }}
-                onMouseEnter={e => { e.currentTarget.style.background = '#fff' }} onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.85)' }}>
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3L11 8L6 13" stroke="#0A0A0A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              </button>
-              <div style={{ position: 'absolute', bottom: 16, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 6, zIndex: 2 }}>
-                {allFacilityPhotos.map((_, i) => (
-                  <button key={i} onClick={() => { setPaused(true); setCurrent(i) }}
-                    style={{ width: i === current ? 24 : 8, height: 8, borderRadius: 999, background: i === current ? '#CC0000' : 'rgba(255,255,255,0.6)', border: 'none', cursor: 'pointer', transition: 'all 0.3s ease', padding: 0 }} />
-                ))}
-              </div>
-              <div style={{ position: 'absolute', top: 16, right: 16, background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(8px)', color: '#fff', fontSize: '0.75rem', fontWeight: 600, padding: '4px 10px', borderRadius: 999, zIndex: 2 }}>
-                {current + 1} / {total}
-              </div>
+          {/* RIGHT: bento photo cards */}
+          <div style={{ position: 'relative', height: 520 }}>
+            {/* Card 1 — large top-left */}
+            <div
+              onMouseEnter={() => setHoveredPhoto(0)}
+              onMouseLeave={() => setHoveredPhoto(null)}
+              style={{
+                position: 'absolute', top: 0, left: 0,
+                width: '58%', height: '55%',
+                borderRadius: 20, overflow: 'hidden',
+                boxShadow: hoveredPhoto === 0 ? '0 20px 50px rgba(0,0,0,0.22)' : '0 8px 24px rgba(0,0,0,0.12)',
+                animation: 'kfFloat1 4s ease-in-out infinite',
+                transform: hoveredPhoto === 0 ? 'scale(1.04) rotate(-2deg)' : undefined,
+                transition: 'box-shadow 0.3s ease',
+                zIndex: hoveredPhoto === 0 ? 4 : 1,
+                border: '3px solid #fff',
+              }}
+            >
+              <img src={photos[0].src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
-            <style>{`@keyframes fadeIn { from { opacity: 0.6; } to { opacity: 1; } }`}</style>
+
+            {/* Card 2 — top-right */}
+            <div
+              onMouseEnter={() => setHoveredPhoto(1)}
+              onMouseLeave={() => setHoveredPhoto(null)}
+              style={{
+                position: 'absolute', top: '5%', right: 0,
+                width: '38%', height: '42%',
+                borderRadius: 20, overflow: 'hidden',
+                boxShadow: hoveredPhoto === 1 ? '0 20px 50px rgba(0,0,0,0.22)' : '0 8px 24px rgba(0,0,0,0.12)',
+                animation: 'kfFloat2 5s ease-in-out infinite',
+                transition: 'box-shadow 0.3s ease',
+                zIndex: hoveredPhoto === 1 ? 4 : 2,
+                border: '3px solid #fff',
+              }}
+            >
+              <img src={photos[1].src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            </div>
+
+            {/* Card 3 — bottom-left */}
+            <div
+              onMouseEnter={() => setHoveredPhoto(2)}
+              onMouseLeave={() => setHoveredPhoto(null)}
+              style={{
+                position: 'absolute', bottom: 0, left: '5%',
+                width: '40%', height: '42%',
+                borderRadius: 20, overflow: 'hidden',
+                boxShadow: hoveredPhoto === 2 ? '0 20px 50px rgba(0,0,0,0.22)' : '0 8px 24px rgba(0,0,0,0.12)',
+                animation: 'kfFloat3 4.5s ease-in-out infinite',
+                transition: 'box-shadow 0.3s ease',
+                zIndex: hoveredPhoto === 2 ? 4 : 1,
+                border: '3px solid #fff',
+              }}
+            >
+              <img src={photos[2].src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            </div>
+
+            {/* Card 4 — bottom-right */}
+            <div
+              onMouseEnter={() => setHoveredPhoto(3)}
+              onMouseLeave={() => setHoveredPhoto(null)}
+              style={{
+                position: 'absolute', bottom: '3%', right: '2%',
+                width: '53%', height: '50%',
+                borderRadius: 20, overflow: 'hidden',
+                boxShadow: hoveredPhoto === 3 ? '0 20px 50px rgba(0,0,0,0.22)' : '0 8px 24px rgba(0,0,0,0.12)',
+                animation: 'kfFloat4 3.8s ease-in-out infinite',
+                transition: 'box-shadow 0.3s ease',
+                zIndex: hoveredPhoto === 3 ? 4 : 2,
+                border: '3px solid #fff',
+              }}
+            >
+              <img src={photos[3].src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            </div>
+
+            {/* Decorative dot */}
+            <div style={{ position: 'absolute', top: '46%', left: '45%', width: 16, height: 16, borderRadius: '50%', background: '#1E5EBF', zIndex: 5, boxShadow: '0 0 0 4px rgba(30,94,191,0.2)' }} />
           </div>
+
         </div>
       </div>
     </section>
@@ -509,56 +687,85 @@ function Coach() {
   const { openModal } = useModal()
 
   return (
-    <section id="coach" style={{ background: '#0A0A0A', padding: '96px 0', position: 'relative', overflow: 'hidden' }}>
-      <TatamiBg />
-      <div className="absolute pointer-events-none" style={{ left: '-10rem', top: '50%', transform: 'translateY(-50%)', width: '600px', height: '600px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(204,0,0,0.08) 0%, transparent 70%)' }} />
-      <div className="max-w-7xl mx-auto px-4 md:px-8 relative" style={{ zIndex: 1 }}>
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16 items-start">
-          <div className="md:col-span-5">
-            <div className="relative overflow-hidden" style={{ borderRadius: '20px', boxShadow: '0 24px 60px rgba(0,0,0,0.5)' }}>
-              <img src="/images/10.png" alt="Coach Rodrigo Cabral" className="w-full object-cover" style={{ aspectRatio: '4/5', display: 'block' }} />
-              <div className="absolute bottom-0 left-0 right-0 flex items-center justify-between px-5 py-4" style={{ background: 'rgba(10,10,10,0.85)', backdropFilter: 'blur(8px)' }}>
-                <div>
-                  <div style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.625rem', letterSpacing: '0.18em', textTransform: 'uppercase', fontWeight: 700, marginBottom: 4 }}>Head Instructor</div>
-                  <div className="text-white font-bold" style={{ fontSize: '0.9375rem' }}>Rodrigo Cabral</div>
-                </div>
-                <span className="px-3 py-1.5 font-bold" style={{ background: 'transparent', border: '1.5px solid #CC0000', color: '#CC0000', fontSize: '0.625rem', letterSpacing: '0.14em', textTransform: 'uppercase', borderRadius: '4px' }}>5th Degree</span>
-              </div>
+    <section id="coach" style={{ background: '#1E5EBF', padding: '96px 0', position: 'relative', overflow: 'hidden' }}>
+      <PatternBg />
+      <style>{`
+        @keyframes coachFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+        @keyframes coachBadge { 0%,100%{transform:rotate(-3deg) scale(1)} 50%{transform:rotate(-3deg) scale(1.04)} }
+      `}</style>
+
+      {/* Decorative blobs */}
+      <div style={{ position:'absolute', top:'-80px', right:'-80px', width:320, height:320, borderRadius:'50%', background:'rgba(30,94,191,0.06)', zIndex:0 }} />
+      <div style={{ position:'absolute', bottom:'-60px', left:'-60px', width:240, height:240, borderRadius:'50%', background:'rgba(30,94,191,0.05)', zIndex:0 }} />
+
+      <div className="max-w-7xl mx-auto px-4 md:px-8 relative" style={{ zIndex:1 }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center">
+
+          {/* LEFT: photo with decorative elements */}
+          <div style={{ position:'relative', display:'flex', justifyContent:'center' }}>
+            {/* Background shape */}
+            <div style={{ position:'absolute', top:'8%', left:'5%', width:'80%', height:'84%', borderRadius:32, background:'linear-gradient(135deg, #1E5EBF 0%, #0d3a8a 100%)', zIndex:0 }} />
+
+            {/* Photo — floating */}
+            <div style={{ position:'relative', zIndex:2, animation:'coachFloat 4s ease-in-out infinite', width:'78%' }}>
+              <img src="/kids/imagem/10.webp" alt="Coach Rodrigo Cabral"
+                style={{ width:'100%', aspectRatio:'3/4', objectFit:'cover', objectPosition:'top', borderRadius:24, boxShadow:'0 24px 60px rgba(0,0,0,0.18)', display:'block', border:'4px solid #fff' }} />
+            </div>
+
+            {/* Badge — 5th Degree */}
+            <div style={{ position:'absolute', bottom:'14%', right:'6%', zIndex:3, background:'#1E5EBF', color:'#fff', borderRadius:14, padding:'12px 16px', boxShadow:'0 8px 24px rgba(30,94,191,0.35)', animation:'coachBadge 3.5s ease-in-out infinite', border:'3px solid #fff' }}>
+              <div style={{ fontSize:'0.6rem', letterSpacing:'0.15em', textTransform:'uppercase', opacity:0.75, marginBottom:3 }}>Black Belt</div>
+              <div style={{ fontFamily:"'ChildGorlex','Anton',sans-serif", fontSize:'1.1rem', fontWeight:700 }}>5th Degree</div>
+            </div>
+
+            {/* Years badge */}
+            <div style={{ position:'absolute', top:'12%', right:'4%', zIndex:3, background:'#fff', borderRadius:14, padding:'10px 14px', boxShadow:'0 8px 24px rgba(0,0,0,0.1)', border:'2px solid #E8ECF8' }}>
+              <div style={{ fontFamily:"'ChildGorlex','Anton',sans-serif", fontSize:'1.5rem', color:'#1E5EBF', lineHeight:1, fontWeight:700 }}>30+</div>
+              <div style={{ fontSize:'0.65rem', color:'#888', marginTop:3 }}>Years on the Mats</div>
             </div>
           </div>
 
-          <div className="md:col-span-7 flex flex-col gap-7">
-            <div className="flex items-center gap-3">
-              <div style={{ width: 28, height: 2, background: '#CC0000', borderRadius: 9999 }} />
-              <span style={{ color: '#CC0000', fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase' }}>Meet Rodrigo, Head Coach</span>
+          {/* RIGHT: content */}
+          <div style={{ display:'flex', flexDirection:'column', gap:20 }}>
+            <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+              <div style={{ width:24, height:3, background:'rgba(255,255,255,0.6)', borderRadius:999 }} />
+              <span style={{ color:'rgba(255,255,255,0.7)', fontSize:'0.65rem', letterSpacing:'0.2em', textTransform:'uppercase', fontWeight:700 }}>Meet Rodrigo, Head Coach</span>
             </div>
-            <h2 className="text-white" style={{ fontFamily: "'SuperbusyActivity','Anton',sans-serif", fontSize: 'clamp(3rem,6vw,5rem)', lineHeight: '1.0', margin: 0, letterSpacing: '-0.01em' }}>Rodrigo Cabral</h2>
-            <div style={{ height: 1, background: 'rgba(255,255,255,0.1)' }} />
-            <div className="flex items-start gap-10">
-              {coachStats.map(s => (
-                <div key={s.label}>
-                  <div style={{ fontFamily: 'Anton,sans-serif', fontSize: 'clamp(1.75rem,3vw,2.5rem)', color: '#FFFFFF', lineHeight: 1 }}>{s.value}</div>
-                  <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.45)', marginTop: 6, letterSpacing: '0.04em' }}>{s.label}</div>
+
+            <h2 style={{ fontFamily:"'ChildGorlex','SuperbusyActivity','Anton',sans-serif", fontSize:'clamp(2.5rem,5vw,4rem)', lineHeight:1.05, color:'#FFFFFF', margin:0 }}>
+              Rodrigo Cabral
+            </h2>
+
+            {/* Stats cards */}
+            <div style={{ display:'flex', gap:12 }}>
+              {coachStats.map((s, i) => (
+                <div key={s.label} style={{ flex:1, background: i===0 ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.1)', borderRadius:14, padding:'14px 16px', border:'1.5px solid rgba(255,255,255,0.25)' }}>
+                  <div style={{ fontFamily:"'ChildGorlex','Anton',sans-serif", fontSize:'clamp(1.5rem,2.5vw,2rem)', color:'#FFFFFF', lineHeight:1 }}>{s.value}</div>
+                  <div style={{ fontSize:'0.7rem', color:'rgba(255,255,255,0.65)', marginTop:5, letterSpacing:'0.04em' }}>{s.label}</div>
                 </div>
               ))}
             </div>
-            <div style={{ height: 1, background: 'rgba(255,255,255,0.1)' }} />
-            <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: 'clamp(0.9375rem,0.5vw + 0.875rem,1.0625rem)', lineHeight: '1.75', margin: 0 }}>
+
+            <p style={{ color:'rgba(255,255,255,0.8)', fontSize:'0.9375rem', lineHeight:'1.75', margin:0 }}>
               Rodrigo Cabral has over 30 years on the mats and developed the same method that helped shape current champion Andrew Tackett. Today, he helps children grow with confidence through Jiu-Jitsu.
             </p>
-            <div className="flex flex-col gap-3">
+
+            <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
               {coachBullets.map(b => (
-                <div key={b.label} className="flex items-center gap-4">
-                  <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#CC0000', flexShrink: 0, display: 'inline-block' }} />
-                  <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: '0.625rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', minWidth: '130px' }}>{b.label}</span>
-                  <span style={{ color: 'rgba(255,255,255,0.85)', fontSize: '0.9375rem', fontWeight: 500 }}>{b.text}</span>
+                <div key={b.label} style={{ display:'flex', alignItems:'center', gap:12, background:'#FFFFFF', borderRadius:10, padding:'10px 14px', border:'1px solid rgba(30,94,191,0.15)' }}>
+                  <div style={{ width:8, height:8, borderRadius:'50%', background:'#1E5EBF', flexShrink:0 }} />
+                  <span style={{ color:'rgba(30,94,191,0.55)', fontSize:'0.625rem', fontWeight:700, letterSpacing:'0.15em', textTransform:'uppercase', minWidth:110 }}>{b.label}</span>
+                  <span style={{ color:'#1E5EBF', fontSize:'0.875rem', fontWeight:600 }}>{b.text}</span>
                 </div>
               ))}
             </div>
-            <button onClick={openModal} className="self-start inline-flex items-center gap-2 text-white font-bold cursor-pointer transition-all duration-200 hover:scale-[1.02] active:scale-[0.99] min-h-[52px]" style={{ background: '#CC0000', padding: '1rem 2.5rem', borderRadius: 6, fontSize: '0.9375rem', letterSpacing: '0.04em' }}>
+
+            <button onClick={openModal} className="self-start inline-flex items-center gap-2 font-bold cursor-pointer transition-all hover:scale-[1.02] active:scale-[0.99] min-h-[52px]"
+              style={{ background:'#fff', color:'#1E5EBF', padding:'1rem 2.5rem', borderRadius:10, fontSize:'0.9rem', letterSpacing:'0.04em', fontWeight:700 }}>
               Book your free trial class →
             </button>
           </div>
+
         </div>
       </div>
     </section>
@@ -576,11 +783,11 @@ function KidsFAQ() {
       <div className="max-w-7xl mx-auto px-4 md:px-8 relative" style={{ zIndex: 1 }}>
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16">
           <div className="md:col-span-4">
-            <Badge className="mb-4">COMMON QUESTIONS</Badge>
-            <h2 className="text-[#0A0A0A] mb-5" style={{ fontFamily: "'SuperbusyActivity','Anton',sans-serif", fontSize: 'clamp(2rem,4vw + 0.75rem,3.5rem)', letterSpacing: '0.01em', lineHeight: '1.0', textTransform: 'uppercase' }}>
-              Common <span style={{ color: '#CC0000' }}>Questions</span>
+            <span style={{ fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#1E5EBF', display: 'block', marginBottom: 12 }}>COMMON QUESTIONS</span>
+            <h2 className="text-[#0A0A0A] mb-5" style={{ fontFamily: "'ChildGorlex','SuperbusyActivity','Anton',sans-serif", fontSize: 'clamp(2rem,4vw + 0.75rem,3.5rem)', letterSpacing: '0.01em', lineHeight: '1.1', textTransform: 'uppercase' }}>
+              Common <span style={{ color: '#1E5EBF' }}>Questions</span>
             </h2>
-            <button onClick={openModal} className="inline-flex items-center font-semibold cursor-pointer transition-all duration-200 hover:scale-[1.02] active:scale-[0.99] mt-4 whitespace-nowrap" style={{ background: '#CC0000', color: '#FFFFFF', padding: '0.75rem 1.5rem', borderRadius: 6, fontSize: '0.8125rem', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+            <button onClick={openModal} className="inline-flex items-center font-semibold cursor-pointer transition-all duration-200 hover:scale-[1.02] active:scale-[0.99] mt-4 whitespace-nowrap" style={{ background: '#1E5EBF', color: '#FFFFFF', padding: '0.75rem 1.5rem', borderRadius: 6, fontSize: '0.8125rem', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
               Click to book your free trial class →
             </button>
           </div>
@@ -589,7 +796,7 @@ function KidsFAQ() {
               <div key={item.id} className="border-b transition-colors" style={{ borderColor: '#D8D8D8' }}>
                 <button onClick={() => setOpen(open === item.id ? null : item.id)} className="w-full flex items-center justify-between py-5 text-left cursor-pointer group min-h-[44px]" aria-expanded={open === item.id}>
                   <span className="text-[#0A0A0A] font-semibold pr-4 group-hover:text-[#555555] transition-colors" style={{ fontSize: 'clamp(0.9375rem,0.3vw + 0.875rem,1rem)' }}>{item.question}</span>
-                  <span className="shrink-0 transition-transform duration-200" style={{ transform: open === item.id ? 'rotate(45deg)' : 'rotate(0deg)', color: open === item.id ? '#CC0000' : '#0A0A0A' }}>
+                  <span className="shrink-0 transition-transform duration-200" style={{ transform: open === item.id ? 'rotate(45deg)' : 'rotate(0deg)', color: open === item.id ? '#1E5EBF' : '#0A0A0A' }}>
                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 4V16M4 10H16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
                   </span>
                 </button>
@@ -622,7 +829,7 @@ export function KidsPage() {
         <Coach />
         <KidsFAQ />
       </main>
-      <Footer />
+      <KidsFooter />
     </BookingProvider>
   )
 }
