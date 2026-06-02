@@ -10,6 +10,7 @@ const items = [
   { src: '/images/galeria/8.webp',  w: 380 },
   { src: '/images/galeria/9.webp',  w: 420 },
   { src: '/images/galeria/11.webp', w: 460 },
+  { src: '/images/11.webp',         w: 400 },
   { src: '/images/galeria/13.webp', w: 400 },
   { src: '/images/galeria/14.webp', w: 440 },
   { src: '/images/galeria/15.webp', w: 360 },
@@ -19,33 +20,29 @@ const items = [
   { src: '/images/galeria/19.webp', w: 340 },
   { src: '/images/galeria/20.webp', w: 420 },
   { src: '/images/galeria/21.webp', w: 360 },
-  { src: '/images/11.webp',         w: 400 },
 ]
 
-// duplicate for seamless loop
 const track = [...items, ...items]
 const H = 360
 const GAP = 12
-const SPEED = 0.6 // px per frame
-const JUMP = 440  // px per arrow click
+const SPEED = 0.6
+const JUMP = 440
 
 export function Gallery() {
   const ref = useRef<HTMLDivElement>(null)
   const [hovered, setHovered] = useState(false)
   const pausedRef = useRef(false)
+  pausedRef.current = hovered
 
-  // continuous auto-scroll via rAF
   useEffect(() => {
     const el = ref.current
     if (!el) return
-    const track = el
+    const t = el
     let id: number
     function tick() {
       if (!pausedRef.current) {
-        track.scrollLeft += SPEED
-        if (track.scrollLeft >= track.scrollWidth / 2) {
-          track.scrollLeft = 0
-        }
+        t.scrollLeft += SPEED
+        if (t.scrollLeft >= t.scrollWidth / 2) t.scrollLeft = 0
       }
       id = requestAnimationFrame(tick)
     }
@@ -53,97 +50,66 @@ export function Gallery() {
     return () => cancelAnimationFrame(id)
   }, [])
 
-  // sync hover state to ref so rAF reads it without closure issues
-  useEffect(() => { pausedRef.current = hovered }, [hovered])
-
   function go(dir: 'prev' | 'next') {
     const el = ref.current
     if (!el) return
-    // pause rAF, jump directly, resume after animation settles
     pausedRef.current = true
-    el.scrollLeft += dir === 'next' ? JUMP : -JUMP
-    // wrap if needed
-    if (el.scrollLeft >= el.scrollWidth / 2) el.scrollLeft -= el.scrollWidth / 2
-    if (el.scrollLeft < 0) el.scrollLeft += el.scrollWidth / 2
-    setTimeout(() => { pausedRef.current = hovered }, 600)
+    const start = el.scrollLeft
+    const distance = dir === 'next' ? JUMP : -JUMP
+    const duration = 600
+    const startTime = performance.now()
+    function ease(t: number) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t }
+    function animate(now: number) {
+      const t = Math.min((now - startTime) / duration, 1)
+      el.scrollLeft = start + distance * ease(t)
+      if (t < 1) requestAnimationFrame(animate)
+      else setTimeout(() => { pausedRef.current = hovered }, 200)
+    }
+    requestAnimationFrame(animate)
   }
 
   return (
     <section style={{ background: '#FFFFFF', padding: '64px 0' }}>
-      <div style={{ position: 'relative' }}>
 
-        {/* Fade edges */}
+      {/* Scrollable track with fade */}
+      <div style={{ position: 'relative' }}>
         <div style={{
           position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none',
           background: 'linear-gradient(90deg, #fff 0%, transparent 10%, transparent 90%, #fff 100%)',
         }} />
-
-        {/* Prev arrow */}
-        <button
-          onClick={() => go('prev')}
-          style={{
-            position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)',
-            zIndex: 5, width: 48, height: 48, borderRadius: '50%',
-            background: '#fff', border: '1.5px solid #ddd', cursor: 'pointer',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 4px 16px rgba(0,0,0,0.12)', transition: 'all 0.2s',
-          }}
-          onMouseEnter={e => { e.currentTarget.style.background = '#0A0A0A' }}
-          onMouseLeave={e => { e.currentTarget.style.background = '#fff' }}
-        >
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-            <path d="M11 4L6 9L11 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </button>
-
-        {/* Next arrow */}
-        <button
-          onClick={() => go('next')}
-          style={{
-            position: 'absolute', right: 16, top: '50%', transform: 'translateY(-50%)',
-            zIndex: 5, width: 48, height: 48, borderRadius: '50%',
-            background: '#fff', border: '1.5px solid #ddd', cursor: 'pointer',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 4px 16px rgba(0,0,0,0.12)', transition: 'all 0.2s',
-          }}
-          onMouseEnter={e => { e.currentTarget.style.background = '#0A0A0A' }}
-          onMouseLeave={e => { e.currentTarget.style.background = '#fff' }}
-        >
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-            <path d="M7 4L12 9L7 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </button>
-
-        {/* Track */}
         <div
           ref={ref}
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: GAP,
-            overflowX: 'auto',
-            width: '100%',
-            scrollbarWidth: 'none',
-          }}
+          style={{ display: 'flex', alignItems: 'center', gap: GAP, overflowX: 'auto', width: '100%', scrollbarWidth: 'none' }}
           className="[&::-webkit-scrollbar]:hidden"
         >
           {track.map((item, i) => (
-            <div
-              key={i}
-              style={{ flexShrink: 0, width: item.w, height: H, borderRadius: 14, overflow: 'hidden', background: '#eee' }}
-            >
-              <img
-                src={item.src}
-                alt=""
-                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                loading="lazy"
-              />
+            <div key={i} style={{ flexShrink: 0, width: item.w, height: H, borderRadius: 14, overflow: 'hidden', background: '#eee' }}>
+              <img src={item.src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} loading="lazy" />
             </div>
           ))}
         </div>
       </div>
+
+      {/* Nav buttons — igual ao Testimonials */}
+      <div className="flex items-center justify-center gap-4 mt-6">
+        <button
+          onClick={() => go('prev')}
+          className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:bg-[#F0F0F0] cursor-pointer"
+          style={{ border: '1px solid #D8D8D8' }}
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="#0A0A0A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        </button>
+        <button
+          onClick={() => go('next')}
+          className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:bg-[#F0F0F0] cursor-pointer"
+          style={{ border: '1px solid #D8D8D8' }}
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3L11 8L6 13" stroke="#0A0A0A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        </button>
+      </div>
+
     </section>
   )
 }

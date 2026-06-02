@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import { Badge } from '../ui/Badge'
 import { Button } from '../ui/Button'
 import { TrianglePattern } from '../ui/TrianglePattern'
@@ -11,25 +11,49 @@ const features = [
   'Clean and organized environment',
 ]
 
-const images = [
-  '/images/galeira%202/1.webp',
-  '/images/galeira%202/2.webp',
-  '/images/galeira%202/3.webp',
-  '/images/galeira%202/4.webp',
-  '/images/galeira%202/5.webp',
-  '/images/galeira%202/6.webp',
-  '/images/galeira%202/7.webp',
-  '/images/galeira%202/8.webp',
-  '/images/galeira%202/9.webp',
+const facilityItems = [
+  { src: '/images/galeira%202/1.webp', w: 420 },
+  { src: '/images/galeira%202/2.webp', w: 360 },
+  { src: '/images/galeira%202/3.webp', w: 460 },
+  { src: '/images/galeira%202/4.webp', w: 380 },
+  { src: '/images/galeira%202/5.webp', w: 420 },
+  { src: '/images/galeira%202/6.webp', w: 340 },
+  { src: '/images/galeira%202/7.webp', w: 440 },
+  { src: '/images/galeira%202/8.webp', w: 400 },
+  { src: '/images/galeira%202/9.webp', w: 460 },
 ]
 
-const track = [...images, ...images]
-
-const CARD_W = 320
-const CARD_H = 420
+const facilityTrack = [...facilityItems, ...facilityItems]
+const H = 360
 const GAP = 12
-const SPEED = 0.5
-const JUMP = 340
+const SPEED = 0.6
+const JUMP = 440
+
+function FeatureCard({ text }: { text: string }) {
+  const [hov, setHov] = useState(false)
+  return (
+    <div
+      className="flex items-center gap-2 cursor-default"
+      style={{
+        background: hov ? '#CC0000' : '#F5F5F5',
+        borderRadius: 10,
+        padding: '10px 14px',
+        border: `1px solid ${hov ? '#CC0000' : '#EBEBEB'}`,
+        transition: 'all 0.2s ease',
+      }}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+    >
+      <svg width="18" height="18" viewBox="0 0 20 20" fill="none" className="shrink-0">
+        <circle cx="10" cy="10" r="10" fill={hov ? 'rgba(255,255,255,0.2)' : 'rgba(10,10,10,0.08)'} />
+        <path d="M6 10L8.5 12.5L14 7" stroke={hov ? '#fff' : '#0A0A0A'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+      <span style={{ fontSize: '0.8125rem', fontWeight: 500, lineHeight: '1.4', color: hov ? '#fff' : '#0A0A0A', transition: 'color 0.2s ease' }}>
+        {text}
+      </span>
+    </div>
+  )
+}
 
 function FeatureIcon() {
   return (
@@ -49,14 +73,12 @@ export function Facility() {
   useEffect(() => {
     const el = ref.current
     if (!el) return
-    const track = el
+    const t = el
     let id: number
     function tick() {
       if (!pausedRef.current) {
-        track.scrollLeft += SPEED
-        if (track.scrollLeft >= track.scrollWidth / 2) {
-          track.scrollLeft = 0
-        }
+        t.scrollLeft += SPEED
+        if (t.scrollLeft >= t.scrollWidth / 2) t.scrollLeft = 0
       }
       id = requestAnimationFrame(tick)
     }
@@ -68,108 +90,84 @@ export function Facility() {
     const el = ref.current
     if (!el) return
     pausedRef.current = true
-    el.scrollLeft += dir === 'next' ? JUMP : -JUMP
-    if (el.scrollLeft >= el.scrollWidth / 2) el.scrollLeft -= el.scrollWidth / 2
-    if (el.scrollLeft < 0) el.scrollLeft += el.scrollWidth / 2
-    setTimeout(() => { pausedRef.current = hovered }, 600)
+    const start = el.scrollLeft
+    const distance = dir === 'next' ? JUMP : -JUMP
+    const duration = 600
+    const startTime = performance.now()
+    function ease(t: number) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t }
+    function animate(now: number) {
+      const t = Math.min((now - startTime) / duration, 1)
+      el.scrollLeft = start + distance * ease(t)
+      if (t < 1) requestAnimationFrame(animate)
+      else setTimeout(() => { pausedRef.current = hovered }, 200)
+    }
+    requestAnimationFrame(animate)
   }
 
   return (
-    <section style={{ background: '#FFFFFF', padding: '96px 0', position: 'relative', overflow: 'hidden' }}>
+    <section style={{ background: '#FFFFFF', padding: '24px 0 64px', position: 'relative' }}>
       <TrianglePattern opacity={0.10} />
 
-      <div className="max-w-7xl mx-auto px-4 md:px-8 relative" style={{ zIndex: 1 }}>
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16 items-center">
-
-          {/* Left: text */}
-          <div className="md:col-span-5">
-            <Badge className="mb-4">THE ACADEMY</Badge>
-            <h2
-              className="text-[#0A0A0A] mb-5"
-              style={{
-                fontFamily: 'Anton, sans-serif',
-                fontSize: 'clamp(2rem, 4vw + 0.75rem, 3.5rem)',
-                letterSpacing: '0.01em',
-                lineHeight: '1.0',
-                textTransform: 'uppercase',
-              }}
-            >
+      {/* Text content */}
+      <div className="max-w-7xl mx-auto px-4 md:px-8 relative mb-12" style={{ zIndex: 1 }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20 items-center">
+          <div>
+            <h2 className="text-[#0A0A0A] mb-4" style={{ fontFamily: 'Anton, sans-serif', fontSize: 'clamp(2rem, 4vw + 0.75rem, 3.5rem)', letterSpacing: '0.01em', lineHeight: '1.0', textTransform: 'uppercase' }}>
               To start Jiu-Jitsu the right way, you need the right environment.
             </h2>
-            <p className="text-[#555555] mb-7" style={{ fontSize: 'clamp(1rem, 0.5vw + 0.875rem, 1.125rem)', lineHeight: '1.65' }}>
+            <p className="text-[#555555]" style={{ fontSize: 'clamp(1rem, 0.5vw + 0.875rem, 1.125rem)', lineHeight: '1.65' }}>
               Fight Factory was designed to make beginners feel comfortable from day one, with:
             </p>
-            <ul className="space-y-3 mb-8">
-              {features.map((feature) => (
-                <li key={feature} className="flex items-start gap-3">
-                  <FeatureIcon />
-                  <span className="text-[#0A0A0A]" style={{ lineHeight: '1.65' }}>{feature}</span>
-                </li>
-              ))}
-            </ul>
-            <Button size="md" variant="red" openModal>
-              Click for a free trial class →
-            </Button>
           </div>
-
-          {/* Right: continuous scroll carousel */}
-          <div className="md:col-span-7">
-            <div style={{ position: 'relative' }}>
-
-              {/* Fade edges */}
-              <div style={{
-                position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none',
-                background: 'linear-gradient(90deg, #fff 0%, transparent 12%, transparent 88%, #fff 100%)',
-              }} />
-
-              {/* Prev */}
-              <button
-                onClick={() => go('prev')}
-                style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', zIndex: 5, width: 44, height: 44, borderRadius: '50%', background: '#fff', border: '1.5px solid #e0e0e0', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 16px rgba(0,0,0,0.12)' }}
-                onMouseEnter={e => { e.currentTarget.style.background = '#0A0A0A'; e.currentTarget.style.color = '#fff' }}
-                onMouseLeave={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.color = 'inherit' }}
-              >
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              </button>
-
-              {/* Next */}
-              <button
-                onClick={() => go('next')}
-                style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', zIndex: 5, width: 44, height: 44, borderRadius: '50%', background: '#fff', border: '1.5px solid #e0e0e0', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 16px rgba(0,0,0,0.12)' }}
-                onMouseEnter={e => { e.currentTarget.style.background = '#0A0A0A'; e.currentTarget.style.color = '#fff' }}
-                onMouseLeave={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.color = 'inherit' }}
-              >
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              </button>
-
-              {/* Scrollable track */}
-              <div
-                ref={ref}
-                onMouseEnter={() => setHovered(true)}
-                onMouseLeave={() => setHovered(false)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: GAP,
-                  overflowX: 'auto',
-                  scrollbarWidth: 'none',
-                  width: '100%',
-                  height: CARD_H,
-                }}
-                className="[&::-webkit-scrollbar]:hidden"
-              >
-                {track.map((src, i) => (
-                  <div key={i} style={{ flexShrink: 0, width: CARD_W, height: CARD_H, borderRadius: 14, overflow: 'hidden', background: '#eee' }}>
-                    <img src={src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} loading="lazy" />
-                  </div>
-                ))}
-              </div>
-
+          <div className="flex flex-col gap-4">
+            <div className="grid grid-cols-2 gap-2">
+              {features.map((feature) => (
+                <FeatureCard key={feature} text={feature} />
+              ))}
+              <Button size="md" variant="red" openModal className="w-full justify-center">
+                Click for a free trial class →
+              </Button>
             </div>
           </div>
-
         </div>
       </div>
+
+      {/* Carousel — idêntico ao Gallery */}
+      <div style={{ position: 'relative' }}>
+        <div style={{ position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none', background: 'linear-gradient(90deg, #fff 0%, transparent 10%, transparent 90%, #fff 100%)' }} />
+        <div
+          ref={ref}
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
+          style={{ display: 'flex', alignItems: 'center', gap: GAP, overflowX: 'auto', width: '100%', scrollbarWidth: 'none' }}
+          className="[&::-webkit-scrollbar]:hidden"
+        >
+          {facilityTrack.map((item, i) => (
+            <div key={i} style={{ flexShrink: 0, width: item.w, height: H, borderRadius: 14, overflow: 'hidden', background: '#eee' }}>
+              <img src={item.src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} loading="lazy" />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Nav buttons — idênticos ao Gallery */}
+      <div className="flex items-center justify-center gap-4 mt-6">
+        <button
+          onClick={() => go('prev')}
+          className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:bg-[#F0F0F0] cursor-pointer"
+          style={{ border: '1px solid #D8D8D8' }}
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="#0A0A0A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        </button>
+        <button
+          onClick={() => go('next')}
+          className="w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 hover:bg-[#F0F0F0] cursor-pointer"
+          style={{ border: '1px solid #D8D8D8' }}
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3L11 8L6 13" stroke="#0A0A0A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        </button>
+      </div>
+
     </section>
   )
 }
