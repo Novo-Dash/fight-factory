@@ -11,16 +11,6 @@ const contactItems = [
     text: '+1 (737) 283-6237',
     href: 'tel:+17372836237',
   },
-  {
-    label: 'Instagram',
-    text: '@fightfactory_jiujitsu',
-    href: 'https://instagram.com/fightfactory_jiujitsu',
-  },
-  {
-    label: 'Facebook',
-    text: 'BrazilianFightFactory',
-    href: 'https://www.facebook.com/BrazilianFightFactory',
-  },
 ]
 
 const quickLinks = [

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+﻿import { useEffect, useState } from 'react'
 import { useModal } from '../../hooks/useModal'
 
 const NAV_LINKS = [
@@ -78,7 +78,7 @@ export function KidsNavbar() {
           onClick={handleCTA}
           className="shrink-0 inline-flex items-center gap-2 font-semibold cursor-pointer transition-all duration-200 hover:scale-[1.02] active:scale-[0.99] min-h-[40px]"
           style={{
-            background: '#1E5EBF',
+            background: '#CC0000',
             color: '#FFFFFF',
             padding: '0.65rem 1.25rem',
             fontSize: '0.8rem',
@@ -94,3 +94,4 @@ export function KidsNavbar() {
     </header>
   )
 }
+

@@ -1,11 +1,11 @@
-const ITEM = 'FIGHT FACTORY JIU-JITSU KIDS · AUSTIN, TX · '
+﻿const ITEM = 'FIGHT FACTORY JIU-JITSU KIDS · AUSTIN, TX · '
 const items = Array(16).fill(ITEM)
 
 export function KidsMarquee() {
   return (
     <div
       className="overflow-hidden py-4"
-      style={{ background: '#1E5EBF' }}
+      style={{ background: '#CC0000' }}
       aria-hidden="true"
     >
       <div
@@ -30,3 +30,4 @@ export function KidsMarquee() {
     </div>
   )
 }
+

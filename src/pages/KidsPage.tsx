@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+﻿import { useEffect, useRef, useState } from 'react'
 import { BookingProvider } from '../booking/BookingProvider'
 import { KidsNavbar } from '../components/layout/KidsNavbar'
 import { KidsFooter } from '../components/sections/KidsFooter'
@@ -78,7 +78,7 @@ function CalendarWidget() {
 
   return (
     <div className="rounded-3xl p-5" style={{ background: '#FFFFFF', border: '2px solid rgba(255,255,255,0.12)', boxShadow: '0 8px 0 0 rgba(0,0,0,0.55)' }}>
-      <div className="flex items-center justify-between rounded-2xl px-4 py-3 mb-4" style={{ background: '#1E5EBF', boxShadow: '0 4px 0 0 rgba(0,0,0,0.25)' }}>
+      <div className="flex items-center justify-between rounded-2xl px-4 py-3 mb-4" style={{ background: '#CC0000', boxShadow: '0 4px 0 0 rgba(0,0,0,0.25)' }}>
         <span style={{ fontFamily: "'SuperbusyActivity','Anton',sans-serif", fontSize: '1.25rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#FFFFFF' }}>June</span>
         <div className="flex gap-1.5">{[0,1,2].map(i => <span key={i} className="rounded-full" style={{ width: 10, height: 10, background: 'rgba(255,255,255,0.8)', display: 'inline-block' }} />)}</div>
       </div>
@@ -90,7 +90,7 @@ function CalendarWidget() {
           if (n === null) return <div key={i} aria-hidden style={{ aspectRatio: '1' }} />
           const isHL = n === highlight
           return (
-            <div key={i} className="relative flex items-center justify-center rounded-lg" style={{ aspectRatio: '1', background: isHL ? '#1E5EBF' : 'rgba(10,10,10,0.05)', boxShadow: isHL ? '0 3px 0 0 rgba(0,0,0,0.4)' : 'none', transition: 'background 0.3s ease, box-shadow 0.3s ease' }}>
+            <div key={i} className="relative flex items-center justify-center rounded-lg" style={{ aspectRatio: '1', background: isHL ? '#CC0000' : 'rgba(10,10,10,0.05)', boxShadow: isHL ? '0 3px 0 0 rgba(0,0,0,0.4)' : 'none', transition: 'background 0.3s ease, box-shadow 0.3s ease' }}>
               {isHL && <span className="absolute rounded-full" style={{ width: 8, height: 8, background: '#F9B80E', top: -3, right: -3, zIndex: 2 }} />}
               <span style={{ fontSize: '0.75rem', fontWeight: 600, color: isHL ? '#FFFFFF' : '#0A0A0A', position: 'relative', zIndex: 1 }}>{n}</span>
             </div>
@@ -115,12 +115,12 @@ function Hero() {
           {/* LEFT: text */}
           <div className="flex flex-col gap-6">
             <p className="inline-flex items-center gap-2" style={{ fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(10,10,10,0.5)' }}>
-              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#1E5EBF', display: 'inline-block', animation: 'hero-pulse 2s ease-in-out infinite' }} />
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#CC0000', display: 'inline-block', animation: 'hero-pulse 2s ease-in-out infinite' }} />
               Austin, TX · Kids Jiu-Jitsu
             </p>
 
             <h1 style={{ fontFamily: "'ChildGorlex','SuperbusyActivity','Anton',sans-serif", fontSize: 'clamp(1.6rem, 5vw, 4rem)', letterSpacing: '0.01em', lineHeight: '1.1', textTransform: 'uppercase', color: '#0A0A0A', margin: 0 }}>
-              <span style={{ color: '#1E5EBF' }}>Help your child<br />build confidence</span><br />
+              <span style={{ color: '#CC0000' }}>Help your child<br />build confidence</span><br />
               from their very<br />first Jiu-Jitsu class.
             </h1>
 
@@ -129,15 +129,9 @@ function Hero() {
             </p>
 
             <div className="flex flex-wrap gap-4">
-              <button onClick={openModal} className="inline-flex items-center gap-2 font-semibold cursor-pointer transition-all hover:scale-[1.02] active:scale-[0.99] min-h-[52px]" style={{ background: '#1E5EBF', color: '#fff', padding: '1rem 2rem', fontSize: '0.8125rem', letterSpacing: '0.08em', textTransform: 'uppercase', borderRadius: 6 }}>
+              <button onClick={openModal} className="inline-flex items-center gap-2 font-semibold cursor-pointer transition-all hover:scale-[1.02] active:scale-[0.99] min-h-[52px]" style={{ background: '#CC0000', color: '#fff', padding: '1rem 2rem', fontSize: '0.8125rem', letterSpacing: '0.08em', textTransform: 'uppercase', borderRadius: 6 }}>
                 Book a Free Trial Class →
               </button>
-              <a href="#classes" className="inline-flex items-center gap-2 font-semibold transition-all min-h-[52px]" style={{ border: '2px solid #0A0A0A', color: '#0A0A0A', padding: '1rem 2rem', fontSize: '0.8125rem', letterSpacing: '0.08em', textTransform: 'uppercase', textDecoration: 'none', borderRadius: 6 }}
-                onMouseEnter={e => { e.currentTarget.style.background = '#0A0A0A'; e.currentTarget.style.color = '#fff' }}
-                onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#0A0A0A' }}
-              >
-                See Programs
-              </a>
             </div>
 
           </div>
@@ -173,18 +167,18 @@ function WhyParents() {
         {/* Header */}
         <div className="mb-10">
           <h2 style={{ fontFamily: "'ChildGorlex','SuperbusyActivity','Anton',sans-serif", fontSize: 'clamp(2rem,3.5vw + 0.5rem,3.5rem)', lineHeight: '1.1', color: '#0A0A0A', margin: 0 }}>
-            Why do parents choose <span style={{ color: '#1E5EBF', whiteSpace: 'nowrap' }}>Fight Factory?</span>
+            Why do parents choose <span style={{ color: '#CC0000', whiteSpace: 'nowrap' }}>Fight Factory?</span>
           </h2>
         </div>
 
         {/* Mobile: stack | Desktop: bento */}
         <div className="flex flex-col gap-4 md:hidden">
           {/* Title card */}
-          <div style={{ borderRadius: 20, background: '#1E5EBF', padding: '24px', display: 'flex', flexDirection: 'column', gap: 14 }}>
+          <div style={{ borderRadius: 20, background: '#CC0000', padding: '24px', display: 'flex', flexDirection: 'column', gap: 14 }}>
             <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: '0.9rem', lineHeight: '1.7', margin: 0 }}>
               Fight Factory offers a kids onboarding system unique in Austin: children begin with 5 introductory classes in a separate group, designed to build confidence in their first steps.
             </p>
-            <button onClick={openModal} style={{ alignSelf: 'flex-start', background: '#fff', color: '#1E5EBF', border: 'none', borderRadius: 6, padding: '0.75rem 1.5rem', fontSize: '0.8rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', cursor: 'pointer' }}>
+            <button onClick={openModal} style={{ alignSelf: 'flex-start', background: '#fff', color: '#CC0000', border: 'none', borderRadius: 6, padding: '0.75rem 1.5rem', fontSize: '0.8rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', cursor: 'pointer' }}>
               Book Free Trial →
             </button>
           </div>
@@ -202,7 +196,7 @@ function WhyParents() {
           <div style={{ borderRadius: 20, background: '#fff', padding: '16px', border: '1.5px solid #E8ECF8', display: 'flex', flexDirection: 'column', gap: 8 }}>
             {whyBenefits.map((b, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 12px', borderRadius: 8, background: '#F8F9FF', border: '1px solid #E8ECF8' }}>
-                <div style={{ width: 22, height: 22, borderRadius: '50%', background: '#1E5EBF', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ width: 22, height: 22, borderRadius: '50%', background: '#CC0000', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l2.5 2.5L10 3.5" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </div>
                 <span style={{ fontSize: '0.85rem', color: '#333', fontWeight: 500 }}>{b.text}</span>
@@ -218,20 +212,20 @@ function WhyParents() {
             onMouseLeave={e => { (e.currentTarget.querySelector('img') as HTMLElement).style.transform = 'scale(1)' }}>
             <img src="/kids/imagem/2.webp" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.5s ease' }} />
           </div>
-          <div style={{ gridColumn: '2 / 4', gridRow: '1', borderRadius: 20, background: '#1E5EBF', padding: '32px 36px', display: 'flex', flexDirection: 'column', gap: 16, minHeight: 200 }}>
+          <div style={{ gridColumn: '2 / 4', gridRow: '1', borderRadius: 20, background: '#CC0000', padding: '32px 36px', display: 'flex', flexDirection: 'column', gap: 16, minHeight: 200 }}>
             <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: '0.9rem', lineHeight: '1.7', margin: 0 }}>
               Fight Factory offers a kids onboarding system unique in Austin: children begin with 5 introductory classes in a separate group from the regular classes, designed to build confidence in their first steps.
             </p>
-            <button onClick={openModal} style={{ alignSelf: 'flex-start', background: '#fff', color: '#1E5EBF', border: 'none', borderRadius: 6, padding: '0.75rem 1.5rem', fontSize: '0.8rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', cursor: 'pointer' }}>
+            <button onClick={openModal} style={{ alignSelf: 'flex-start', background: '#fff', color: '#CC0000', border: 'none', borderRadius: 6, padding: '0.75rem 1.5rem', fontSize: '0.8rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', cursor: 'pointer' }}>
               Book Free Trial →
             </button>
           </div>
           <div style={{ gridColumn: '2', gridRow: '2', borderRadius: 20, background: '#fff', padding: '24px', border: '1.5px solid #E8ECF8', display: 'flex', flexDirection: 'column', gap: 8 }}>
             {whyBenefits.map((b, i) => (
               <div key={i} className="benefit-hover-card" style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', borderRadius: 10, border: '1.5px solid #E8ECF8', background: '#F8F9FF', cursor: 'default', transition: 'all 0.2s ease' }}
-                onMouseEnter={e => { const el = e.currentTarget; el.style.background = '#1E5EBF'; el.style.borderColor = '#1E5EBF'; (el.querySelector('.b-icon') as HTMLElement).style.background = 'rgba(255,255,255,0.2)'; (el.querySelector('.b-text') as HTMLElement).style.color = '#fff' }}
-                onMouseLeave={e => { const el = e.currentTarget; el.style.background = '#F8F9FF'; el.style.borderColor = '#E8ECF8'; (el.querySelector('.b-icon') as HTMLElement).style.background = '#1E5EBF'; (el.querySelector('.b-text') as HTMLElement).style.color = '#333' }}>
-                <div className="b-icon" style={{ width: 28, height: 28, borderRadius: '50%', background: '#1E5EBF', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background 0.2s' }}>
+                onMouseEnter={e => { const el = e.currentTarget; el.style.background = '#CC0000'; el.style.borderColor = '#CC0000'; (el.querySelector('.b-icon') as HTMLElement).style.background = 'rgba(255,255,255,0.2)'; (el.querySelector('.b-text') as HTMLElement).style.color = '#fff' }}
+                onMouseLeave={e => { const el = e.currentTarget; el.style.background = '#F8F9FF'; el.style.borderColor = '#E8ECF8'; (el.querySelector('.b-icon') as HTMLElement).style.background = '#CC0000'; (el.querySelector('.b-text') as HTMLElement).style.color = '#333' }}>
+                <div className="b-icon" style={{ width: 28, height: 28, borderRadius: '50%', background: '#CC0000', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background 0.2s' }}>
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l2.5 2.5L10 3.5" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </div>
                 <span className="b-text" style={{ fontSize: '0.85rem', color: '#333', lineHeight: '1.4', fontWeight: 500, transition: 'color 0.2s' }}>{b.text}</span>
@@ -275,7 +269,7 @@ function Programs() {
         {/* Header */}
         <div className="text-center mb-12">
           <h2 style={{ fontFamily: "'ChildGorlex','SuperbusyActivity','Anton',sans-serif", fontSize: 'clamp(2rem,4vw,3.5rem)', lineHeight: '1.05', color: '#0A0A0A', margin: 0 }}>
-            Our <span style={{ color: '#1E5EBF' }}>classes</span>
+            Our <span style={{ color: '#CC0000' }}>classes</span>
           </h2>
         </div>
 
@@ -287,7 +281,7 @@ function Programs() {
               onMouseLeave={() => setHoveredCard(null)}
               style={{
                 borderRadius: 20, overflow: 'hidden', background: '#0A0A0A', display: 'flex', flexDirection: 'column',
-                border: hoveredCard === p.id ? '2px solid #1E5EBF' : '2px solid #0A0A0A',
+                border: hoveredCard === p.id ? '2px solid #CC0000' : '2px solid #0A0A0A',
                 boxShadow: hoveredCard === p.id ? '0 20px 60px rgba(0,0,0,0.35)' : '0 8px 32px rgba(0,0,0,0.18)',
                 transform: hoveredCard === null ? 'scale(1)' : hoveredCard === p.id ? 'scale(1.02)' : 'scale(0.97)',
                 filter: hoveredCard === null ? 'none' : hoveredCard === p.id ? 'none' : 'blur(2px) brightness(0.6)',
@@ -305,7 +299,7 @@ function Programs() {
               </div>
 
               {/* Text section — below photo */}
-              <div style={{ padding: '28px', display: 'flex', flexDirection: 'column', gap: 14, flexGrow: 1, background: hoveredCard === p.id ? '#1E5EBF' : '#0A0A0A', transition: 'background 0.4s ease' }}>
+              <div style={{ padding: '28px', display: 'flex', flexDirection: 'column', gap: 14, flexGrow: 1, background: hoveredCard === p.id ? '#CC0000' : '#0A0A0A', transition: 'background 0.4s ease' }}>
                 <h3 style={{ fontFamily: "'ChildGorlex','SuperbusyActivity','Anton',sans-serif", fontSize: 'clamp(1.4rem,2vw,1.85rem)', color: '#FFFFFF', lineHeight: '1.05', margin: 0, textTransform: 'uppercase', letterSpacing: '0.02em' }}>
                   {p.title}
                 </h3>
@@ -313,10 +307,10 @@ function Programs() {
                   {p.desc}
                 </p>
                 <button onClick={openModal}
-                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', background: hoveredCard === p.id ? '#FFFFFF' : 'rgba(255,255,255,0.08)', color: hoveredCard === p.id ? '#1E5EBF' : '#fff', border: hoveredCard === p.id ? '1.5px solid #fff' : '1.5px solid rgba(255,255,255,0.18)', borderRadius: 8, padding: '0.875rem 1.5rem', fontSize: '0.8rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer', transition: 'all 0.4s ease', marginTop: 'auto' }}
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', background: hoveredCard === p.id ? '#FFFFFF' : 'rgba(255,255,255,0.08)', color: hoveredCard === p.id ? '#CC0000' : '#fff', border: hoveredCard === p.id ? '1.5px solid #fff' : '1.5px solid rgba(255,255,255,0.18)', borderRadius: 8, padding: '0.875rem 1.5rem', fontSize: '0.8rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer', transition: 'all 0.4s ease', marginTop: 'auto' }}
                 >
                   Book a free trial class
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10H16M16 10L11 5M16 10L11 15" stroke={hoveredCard === p.id ? '#1E5EBF' : 'white'} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10H16M16 10L11 5M16 10L11 15" stroke={hoveredCard === p.id ? '#CC0000' : 'white'} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </button>
               </div>
             </div>
@@ -332,7 +326,7 @@ function Process() {
   const { openModal } = useModal()
 
   return (
-    <section style={{ background: '#1E5EBF', padding: '96px 0', position: 'relative', overflow: 'hidden' }}>
+    <section style={{ background: '#CC0000', padding: '96px 0', position: 'relative', overflow: 'hidden' }}>
       {/* Subtle texture */}
       <div className="absolute inset-0 pointer-events-none" style={{
         backgroundImage: `
@@ -365,13 +359,13 @@ function Process() {
             <ol className="flex flex-col gap-4">
               {steps.map((s, idx) => (
                 <li key={s.num}>
-                  <div className="grid items-center gap-5 p-5 md:p-6" style={{ gridTemplateColumns: 'auto 1fr', background: '#FFFFFF', border: '1.5px solid #E8ECF8', borderRadius: 16, boxShadow: '0 4px 16px rgba(30,94,191,0.07)', transition: 'box-shadow 0.2s ease' }}
-                    onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 8px 32px rgba(30,94,191,0.14)'; e.currentTarget.style.borderColor = '#1E5EBF' }}
-                    onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 4px 16px rgba(30,94,191,0.07)'; e.currentTarget.style.borderColor = '#E8ECF8' }}
+                  <div className="grid items-center gap-5 p-5 md:p-6" style={{ gridTemplateColumns: 'auto 1fr', background: '#FFFFFF', border: '1.5px solid #E8ECF8', borderRadius: 16, boxShadow: '0 4px 16px rgba(204,0,0,0.07)', transition: 'box-shadow 0.2s ease' }}
+                    onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 8px 32px rgba(204,0,0,0.14)'; e.currentTarget.style.borderColor = '#CC0000' }}
+                    onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 4px 16px rgba(204,0,0,0.07)'; e.currentTarget.style.borderColor = '#E8ECF8' }}
                   >
-                    <span style={{ fontFamily: "'ChildGorlex','Anton',sans-serif", fontSize: 'clamp(2.5rem,6vw,4.5rem)', lineHeight: 1, color: idx === 0 ? '#1E5EBF' : idx === 1 ? '#F9B80E' : '#0A0A0A', userSelect: 'none', minWidth: 72 }}>{s.num}</span>
+                    <span style={{ fontFamily: "'ChildGorlex','Anton',sans-serif", fontSize: 'clamp(2.5rem,6vw,4.5rem)', lineHeight: 1, color: idx === 0 ? '#CC0000' : idx === 1 ? '#F9B80E' : '#0A0A0A', userSelect: 'none', minWidth: 72 }}>{s.num}</span>
                     <div className="min-w-0">
-                      <p style={{ fontSize: '0.625rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#1E5EBF', marginBottom: 6 }}>{s.label}</p>
+                      <p style={{ fontSize: '0.625rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#CC0000', marginBottom: 6 }}>{s.label}</p>
                       <p style={{ fontSize: 'clamp(0.9375rem,1.5vw,1.125rem)', lineHeight: '1.5', color: '#333', margin: 0 }}>{s.text}</p>
                     </div>
                   </div>
@@ -380,7 +374,7 @@ function Process() {
             </ol>
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5 pt-6 mt-2" style={{ borderTop: '1px solid rgba(255,255,255,0.2)' }}>
               <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: '0.9375rem', lineHeight: '1.6', maxWidth: '36ch', margin: 0 }}>The first class is completely free. No commitment. No pressure.</p>
-              <button onClick={openModal} className="shrink-0 font-bold cursor-pointer transition-all duration-200 hover:scale-[1.02] active:scale-[0.99] min-h-[52px] whitespace-nowrap" style={{ background: '#FFFFFF', color: '#1E5EBF', padding: '0.875rem 2rem', borderRadius: 6, fontSize: '0.8125rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+              <button onClick={openModal} className="shrink-0 font-bold cursor-pointer transition-all duration-200 hover:scale-[1.02] active:scale-[0.99] min-h-[52px] whitespace-nowrap" style={{ background: '#FFFFFF', color: '#CC0000', padding: '0.875rem 2rem', borderRadius: 6, fontSize: '0.8125rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
                 Schedule Free Trial Class →
               </button>
             </div>
@@ -464,7 +458,7 @@ function KidsTestimonials() {
           <div className="md:col-span-4 flex flex-col gap-6">
             <h2 style={{ fontFamily: "'ChildGorlex','SuperbusyActivity','Anton',sans-serif", fontSize: 'clamp(2rem,3.5vw,3rem)', lineHeight: '1.1', color: '#0A0A0A', margin: 0 }}>
               Get to know some of{' '}
-              <span style={{ color: '#1E5EBF' }}>our students</span>
+              <span style={{ color: '#CC0000' }}>our students</span>
             </h2>
 
             {/* Rating */}
@@ -516,8 +510,8 @@ function KidsTestimonials() {
                   onMouseLeave={() => setHoveredCard(null)}
                   style={{
                     flexShrink: 0, width: CARD_W, background: '#FAFAFA', borderRadius: 16, padding: 20,
-                    border: hoveredCard === idx ? '1.5px solid #1E5EBF' : '1px solid #E8E8E8',
-                    boxShadow: hoveredCard === idx ? '0 8px 32px rgba(30,94,191,0.15)' : '0 2px 12px rgba(0,0,0,0.05)',
+                    border: hoveredCard === idx ? '1.5px solid #CC0000' : '1px solid #E8E8E8',
+                    boxShadow: hoveredCard === idx ? '0 8px 32px rgba(204,0,0,0.15)' : '0 2px 12px rgba(0,0,0,0.05)',
                     transform: hoveredCard === null ? 'scale(1)' : hoveredCard === idx ? 'scale(1.03)' : 'scale(0.97)',
                     filter: hoveredCard === null ? 'none' : hoveredCard === idx ? 'none' : 'blur(1.5px) brightness(0.75)',
                     transition: 'all 0.35s ease',
@@ -577,7 +571,7 @@ function KidsFacility() {
           {/* LEFT: text */}
           <div className="flex flex-col gap-6">
             <h2 style={{ fontFamily: "'ChildGorlex','SuperbusyActivity','Anton',sans-serif", fontSize: 'clamp(2rem,4vw,3.2rem)', lineHeight: '1.1', color: '#0A0A0A', margin: 0 }}>
-              <span style={{ color: '#1E5EBF' }}>For kids to learn confidently,</span>{' '}they need the right environment.
+              <span style={{ color: '#CC0000' }}>For kids to learn confidently,</span>{' '}they need the right environment.
             </h2>
             <p style={{ color: '#555', fontSize: 'clamp(1rem,0.5vw + 0.875rem,1.125rem)', lineHeight: '1.65', margin: 0 }}>
               Fight Factory was designed to help children feel comfortable from day one, with:
@@ -585,7 +579,7 @@ function KidsFacility() {
             <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 10 }}>
               {facilityFeatures.map(f => (
                 <li key={f} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <div style={{ width: 22, height: 22, borderRadius: '50%', background: '#1E5EBF', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <div style={{ width: 22, height: 22, borderRadius: '50%', background: '#CC0000', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                     <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2 6l2.5 2.5L10 3.5" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
                   </div>
                   <span style={{ fontSize: '0.9375rem', color: '#333', fontWeight: 500 }}>{f}</span>
@@ -593,7 +587,7 @@ function KidsFacility() {
               ))}
             </ul>
             <button onClick={openModal} className="inline-flex items-center gap-2 font-semibold cursor-pointer transition-all hover:scale-[1.02] active:scale-[0.99] self-start"
-              style={{ background: '#1E5EBF', color: '#fff', padding: '0.875rem 1.75rem', borderRadius: 8, fontSize: '0.8125rem', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+              style={{ background: '#CC0000', color: '#fff', padding: '0.875rem 1.75rem', borderRadius: 8, fontSize: '0.8125rem', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
               Click for a free trial class →
             </button>
           </div>
@@ -674,7 +668,7 @@ function KidsFacility() {
             </div>
 
             {/* Decorative dot */}
-            <div style={{ position: 'absolute', top: '46%', left: '45%', width: 16, height: 16, borderRadius: '50%', background: '#1E5EBF', zIndex: 5, boxShadow: '0 0 0 4px rgba(30,94,191,0.2)' }} />
+            <div style={{ position: 'absolute', top: '46%', left: '45%', width: 16, height: 16, borderRadius: '50%', background: '#CC0000', zIndex: 5, boxShadow: '0 0 0 4px rgba(204,0,0,0.2)' }} />
           </div>
 
         </div>
@@ -687,7 +681,7 @@ function Coach() {
   const { openModal } = useModal()
 
   return (
-    <section id="coach" style={{ background: '#1E5EBF', padding: '96px 0', position: 'relative', overflow: 'hidden' }}>
+    <section id="coach" style={{ background: '#CC0000', padding: '96px 0', position: 'relative', overflow: 'hidden' }}>
       <PatternBg />
       <style>{`
         @keyframes coachFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
@@ -695,8 +689,8 @@ function Coach() {
       `}</style>
 
       {/* Decorative blobs */}
-      <div style={{ position:'absolute', top:'-80px', right:'-80px', width:320, height:320, borderRadius:'50%', background:'rgba(30,94,191,0.06)', zIndex:0 }} />
-      <div style={{ position:'absolute', bottom:'-60px', left:'-60px', width:240, height:240, borderRadius:'50%', background:'rgba(30,94,191,0.05)', zIndex:0 }} />
+      <div style={{ position:'absolute', top:'-80px', right:'-80px', width:320, height:320, borderRadius:'50%', background:'rgba(204,0,0,0.06)', zIndex:0 }} />
+      <div style={{ position:'absolute', bottom:'-60px', left:'-60px', width:240, height:240, borderRadius:'50%', background:'rgba(204,0,0,0.05)', zIndex:0 }} />
 
       <div className="max-w-7xl mx-auto px-4 md:px-8 relative" style={{ zIndex:1 }}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center">
@@ -704,7 +698,7 @@ function Coach() {
           {/* LEFT: photo with decorative elements */}
           <div style={{ position:'relative', display:'flex', justifyContent:'center' }}>
             {/* Background shape */}
-            <div style={{ position:'absolute', top:'8%', left:'5%', width:'80%', height:'84%', borderRadius:32, background:'linear-gradient(135deg, #1E5EBF 0%, #0d3a8a 100%)', zIndex:0 }} />
+            <div style={{ position:'absolute', top:'8%', left:'5%', width:'80%', height:'84%', borderRadius:32, background:'linear-gradient(135deg, #CC0000 0%, #8B0000 100%)', zIndex:0 }} />
 
             {/* Photo — floating */}
             <div style={{ position:'relative', zIndex:2, animation:'coachFloat 4s ease-in-out infinite', width:'78%' }}>
@@ -713,14 +707,14 @@ function Coach() {
             </div>
 
             {/* Badge — 5th Degree */}
-            <div style={{ position:'absolute', bottom:'14%', right:'6%', zIndex:3, background:'#1E5EBF', color:'#fff', borderRadius:14, padding:'12px 16px', boxShadow:'0 8px 24px rgba(30,94,191,0.35)', animation:'coachBadge 3.5s ease-in-out infinite', border:'3px solid #fff' }}>
+            <div style={{ position:'absolute', bottom:'14%', right:'6%', zIndex:3, background:'#CC0000', color:'#fff', borderRadius:14, padding:'12px 16px', boxShadow:'0 8px 24px rgba(204,0,0,0.35)', animation:'coachBadge 3.5s ease-in-out infinite', border:'3px solid #fff' }}>
               <div style={{ fontSize:'0.6rem', letterSpacing:'0.15em', textTransform:'uppercase', opacity:0.75, marginBottom:3 }}>Black Belt</div>
               <div style={{ fontFamily:"'ChildGorlex','Anton',sans-serif", fontSize:'1.1rem', fontWeight:700 }}>5th Degree</div>
             </div>
 
             {/* Years badge */}
             <div style={{ position:'absolute', top:'12%', right:'4%', zIndex:3, background:'#fff', borderRadius:14, padding:'10px 14px', boxShadow:'0 8px 24px rgba(0,0,0,0.1)', border:'2px solid #E8ECF8' }}>
-              <div style={{ fontFamily:"'ChildGorlex','Anton',sans-serif", fontSize:'1.5rem', color:'#1E5EBF', lineHeight:1, fontWeight:700 }}>30+</div>
+              <div style={{ fontFamily:"'ChildGorlex','Anton',sans-serif", fontSize:'1.5rem', color:'#CC0000', lineHeight:1, fontWeight:700 }}>30+</div>
               <div style={{ fontSize:'0.65rem', color:'#888', marginTop:3 }}>Years on the Mats</div>
             </div>
           </div>
@@ -752,16 +746,16 @@ function Coach() {
 
             <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
               {coachBullets.map(b => (
-                <div key={b.label} style={{ display:'flex', alignItems:'center', gap:12, background:'#FFFFFF', borderRadius:10, padding:'10px 14px', border:'1px solid rgba(30,94,191,0.15)' }}>
-                  <div style={{ width:8, height:8, borderRadius:'50%', background:'#1E5EBF', flexShrink:0 }} />
-                  <span style={{ color:'rgba(30,94,191,0.55)', fontSize:'0.625rem', fontWeight:700, letterSpacing:'0.15em', textTransform:'uppercase', minWidth:110 }}>{b.label}</span>
-                  <span style={{ color:'#1E5EBF', fontSize:'0.875rem', fontWeight:600 }}>{b.text}</span>
+                <div key={b.label} style={{ display:'flex', alignItems:'center', gap:12, background:'#FFFFFF', borderRadius:10, padding:'10px 14px', border:'1px solid rgba(204,0,0,0.15)' }}>
+                  <div style={{ width:8, height:8, borderRadius:'50%', background:'#CC0000', flexShrink:0 }} />
+                  <span style={{ color:'rgba(204,0,0,0.55)', fontSize:'0.625rem', fontWeight:700, letterSpacing:'0.15em', textTransform:'uppercase', minWidth:110 }}>{b.label}</span>
+                  <span style={{ color:'#CC0000', fontSize:'0.875rem', fontWeight:600 }}>{b.text}</span>
                 </div>
               ))}
             </div>
 
             <button onClick={openModal} className="self-start inline-flex items-center gap-2 font-bold cursor-pointer transition-all hover:scale-[1.02] active:scale-[0.99] min-h-[52px]"
-              style={{ background:'#fff', color:'#1E5EBF', padding:'1rem 2.5rem', borderRadius:10, fontSize:'0.9rem', letterSpacing:'0.04em', fontWeight:700 }}>
+              style={{ background:'#fff', color:'#CC0000', padding:'1rem 2.5rem', borderRadius:10, fontSize:'0.9rem', letterSpacing:'0.04em', fontWeight:700 }}>
               Book your free trial class →
             </button>
           </div>
@@ -783,11 +777,11 @@ function KidsFAQ() {
       <div className="max-w-7xl mx-auto px-4 md:px-8 relative" style={{ zIndex: 1 }}>
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16">
           <div className="md:col-span-4">
-            <span style={{ fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#1E5EBF', display: 'block', marginBottom: 12 }}>COMMON QUESTIONS</span>
+            <span style={{ fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#CC0000', display: 'block', marginBottom: 12 }}>COMMON QUESTIONS</span>
             <h2 className="text-[#0A0A0A] mb-5" style={{ fontFamily: "'ChildGorlex','SuperbusyActivity','Anton',sans-serif", fontSize: 'clamp(2rem,4vw + 0.75rem,3.5rem)', letterSpacing: '0.01em', lineHeight: '1.1', textTransform: 'uppercase' }}>
-              Common <span style={{ color: '#1E5EBF' }}>Questions</span>
+              Common <span style={{ color: '#CC0000' }}>Questions</span>
             </h2>
-            <button onClick={openModal} className="inline-flex items-center font-semibold cursor-pointer transition-all duration-200 hover:scale-[1.02] active:scale-[0.99] mt-4 whitespace-nowrap" style={{ background: '#1E5EBF', color: '#FFFFFF', padding: '0.75rem 1.5rem', borderRadius: 6, fontSize: '0.8125rem', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+            <button onClick={openModal} className="inline-flex items-center font-semibold cursor-pointer transition-all duration-200 hover:scale-[1.02] active:scale-[0.99] mt-4 whitespace-nowrap" style={{ background: '#CC0000', color: '#FFFFFF', padding: '0.75rem 1.5rem', borderRadius: 6, fontSize: '0.8125rem', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
               Click to book your free trial class →
             </button>
           </div>
@@ -796,7 +790,7 @@ function KidsFAQ() {
               <div key={item.id} className="border-b transition-colors" style={{ borderColor: '#D8D8D8' }}>
                 <button onClick={() => setOpen(open === item.id ? null : item.id)} className="w-full flex items-center justify-between py-5 text-left cursor-pointer group min-h-[44px]" aria-expanded={open === item.id}>
                   <span className="text-[#0A0A0A] font-semibold pr-4 group-hover:text-[#555555] transition-colors" style={{ fontSize: 'clamp(0.9375rem,0.3vw + 0.875rem,1rem)' }}>{item.question}</span>
-                  <span className="shrink-0 transition-transform duration-200" style={{ transform: open === item.id ? 'rotate(45deg)' : 'rotate(0deg)', color: open === item.id ? '#1E5EBF' : '#0A0A0A' }}>
+                  <span className="shrink-0 transition-transform duration-200" style={{ transform: open === item.id ? 'rotate(45deg)' : 'rotate(0deg)', color: open === item.id ? '#CC0000' : '#0A0A0A' }}>
                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 4V16M4 10H16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
                   </span>
                 </button>
@@ -833,3 +827,4 @@ export function KidsPage() {
     </BookingProvider>
   )
 }
+

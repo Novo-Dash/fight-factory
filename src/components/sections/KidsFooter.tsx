@@ -1,4 +1,4 @@
-const contactItems = [
+﻿const contactItems = [
   { label: 'Address', text: '9607 Research Blvd, Suite #675, Austin, TX 78759', href: 'https://maps.google.com/?q=Fight+Factory+Jiu-Jitsu+Austin+TX' },
   { label: 'Phone',   text: '+1 (737) 283-6237', href: 'tel:+17372836237' },
   { label: 'Instagram', text: '@fightfactory_jiujitsu', href: 'https://instagram.com/fightfactory_jiujitsu' },
@@ -28,7 +28,7 @@ export function KidsFooter() {
       </div>
 
       {/* Footer body */}
-      <div style={{ background: '#0d2a6b', position: 'relative', overflow: 'hidden', padding: '60px 0 0' }}>
+      <div style={{ background: '#1a0000', position: 'relative', overflow: 'hidden', padding: '60px 0 0' }}>
 
         {/* Watermark */}
         <style>{`
@@ -50,7 +50,7 @@ export function KidsFooter() {
 
         {/* Card */}
         <div className="max-w-6xl mx-auto px-4 md:px-8 relative" style={{ zIndex: 1 }}>
-          <div style={{ background: '#1E5EBF', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 20, padding: '40px 40px 0', overflow: 'hidden' }}>
+          <div style={{ background: '#CC0000', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 20, padding: '40px 40px 0', overflow: 'hidden' }}>
 
             <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-10">
 
@@ -68,7 +68,7 @@ export function KidsFooter() {
                     <a key={i} href={s.href} target="_blank" rel="noopener noreferrer"
                       className="flex items-center justify-center transition-all duration-200"
                       style={{ width: 38, height: 38, borderRadius: '50%', border: '1px solid rgba(255,255,255,0.25)', color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}
-                      onMouseEnter={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.color = '#1E5EBF' }}
+                      onMouseEnter={e => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.color = '#CC0000' }}
                       onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'rgba(255,255,255,0.6)' }}
                     >{s.icon}</a>
                   ))}
@@ -122,3 +122,4 @@ export function KidsFooter() {
     </footer>
   )
 }
+
