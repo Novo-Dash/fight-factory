@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s -o /dev/null -w \"%{http_code} %{size_download}\" \"http://localhost:5175/kids/fonte/TAGBOGY.otf\")",
+      "Bash(npx playwright eval --browser chromium ' *)",
+      "Bash(node -e ' *)",
+      "Bash(npx playwright *)",
+      "Bash(npx ttf2woff2 *)",
+      "Bash(npx -y ttf2woff2 --help)",
+      "Bash(python3 -c \"import fonttools\")",
+      "Bash(python -c \"from fontTools.ttLib import TTFont; f=TTFont\\('D:/DOCUMENTOS/NovoDash/Fight Factory/public/kids/fonte/TAGBOGY.otf'\\); f.flavor='woff2'; f.save\\('D:/DOCUMENTOS/NovoDash/Fight Factory/public/kids/fonte/TAGBOGY.woff2'\\); print\\('OK'\\)\")",
+      "PowerShell(\\(Get-Item \"D:\\\\DOCUMENTOS\\\\NovoDash\\\\Fight Factory\\\\public\\\\kids\\\\fonte\\\\TAGBOGY.woff2\"\\).Length)"
+    ]
+  }
+}
