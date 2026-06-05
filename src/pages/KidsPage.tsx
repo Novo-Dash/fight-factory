@@ -108,23 +108,25 @@ function Hero() {
         @media (max-width:768px) {
           .k-hero-grid {
             grid-template-columns: 1fr !important;
-            padding-top: 96px !important;
-            padding-bottom: 48px !important;
-            padding-left: 20px !important;
-            padding-right: 20px !important;
+            padding-top: 88px !important;
+            padding-bottom: 40px !important;
+            padding-left: 16px !important;
+            padding-right: 16px !important;
             min-height: unset !important;
           }
-          .k-hero-title { font-size: 1.95rem !important; letter-spacing: -0.025em !important; }
+          .k-hero-title { font-size: 2.4rem !important; letter-spacing: -0.03em !important; line-height: 1.05 !important; }
           .k-hero-body {
-            font-size: 0.65rem !important;
-            line-height: 1.6 !important;
+            font-size: 0.82rem !important;
+            line-height: 1.65 !important;
             max-width: 100% !important;
           }
           .k-hero-btn {
-            padding: 0.9rem 1.75rem !important;
-            font-size: 0.8rem !important;
-            letter-spacing: 0.04em !important;
+            padding: 1rem 2rem !important;
+            font-size: 0.85rem !important;
+            letter-spacing: 0.05em !important;
             white-space: nowrap !important;
+            width: 100% !important;
+            justify-content: center !important;
           }
           .k-hero-mobile-photos { display: flex !important; }
         }
@@ -150,12 +152,12 @@ function Hero() {
 
         {/* LEFT column */}
         <div className="k-pol-col" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'center', gap: 40, paddingRight: 20 }}>
-          <div style={{ width: 250, background: '#fff', padding: '13px 13px 46px', boxShadow: '0 10px 40px rgba(0,0,0,0.13)', animation: 'kPol1 8s ease-in-out infinite', animationFillMode: 'backwards', marginTop: 48, willChange: 'transform' }}>
+          <div style={{ width: 310, background: '#fff', padding: '14px 14px 52px', boxShadow: '0 10px 40px rgba(0,0,0,0.13)', animation: 'kPol1 8s ease-in-out infinite', animationFillMode: 'backwards', marginTop: 48, willChange: 'transform' }}>
             <div style={{ width: '100%', aspectRatio: '1', overflow: 'hidden', background: '#111' }}>
               <img src="/kids/imagem/gallery/1.webp" alt="" decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
             </div>
           </div>
-          <div style={{ width: 230, background: '#fff', padding: '13px 13px 42px', boxShadow: '0 10px 40px rgba(0,0,0,0.11)', animation: 'kPol2 9s ease-in-out infinite', animationDelay: '0.4s', animationFillMode: 'backwards', marginRight: '12%', willChange: 'transform' }}>
+          <div style={{ width: 285, background: '#fff', padding: '14px 14px 50px', boxShadow: '0 10px 40px rgba(0,0,0,0.11)', animation: 'kPol2 9s ease-in-out infinite', animationDelay: '0.4s', animationFillMode: 'backwards', marginRight: '12%', willChange: 'transform' }}>
             <div style={{ width: '100%', aspectRatio: '1', overflow: 'hidden', background: '#111' }}>
               <img src="/kids/imagem/gallery/3.webp" alt="" decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
             </div>
@@ -165,14 +167,8 @@ function Hero() {
         {/* CENTER */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 28, padding: '0 16px' }}>
 
-          {/* Eyebrow */}
-          <div className="inline-flex items-center gap-2" style={{ background: '#FFF0F0', border: '1.5px solid rgba(204,0,0,0.2)', borderRadius: 8, padding: '6px 16px' }}>
-            <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#CC0000', display: 'inline-block' }} />
-            <span style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#CC0000' }}>Kids Jiu-Jitsu · Austin, TX</span>
-          </div>
-
           {/* Headline */}
-          <h1 className="k-hero-title" style={{ fontFamily: "'Tagbogy','HipsterHatch','Anton',sans-serif", fontSize: 'clamp(1.9rem, 4vw, 4.4rem)', letterSpacing: '0.01em', lineHeight: '1.08', textTransform: 'uppercase', color: '#0A0A0A', margin: 0 }}>
+          <h1 className="k-hero-title" style={{ fontFamily: "'Tagbogy','HipsterHatch','Anton',sans-serif", fontSize: 'clamp(2.2rem, 4.5vw, 5.2rem)', letterSpacing: '0.01em', lineHeight: '1.08', textTransform: 'uppercase', color: '#0A0A0A', margin: 0 }}>
             <span style={{ color: '#CC0000' }}>Help your child build{' '}<br className="k-hero-br" />confidence from their</span>{' '}<br className="k-hero-br" />
             <span style={{ color: '#0A0A0A' }}>very first Jiu&#8209;Jitsu class.</span>
           </h1>
@@ -209,12 +205,12 @@ function Hero() {
 
         {/* RIGHT column */}
         <div className="k-pol-col" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', gap: 40, paddingLeft: 20 }}>
-          <div style={{ width: 240, background: '#fff', padding: '13px 13px 44px', boxShadow: '0 10px 40px rgba(0,0,0,0.12)', animation: 'kPol3 7s ease-in-out infinite', animationDelay: '0.2s', animationFillMode: 'backwards', marginLeft: '12%', willChange: 'transform' }}>
+          <div style={{ width: 300, background: '#fff', padding: '14px 14px 52px', boxShadow: '0 10px 40px rgba(0,0,0,0.12)', animation: 'kPol3 7s ease-in-out infinite', animationDelay: '0.2s', animationFillMode: 'backwards', marginLeft: '12%', willChange: 'transform' }}>
             <div style={{ width: '100%', aspectRatio: '1', overflow: 'hidden', background: '#111' }}>
               <img src="/kids/imagem/gallery/4.webp" alt="" decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
             </div>
           </div>
-          <div style={{ width: 255, background: '#fff', padding: '13px 13px 46px', boxShadow: '0 10px 40px rgba(0,0,0,0.13)', animation: 'kPol4 10s ease-in-out infinite', animationDelay: '0.6s', animationFillMode: 'backwards', marginTop: 24, willChange: 'transform' }}>
+          <div style={{ width: 320, background: '#fff', padding: '14px 14px 54px', boxShadow: '0 10px 40px rgba(0,0,0,0.13)', animation: 'kPol4 10s ease-in-out infinite', animationDelay: '0.6s', animationFillMode: 'backwards', marginTop: 24, willChange: 'transform' }}>
             <div style={{ width: '100%', aspectRatio: '1', overflow: 'hidden', background: '#111' }}>
               <img src="/kids/imagem/gallery/5.webp" alt="" decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
             </div>
