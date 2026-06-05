@@ -98,7 +98,7 @@ function Hero() {
   const { openModal } = useModal()
 
   return (
-    <section className="relative overflow-hidden" style={{ background: '#FAFAF8', minHeight: '100vh' }}>
+    <section className="k-hero-section relative overflow-hidden" style={{ background: '#FAFAF8', minHeight: '100vh' }}>
       <style>{`
         @keyframes kPol1 { 0%,100%{transform:rotate(-10deg) translateY(0px)} 50%{transform:rotate(-10deg) translateY(-7px)} }
         @keyframes kPol2 { 0%,100%{transform:rotate(7deg)  translateY(0px)} 50%{transform:rotate(7deg)  translateY(-9px)} }
@@ -106,6 +106,7 @@ function Hero() {
         @keyframes kPol4 { 0%,100%{transform:rotate(-7deg) translateY(0px)} 50%{transform:rotate(-7deg) translateY(-8px)} }
         @media (max-width:900px) { .k-pol-col { display:none !important; } }
         @media (max-width:768px) {
+          .k-hero-section { min-height: unset !important; }
           .k-hero-grid {
             grid-template-columns: 1fr !important;
             padding-top: 88px !important;
@@ -114,10 +115,10 @@ function Hero() {
             padding-right: 16px !important;
             min-height: unset !important;
           }
-          .k-hero-title { font-size: 2.4rem !important; letter-spacing: -0.03em !important; line-height: 1.05 !important; }
+          .k-hero-title { font-size: 3rem !important; letter-spacing: -0.03em !important; line-height: 1.05 !important; }
           .k-hero-body {
-            font-size: 0.82rem !important;
-            line-height: 1.65 !important;
+            font-size: 0.75rem !important;
+            line-height: 1.6 !important;
             max-width: 100% !important;
           }
           .k-hero-btn {
@@ -165,12 +166,12 @@ function Hero() {
         </div>
 
         {/* CENTER */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 28, padding: '0 16px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 20, padding: '0 16px' }}>
 
           {/* Headline */}
           <h1 className="k-hero-title" style={{ fontFamily: "'Tagbogy','HipsterHatch','Anton',sans-serif", fontSize: 'clamp(2.2rem, 4.5vw, 5.2rem)', letterSpacing: '0.01em', lineHeight: '1.08', textTransform: 'uppercase', color: '#0A0A0A', margin: 0 }}>
-            <span style={{ color: '#CC0000' }}>Help your child build{' '}<br className="k-hero-br" />confidence from their</span>{' '}<br className="k-hero-br" />
-            <span style={{ color: '#0A0A0A' }}>very first Jiu&#8209;Jitsu class.</span>
+            <span style={{ color: '#CC0000' }}>Help your child<br className="k-hero-br" />build confidence</span>{' '}<br className="k-hero-br" />
+            <span style={{ color: '#0A0A0A' }}>through Jiu&#8209;Jitsu.</span>
           </h1>
 
           {/* Divider */}
