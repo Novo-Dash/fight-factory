@@ -1,4 +1,4 @@
-﻿import { useEffect, useRef, useState } from 'react'
+﻿import { useEffect, useState } from 'react'
 import { BookingProvider } from '../booking/BookingProvider'
 import { KidsNavbar } from '../components/layout/KidsNavbar'
 import { KidsFooter } from '../components/sections/KidsFooter'
@@ -7,14 +7,6 @@ import { KidsMarquee } from '../components/ui/KidsMarquee'
 
 // ─── DATA ──────────────────────────────────────────────────────────────────
 
-const whyBenefits = [
-  { text: 'Learn fundamentals step by step' },
-  { text: 'Train in a welcoming environment' },
-  { text: 'Dedicated instructor during first classes' },
-  { text: 'No experience or athletic background required' },
-  { text: 'Build confidence before joining advanced groups' },
-]
-// copy is exact as provided — no modifications
 
 
 const steps = [
@@ -361,12 +353,7 @@ function Programs() {
     kids: 'Ages 8 – 14',
   }
 
-  const nums: Record<string, string> = {
-    beginner: '01',
-    kids: '02',
-  }
-
-  const features: Record<string, string[]> = {
+const features: Record<string, string[]> = {
     beginner: ['5-class onboarding', 'Separate beginner group', 'No gear needed'],
     kids: ['Discipline & focus', 'Family-friendly', 'All levels welcome'],
   }
