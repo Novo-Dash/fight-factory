@@ -1,8 +1,6 @@
 ﻿const contactItems = [
   { label: 'Address', text: '9607 Research Blvd, Suite #675, Austin, TX 78759', href: 'https://maps.google.com/?q=Fight+Factory+Jiu-Jitsu+Austin+TX' },
   { label: 'Phone',   text: '+1 (737) 283-6237', href: 'tel:+17372836237' },
-  { label: 'Instagram', text: '@fightfactory_jiujitsu', href: 'https://instagram.com/fightfactory_jiujitsu' },
-  { label: 'Facebook',  text: 'BrazilianFightFactory', href: 'https://www.facebook.com/BrazilianFightFactory' },
 ]
 
 const quickLinks = [
@@ -28,7 +26,7 @@ export function KidsFooter() {
       </div>
 
       {/* Footer body */}
-      <div style={{ background: '#1a0000', position: 'relative', overflow: 'hidden', padding: '60px 0 0' }}>
+      <div style={{ background: '#0A0A0A', position: 'relative', overflow: 'hidden', padding: '60px 0 0' }}>
 
         {/* Watermark */}
         <style>{`
@@ -50,7 +48,7 @@ export function KidsFooter() {
 
         {/* Card */}
         <div className="max-w-6xl mx-auto px-4 md:px-8 relative" style={{ zIndex: 1 }}>
-          <div style={{ background: '#CC0000', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 20, padding: '40px 40px 0', overflow: 'hidden' }}>
+          <div style={{ background: '#161616', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 20, padding: '40px 40px 0', overflow: 'hidden' }}>
 
             <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-10">
 
@@ -58,7 +56,7 @@ export function KidsFooter() {
               <div className="md:col-span-5">
                 <img src="/images/FONTE.webp" alt="Fight Factory Jiu-Jitsu Kids" className="h-9 w-auto object-contain mb-4" style={{ filter: 'brightness(0) invert(1)' }} />
                 <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: '0.875rem', lineHeight: '1.8', maxWidth: 340, marginBottom: 24 }}>
-                  Welcome to Fight Factory, a family-friendly Jiu-Jitsu academy in Austin helping children build confidence and discipline from day one.
+                  Welcome to Fight Factory, a family-friendly Jiu-Jitsu academy in Austin helping children build confidence, discipline, and resilience through beginner-friendly classes designed for every stage of childhood.
                 </p>
                 <div className="flex gap-3">
                   {[
@@ -77,7 +75,7 @@ export function KidsFooter() {
 
               {/* Contact */}
               <div className="md:col-span-4">
-                <h4 style={{ fontFamily: "'ChildGorlex','Anton',sans-serif", color: '#fff', fontSize: '0.75rem', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 20, opacity: 0.6 }}>Contact</h4>
+                <h4 style={{ fontFamily: "'HipsterHatch','Tagbogy','Anton',sans-serif", color: '#fff', fontSize: '0.9rem', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 20, opacity: 0.85 }}>Contact</h4>
                 <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 12 }}>
                   {contactItems.map(c => (
                     <li key={c.label}>
@@ -93,7 +91,7 @@ export function KidsFooter() {
 
               {/* Quick links */}
               <div className="md:col-span-3">
-                <h4 style={{ fontFamily: "'ChildGorlex','Anton',sans-serif", color: '#fff', fontSize: '0.75rem', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 20, opacity: 0.6 }}>Quick Links</h4>
+                <h4 style={{ fontFamily: "'HipsterHatch','Tagbogy','Anton',sans-serif", color: '#fff', fontSize: '0.9rem', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 20, opacity: 0.85 }}>Quick Links</h4>
                 <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 10 }}>
                   {quickLinks.map(l => (
                     <li key={l.label}>

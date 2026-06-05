@@ -18,28 +18,14 @@
 
 @font-face {
   font-family: 'Tagbogy';
-  src: url('/kids/fonte/TAGBOGY.otf') format('opentype');
-  font-display: swap;
-  font-weight: 400;
-}
-
-@font-face {
-  font-family: 'HipsterHatch';
-  src: url('/kids/fonte/Hipster Hatch.ttf') format('truetype');
-  font-display: swap;
-  font-weight: 400;
-}
-
-@font-face {
-  font-family: 'ChildGorlex';
-  src: url('/kids/fonte/Child Gorlex.otf') format('opentype');
+  src: url('/kids/fonte/TAGBOGY.woff2') format('woff2');
   font-display: swap;
   font-weight: 400;
 }
 
 @font-face {
   font-family: 'SuperbusyActivity';
-  src: url('/kids/fonte/SuperbusyActivity-Regular.ttf') format('truetype');
+  src: url('/kids/fonte/SuperbusyActivity-Regular.woff2') format('woff2');
   font-display: swap;
   font-weight: 400;
 }

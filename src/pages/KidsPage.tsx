@@ -75,22 +75,22 @@ function CalendarWidget() {
   }, [])
 
   return (
-    <div className="rounded-3xl p-5" style={{ background: '#FFFFFF', border: '2px solid rgba(255,255,255,0.12)', boxShadow: '0 8px 0 0 rgba(0,0,0,0.55)' }}>
-      <div className="flex items-center justify-between rounded-2xl px-4 py-3 mb-4" style={{ background: '#CC0000', boxShadow: '0 4px 0 0 rgba(0,0,0,0.25)' }}>
-        <span style={{ fontFamily: "'SuperbusyActivity','Anton',sans-serif", fontSize: '1.25rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#FFFFFF' }}>June</span>
-        <div className="flex gap-1.5">{[0,1,2].map(i => <span key={i} className="rounded-full" style={{ width: 10, height: 10, background: 'rgba(255,255,255,0.8)', display: 'inline-block' }} />)}</div>
+    <div className="rounded-2xl p-3" style={{ background: '#FFFFFF', border: '2px solid rgba(255,255,255,0.12)', boxShadow: '0 6px 0 0 rgba(0,0,0,0.55)' }}>
+      <div className="flex items-center justify-between rounded-xl px-3 py-2 mb-3" style={{ background: '#CC0000', boxShadow: '0 3px 0 0 rgba(0,0,0,0.25)' }}>
+        <span style={{ fontFamily: "'SuperbusyActivity','Anton',sans-serif", fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#FFFFFF' }}>June</span>
+        <div className="flex gap-1">{[0,1,2].map(i => <span key={i} className="rounded-full" style={{ width: 8, height: 8, background: 'rgba(255,255,255,0.8)', display: 'inline-block' }} />)}</div>
       </div>
-      <div className="grid grid-cols-7 gap-1 mb-2">
-        {DAYS.map((d, i) => <div key={i} className="text-center" style={{ fontSize: '0.625rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(10,10,10,0.4)' }}>{d}</div>)}
+      <div className="grid grid-cols-7 mb-1" style={{ gap: 2 }}>
+        {DAYS.map((d, i) => <div key={i} className="text-center" style={{ fontSize: '0.55rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(10,10,10,0.4)' }}>{d}</div>)}
       </div>
-      <div className="grid grid-cols-7 gap-1">
+      <div className="grid grid-cols-7" style={{ gap: 2 }}>
         {CELLS.map((n, i) => {
           if (n === null) return <div key={i} aria-hidden style={{ aspectRatio: '1' }} />
           const isHL = n === highlight
           return (
-            <div key={i} className="relative flex items-center justify-center rounded-lg" style={{ aspectRatio: '1', background: isHL ? '#CC0000' : 'rgba(10,10,10,0.05)', boxShadow: isHL ? '0 3px 0 0 rgba(0,0,0,0.4)' : 'none', transition: 'background 0.3s ease, box-shadow 0.3s ease' }}>
-              {isHL && <span className="absolute rounded-full" style={{ width: 8, height: 8, background: '#F9B80E', top: -3, right: -3, zIndex: 2 }} />}
-              <span style={{ fontSize: '0.75rem', fontWeight: 600, color: isHL ? '#FFFFFF' : '#0A0A0A', position: 'relative', zIndex: 1 }}>{n}</span>
+            <div key={i} className="relative flex items-center justify-center rounded-md" style={{ aspectRatio: '1', background: isHL ? '#CC0000' : 'rgba(10,10,10,0.05)', boxShadow: isHL ? '0 2px 0 0 rgba(0,0,0,0.4)' : 'none', transition: 'background 0.3s ease, box-shadow 0.3s ease' }}>
+              {isHL && <span className="absolute rounded-full" style={{ width: 6, height: 6, background: '#F9B80E', top: -2, right: -2, zIndex: 2 }} />}
+              <span style={{ fontSize: '0.65rem', fontWeight: 600, color: isHL ? '#FFFFFF' : '#0A0A0A', position: 'relative', zIndex: 1 }}>{n}</span>
             </div>
           )
         })}
@@ -106,64 +106,129 @@ function Hero() {
   const { openModal } = useModal()
 
   return (
-    <section className="relative w-full overflow-hidden" style={{ background: '#FFFFFF', minHeight: '100vh', paddingTop: 80 }}>
+    <section className="relative overflow-hidden" style={{ background: '#FAFAF8', minHeight: '100vh' }}>
+      <style>{`
+        @keyframes kPol1 { 0%,100%{transform:rotate(-10deg) translateY(0px)} 50%{transform:rotate(-10deg) translateY(-7px)} }
+        @keyframes kPol2 { 0%,100%{transform:rotate(7deg)  translateY(0px)} 50%{transform:rotate(7deg)  translateY(-9px)} }
+        @keyframes kPol3 { 0%,100%{transform:rotate(9deg)  translateY(0px)} 50%{transform:rotate(9deg)  translateY(-6px)} }
+        @keyframes kPol4 { 0%,100%{transform:rotate(-7deg) translateY(0px)} 50%{transform:rotate(-7deg) translateY(-8px)} }
+        @media (max-width:900px) { .k-pol-col { display:none !important; } }
+        @media (max-width:768px) {
+          .k-hero-grid {
+            grid-template-columns: 1fr !important;
+            padding-top: 96px !important;
+            padding-bottom: 48px !important;
+            padding-left: 20px !important;
+            padding-right: 20px !important;
+            min-height: unset !important;
+          }
+          .k-hero-title { font-size: 1.95rem !important; letter-spacing: -0.025em !important; }
+          .k-hero-body {
+            font-size: 0.65rem !important;
+            line-height: 1.6 !important;
+            max-width: 100% !important;
+          }
+          .k-hero-btn {
+            padding: 0.9rem 1.75rem !important;
+            font-size: 0.8rem !important;
+            letter-spacing: 0.04em !important;
+            white-space: nowrap !important;
+          }
+          .k-hero-mobile-photos { display: flex !important; }
+        }
+        @media (min-width:769px) {
+          .k-hero-mobile-photos { display: none !important; }
+        }
+      `}</style>
 
-      <div className="relative max-w-[1440px] mx-auto w-full px-4 md:px-10" style={{ zIndex:1 }}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12 items-center py-10 md:py-16">
+      <div className="k-hero-grid" style={{
+        width: '100%',
+        maxWidth: 1440,
+        margin: '0 auto',
+        display: 'grid',
+        gridTemplateColumns: '1fr minmax(0,580px) 1fr',
+        alignItems: 'center',
+        minHeight: '100vh',
+        paddingTop: 110,
+        paddingBottom: 80,
+        paddingLeft: 32,
+        paddingRight: 32,
+        gap: 0,
+      }}>
 
-          {/* LEFT: text */}
-          <div className="flex flex-col gap-6">
-
-            {/* Eyebrow */}
-            <div className="inline-flex items-center gap-2 self-start" style={{ background:'#FFF0F0', border:'1.5px solid rgba(204,0,0,0.2)', borderRadius: 8, padding:'6px 16px' }}>
-              <span style={{ fontSize:'1rem' }}></span>
-              <span style={{ fontSize:'0.7rem', fontWeight:700, letterSpacing:'0.15em', textTransform:'uppercase', color:'#CC0000' }}>Kids Jiu-Jitsu · Austin, TX</span>
+        {/* LEFT column */}
+        <div className="k-pol-col" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'center', gap: 40, paddingRight: 20 }}>
+          <div style={{ width: 250, background: '#fff', padding: '13px 13px 46px', boxShadow: '0 10px 40px rgba(0,0,0,0.13)', animation: 'kPol1 8s ease-in-out infinite', animationFillMode: 'backwards', marginTop: 48, willChange: 'transform' }}>
+            <div style={{ width: '100%', aspectRatio: '1', overflow: 'hidden', background: '#111' }}>
+              <img src="/kids/imagem/gallery/1.webp" alt="" decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
             </div>
-
-            {/* Headline */}
-            <div>
-              <h1 style={{ fontFamily:"'Tagbogy','HipsterHatch','Anton',sans-serif", fontSize:'clamp(2.5rem, 5vw, 5rem)', letterSpacing:'0.01em', lineHeight:'0.92', textTransform:'uppercase', color:'#0A0A0A', margin:0 }}>
-                <span style={{ color:'#CC0000' }}>Help your child<br />build confidence</span><br />
-                <span style={{ color:'#0A0A0A' }}>from their very<br />first Jiu-Jitsu class.</span>
-              </h1>
+          </div>
+          <div style={{ width: 230, background: '#fff', padding: '13px 13px 42px', boxShadow: '0 10px 40px rgba(0,0,0,0.11)', animation: 'kPol2 9s ease-in-out infinite', animationDelay: '0.4s', animationFillMode: 'backwards', marginRight: '12%', willChange: 'transform' }}>
+            <div style={{ width: '100%', aspectRatio: '1', overflow: 'hidden', background: '#111' }}>
+              <img src="/kids/imagem/gallery/3.webp" alt="" decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
             </div>
+          </div>
+        </div>
 
-            {/* Body */}
-            <p style={{ color:'#666', fontSize:'clamp(0.9rem, 0.5vw + 0.8rem, 1.05rem)', lineHeight:'1.7', maxWidth:'44ch', margin:0 }}>
-              Fight Factory helps kids in Austin develop confidence through a beginner-friendly Jiu-Jitsu program designed to make their first steps feel safe, fun, and motivating from day&nbsp;one.
-            </p>
+        {/* CENTER */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 28, padding: '0 16px' }}>
 
-
-            {/* CTA */}
-            <div className="flex flex-wrap gap-3 items-center">
-              <button onClick={openModal} className="inline-flex items-center gap-2 font-bold cursor-pointer transition-all hover:scale-[1.03] active:scale-[0.98]"
-                style={{ background:'#CC0000', color:'#fff', padding:'1rem 2rem', fontSize:'0.875rem', letterSpacing:'0.08em', textTransform:'uppercase', borderRadius: 8, boxShadow:'0 6px 24px rgba(204,0,0,0.35)', minHeight:52 }}>
-                Book a Free Trial Class →
-              </button>
-            </div>
-
-
+          {/* Eyebrow */}
+          <div className="inline-flex items-center gap-2" style={{ background: '#FFF0F0', border: '1.5px solid rgba(204,0,0,0.2)', borderRadius: 8, padding: '6px 16px' }}>
+            <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#CC0000', display: 'inline-block' }} />
+            <span style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#CC0000' }}>Kids Jiu-Jitsu · Austin, TX</span>
           </div>
 
-          {/* RIGHT: video */}
-          <div style={{ position:'relative' }}>
+          {/* Headline */}
+          <h1 className="k-hero-title" style={{ fontFamily: "'Tagbogy','HipsterHatch','Anton',sans-serif", fontSize: 'clamp(1.9rem, 4vw, 4.4rem)', letterSpacing: '0.01em', lineHeight: '1.08', textTransform: 'uppercase', color: '#0A0A0A', margin: 0 }}>
+            <span style={{ color: '#CC0000' }}>Help your child build{' '}<br className="k-hero-br" />confidence from their</span>{' '}<br className="k-hero-br" />
+            <span style={{ color: '#0A0A0A' }}>very first Jiu&#8209;Jitsu class.</span>
+          </h1>
 
-            {/* Decorative star */}
-            
-            
+          {/* Divider */}
+          <div style={{ width: 48, height: 3, background: '#CC0000', borderRadius: 2, margin: '0 auto' }} />
 
-            {/* Video container with fun border */}
-            <div style={{ borderRadius:28, overflow:'hidden', boxShadow:'0 24px 64px rgba(0,0,0,0.14)', border:'4px solid #0A0A0A', position:'relative', background:'#000' }}>
-              <video autoPlay muted loop playsInline style={{ width:'100%', display:'block', maxHeight:'70vh', objectFit:'cover' }}>
-                <source src="/kids/video/hero.webm" type="video/webm" />
-              </video>
+          {/* Body */}
+          <p className="k-hero-body" style={{ color: '#666', fontSize: 'clamp(0.8rem, 0.9vw, 0.875rem)', lineHeight: '1.75', maxWidth: '52ch', margin: 0 }}>
+            Fight Factory helps kids in Austin develop confidence through a beginner-friendly Jiu-Jitsu program designed to make their first steps feel safe, fun, and motivating from day one.
+          </p>
 
-            </div>
+          {/* CTA */}
+          <button onClick={openModal} className="k-hero-btn inline-flex items-center gap-2 font-bold cursor-pointer transition-all hover:scale-[1.03] active:scale-[0.98]"
+            style={{ background: '#CC0000', color: '#fff', padding: '1rem 2.5rem', fontSize: '0.875rem', letterSpacing: '0.08em', textTransform: 'uppercase', borderRadius: 8, boxShadow: '0 6px 24px rgba(204,0,0,0.35)', minHeight: 52, border: 'none' }}>
+            Book a Free Trial Class →
+          </button>
 
-
+          {/* Fotos polaroid — só mobile */}
+          <div className="k-hero-mobile-photos" style={{ gap: 16, justifyContent: 'center', marginTop: 8 }}>
+            {[
+              { src: '/kids/imagem/gallery/1.webp', rot: '-6deg', anim: 'kPol1 14s ease-in-out infinite' },
+              { src: '/kids/imagem/gallery/4.webp', rot: '5deg',  anim: 'kPol3 15s ease-in-out infinite' },
+            ].map((p, i) => (
+              <div key={i} style={{ width: 140, background: '#fff', padding: '10px 10px 36px', boxShadow: '0 8px 28px rgba(0,0,0,0.14)', transform: `rotate(${p.rot})`, animation: p.anim }}>
+                <div style={{ width: '100%', aspectRatio: '1', overflow: 'hidden', background: '#111' }}>
+                  <img src={p.src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                </div>
+              </div>
+            ))}
           </div>
 
         </div>
+
+        {/* RIGHT column */}
+        <div className="k-pol-col" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', gap: 40, paddingLeft: 20 }}>
+          <div style={{ width: 240, background: '#fff', padding: '13px 13px 44px', boxShadow: '0 10px 40px rgba(0,0,0,0.12)', animation: 'kPol3 7s ease-in-out infinite', animationDelay: '0.2s', animationFillMode: 'backwards', marginLeft: '12%', willChange: 'transform' }}>
+            <div style={{ width: '100%', aspectRatio: '1', overflow: 'hidden', background: '#111' }}>
+              <img src="/kids/imagem/gallery/4.webp" alt="" decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+            </div>
+          </div>
+          <div style={{ width: 255, background: '#fff', padding: '13px 13px 46px', boxShadow: '0 10px 40px rgba(0,0,0,0.13)', animation: 'kPol4 10s ease-in-out infinite', animationDelay: '0.6s', animationFillMode: 'backwards', marginTop: 24, willChange: 'transform' }}>
+            <div style={{ width: '100%', aspectRatio: '1', overflow: 'hidden', background: '#111' }}>
+              <img src="/kids/imagem/gallery/5.webp" alt="" decoding="async" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
   )
@@ -172,70 +237,95 @@ function Hero() {
 function WhyParents() {
   const { openModal } = useModal()
 
-  return (
-    <section style={{ background: '#FFFFFF', padding: '96px 0', overflow: 'hidden' }}>
-      <div className="max-w-7xl mx-auto px-4 md:px-8">
+  const benefits = [
+    {
+      icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 20h4V10H2zM10 20h4V4h-4zM18 20h4v-8h-4z"/></svg>,
+      text: 'Learn fundamentals step by step',
+    },
+    {
+      icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
+      text: 'Train in a welcoming environment',
+    },
+    {
+      icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>,
+      text: 'Dedicated instructor during first classes',
+    },
+    {
+      icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>,
+      text: 'No experience or athletic background required',
+    },
+    {
+      icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>,
+      text: 'Build confidence before joining advanced groups',
+    },
+  ]
 
+  return (
+    <section style={{ background: '#FFFFFF', padding: '56px 0 100px', overflow: 'hidden' }}>
+      <div className="max-w-7xl mx-auto px-4 md:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-14 md:gap-20 items-center">
 
           {/* LEFT: photos */}
-          <div style={{ position: 'relative' }}>
-            {/* Main large photo */}
-            <div style={{ borderRadius: 24, overflow: 'hidden', aspectRatio: '4/5', boxShadow: '0 24px 64px rgba(0,0,0,0.12)' }}
+          <div style={{ position: 'relative', paddingBottom: '8%' }}>
+            <div style={{ borderRadius: 28, overflow: 'hidden', aspectRatio: '4/5', boxShadow: '0 32px 80px rgba(0,0,0,0.13)' }}
               onMouseEnter={e => { (e.currentTarget.querySelector('img') as HTMLElement).style.transform = 'scale(1.04)' }}
               onMouseLeave={e => { (e.currentTarget.querySelector('img') as HTMLElement).style.transform = 'scale(1)' }}>
-              <img src="/kids/imagem/2.webp" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.6s ease' }} />
+              <img src="/kids/imagem/2.webp" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.7s ease' }} />
             </div>
 
-            {/* Small photo — overlapping bottom-right */}
-            <div style={{ position: 'absolute', bottom: '-5%', right: '-6%', width: '52%', borderRadius: 18, overflow: 'hidden', aspectRatio: '4/3', boxShadow: '0 16px 40px rgba(0,0,0,0.15)', border: '4px solid #fff' }}
-              onMouseEnter={e => { (e.currentTarget.querySelector('img') as HTMLElement).style.transform = 'scale(1.04)' }}
-              onMouseLeave={e => { (e.currentTarget.querySelector('img') as HTMLElement).style.transform = 'scale(1)' }}>
-              <img src="/kids/imagem/gallery/2.webp" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.6s ease' }} />
-            </div>
 
-            {/* Floating accent */}
-            <div style={{ position: 'absolute', top: '12%', right: '-4%', background: '#CC0000', color: '#fff', borderRadius: 14, padding: '14px 18px', boxShadow: '0 8px 24px rgba(204,0,0,0.35)', border: '3px solid #fff' }}>
-              <div style={{ fontFamily: "'Tagbogy','Anton',sans-serif", fontSize: '1.4rem', lineHeight: 1, fontWeight: 700 }}>5</div>
-              <div style={{ fontSize: '0.65rem', letterSpacing: '0.1em', textTransform: 'uppercase', opacity: 0.85, marginTop: 2 }}>Intro<br />Classes</div>
+            {/* Red badge */}
+            <div style={{ position: 'absolute', top: '14%', right: '-3%', background: '#CC0000', color: '#fff', borderRadius: 16, padding: '16px 20px', boxShadow: '0 10px 28px rgba(204,0,0,0.38)', border: '3px solid #fff', textAlign: 'center' }}>
+              <div style={{ fontFamily: "'Tagbogy','Anton',sans-serif", fontSize: '1.6rem', lineHeight: 1 }}>5</div>
+              <div style={{ fontSize: '0.6rem', letterSpacing: '0.12em', textTransform: 'uppercase', opacity: 0.9, marginTop: 4, lineHeight: 1.4 }}>Intro<br />Classes</div>
             </div>
           </div>
 
           {/* RIGHT: content */}
-          <div className="flex flex-col gap-7">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
+
+            {/* Label + Title */}
             <div>
               <span style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#CC0000' }}>Why parents choose us</span>
-              <h2 style={{ fontFamily: "'Tagbogy','HipsterHatch','Anton',sans-serif", fontSize: 'clamp(2rem,3.5vw,3.2rem)', lineHeight: '1.05', color: '#0A0A0A', margin: '10px 0 0' }}>
-                Why do parents choose <span style={{ color: '#CC0000' }}>Fight Factory?</span>
+              <h2 style={{ fontFamily: "'Tagbogy','HipsterHatch','Anton',sans-serif", fontSize: 'clamp(2.4rem,4.2vw,4rem)', lineHeight: '1.05', color: '#0A0A0A', margin: '10px 0 0', textTransform: 'uppercase' }}>
+                Why do parents choose<br /><span style={{ color: '#CC0000' }}>Fight Factory?</span>
               </h2>
             </div>
 
-            <p style={{ color: '#666', fontSize: '1rem', lineHeight: '1.75', margin: 0 }}>
+            {/* Sub */}
+            <p style={{ color: '#666', fontSize: '0.875rem', lineHeight: '1.75', margin: 0, maxWidth: '42ch' }}>
               Fight Factory offers a kids onboarding system unique in Austin: children begin with 5 introductory classes in a separate group from the regular classes, designed to build confidence in their first steps:
             </p>
 
-            {/* Benefits */}
-            <div className="flex flex-col gap-3">
-              {whyBenefits.map((b, i) => (
-                <div key={i} className="flex items-start gap-3 group cursor-default"
-                  style={{ padding: '12px 16px', borderRadius: 12, border: '1.5px solid #F0F0F0', background: '#FFFFFF', transition: 'all 0.2s ease' }}
-                  onMouseEnter={e => { e.currentTarget.style.background = '#CC0000'; e.currentTarget.style.borderColor = '#CC0000'; (e.currentTarget.querySelectorAll('*') as NodeListOf<HTMLElement>).forEach(el => { if (el.dataset.txt) el.style.color = '#fff' }) }}
-                  onMouseLeave={e => { e.currentTarget.style.background = '#FAFAFA'; e.currentTarget.style.borderColor = '#F0F0F0'; (e.currentTarget.querySelectorAll('*') as NodeListOf<HTMLElement>).forEach(el => { if (el.dataset.txt) el.style.color = '' }) }}
+            {/* Benefits 2-col grid */}
+            <div className="k-why-benefits" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+              {benefits.map((b, i) => (
+                <div key={i} style={{
+                  display: 'flex', alignItems: 'center', gap: 12,
+                  padding: '14px 16px', borderRadius: 14,
+                  background: '#FAFAFA', border: '1.5px solid #F0F0F0',
+                  transition: 'all 0.2s',
+                  cursor: 'default',
+                  ...(i === benefits.length - 1 && benefits.length % 2 !== 0 ? { gridColumn: '1 / -1' } : {}),
+                }}
+                  onMouseEnter={e => { e.currentTarget.style.background = '#FFF0F0'; e.currentTarget.style.borderColor = 'rgba(204,0,0,0.2)' }}
+                  onMouseLeave={e => { e.currentTarget.style.background = '#FAFAFA'; e.currentTarget.style.borderColor = '#F0F0F0' }}
                 >
-                  <div style={{ width: 24, height: 24, borderRadius: '50%', background: '#CC0000', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: 1 }}>
-                    <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2 6l2.5 2.5L10 3.5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  <div style={{ width: 38, height: 38, borderRadius: 11, background: '#CC0000', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    {b.icon}
                   </div>
-                  <span data-txt="1" style={{ fontSize: '0.9375rem', color: '#333', fontWeight: 500, lineHeight: '1.5', transition: 'color 0.2s' }}>{b.text}</span>
+                  <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#1a1a1a', lineHeight: 1.4 }}>{b.text}</span>
                 </div>
               ))}
             </div>
 
+            {/* CTA */}
             <button onClick={openModal} className="self-start inline-flex items-center gap-2 font-bold cursor-pointer transition-all hover:scale-[1.02] active:scale-[0.98]"
-              style={{ background: '#CC0000', color: '#fff', padding: '0.875rem 2rem', fontSize: '0.875rem', letterSpacing: '0.08em', textTransform: 'uppercase', borderRadius: 8, boxShadow: '0 6px 24px rgba(204,0,0,0.3)' }}>
+              style={{ background: '#CC0000', color: '#fff', padding: '0.9rem 2.2rem', fontSize: '0.875rem', letterSpacing: '0.08em', textTransform: 'uppercase', borderRadius: 8, boxShadow: '0 6px 24px rgba(204,0,0,0.3)', border: 'none' }}>
               Book a Free Trial Class →
             </button>
-          </div>
 
+          </div>
         </div>
       </div>
     </section>
@@ -253,7 +343,7 @@ function Programs() {
       tag: 'BEGINNER',
       title: 'Beginner Kids Program',
       desc: 'Built for children with no experience, using a 5-class onboarding system designed to help kids start confidently.',
-      img: '/kids/imagem/4.webp',
+      img: '/kids/imagem/kids-program.webp',
       accent: '#CC0000',
     },
     {
@@ -261,71 +351,92 @@ function Programs() {
       tag: 'KIDS',
       title: 'Kids Program',
       desc: 'Children develop discipline, confidence, focus, and resilience in a safe, structured, family-friendly environment.',
-      img: '/kids/imagem/5.webp',
+      img: '/kids/imagem/kids-program2.webp',
       accent: '#0A0A0A',
     },
   ]
 
+  const ages: Record<string, string> = {
+    beginner: 'Ages 4 – 7',
+    kids: 'Ages 8 – 14',
+  }
+
+  const nums: Record<string, string> = {
+    beginner: '01',
+    kids: '02',
+  }
+
+  const features: Record<string, string[]> = {
+    beginner: ['5-class onboarding', 'Separate beginner group', 'No gear needed'],
+    kids: ['Discipline & focus', 'Family-friendly', 'All levels welcome'],
+  }
+
   return (
-    <section id="classes" style={{ background: '#FFFFFF', padding: '96px 0', overflow: 'hidden' }}>
+    <section id="classes" style={{ background: '#F9F7F5', padding: '88px 0', overflow: 'hidden' }}>
       <div className="max-w-7xl mx-auto px-4 md:px-8">
 
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12">
+        <div className="k-prog-header" style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 20, marginBottom: 44 }}>
           <div>
-            <span style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#CC0000', display: 'block', marginBottom: 8 }}>Programs</span>
-            <h2 style={{ fontFamily: "'Tagbogy','HipsterHatch','Anton',sans-serif", fontSize: 'clamp(2rem,4vw,3.5rem)', lineHeight: '1.0', color: '#0A0A0A', margin: 0 }}>
-              Our <span style={{ color: '#CC0000' }}>classes</span>
+            <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#CC0000', display: 'block', marginBottom: 10 }}>Programs</span>
+            <h2 style={{ fontFamily: "'Tagbogy','HipsterHatch','Anton',sans-serif", fontSize: 'clamp(2.6rem,5vw,4.4rem)', lineHeight: '1.0', color: '#0A0A0A', margin: 0, textTransform: 'uppercase' }}>
+              Our <span style={{ color: '#CC0000' }}>Classes</span>
             </h2>
           </div>
-          <button onClick={openModal} className="self-start md:self-auto inline-flex items-center gap-2 font-semibold cursor-pointer transition-all hover:scale-[1.02]"
-            style={{ background: '#0A0A0A', color: '#fff', padding: '0.875rem 1.75rem', fontSize: '0.8rem', letterSpacing: '0.08em', textTransform: 'uppercase', borderRadius: 8 }}>
-            Book a Free Trial Class →
-          </button>
         </div>
 
         {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="k-prog-cards" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, justifyContent: 'center' }}>
           {cards.map((card) => (
             <div key={card.id}
               onMouseEnter={() => setHoveredCard(card.id)}
               onMouseLeave={() => setHoveredCard(null)}
-              style={{ borderRadius: 24, overflow: 'hidden', background: '#fff', boxShadow: hoveredCard === card.id ? '0 24px 64px rgba(0,0,0,0.14)' : '0 4px 20px rgba(0,0,0,0.06)', transform: hoveredCard === card.id ? 'translateY(-4px)' : 'translateY(0)', transition: 'all 0.35s ease', border: '1.5px solid #EBEBEB' }}
+              style={{
+                borderRadius: 20, overflow: 'hidden', background: '#fff',
+                boxShadow: hoveredCard === card.id ? '0 24px 56px rgba(0,0,0,0.15)' : '0 4px 20px rgba(0,0,0,0.07)',
+                transform: hoveredCard === card.id ? 'translateY(-5px)' : 'translateY(0)',
+                transition: 'all 0.35s cubic-bezier(0.23,1,0.32,1)',
+                border: '1px solid #EBEBEB',
+              }}
             >
-              {/* Photo placeholder */}
-              <div style={{ position: 'relative', aspectRatio: '16/9', background: '#E8E8E8', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-                {card.img ? (
-                  <img src={card.img} alt={card.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transform: hoveredCard === card.id ? 'scale(1.04)' : 'scale(1)', transition: 'transform 0.5s ease' }} />
-                ) : (
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#BBBBBB" strokeWidth="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-                    <span style={{ color: '#BBBBBB', fontSize: '0.8rem', fontWeight: 600, letterSpacing: '0.05em' }}>1280 × 720 px</span>
-                  </div>
-                )}
-
-                {/* Tag */}
-                <div style={{ position: 'absolute', top: 14, left: 14, background: card.accent, color: '#fff', fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', padding: '5px 12px', borderRadius: 8 }}>
-                  {card.tag}
+              {/* Image */}
+              <div style={{ position: 'relative', aspectRatio: '16/10', overflow: 'hidden' }}>
+                <img src={card.img} alt={card.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transform: hoveredCard === card.id ? 'scale(1.05)' : 'scale(1)', transition: 'transform 0.6s ease' }} />
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.35) 0%, transparent 50%)' }} />
+                {/* Tag + age */}
+                <div style={{ position: 'absolute', top: 16, left: 16, display: 'flex', gap: 8, alignItems: 'center' }}>
+                  <span style={{ background: card.accent, color: '#fff', fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase', padding: '5px 12px', borderRadius: 8 }}>{card.tag}</span>
+                  <span style={{ fontFamily: "'Montserrat',sans-serif", background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)', color: '#fff', fontSize: '0.68rem', fontWeight: 600, padding: '4px 11px', borderRadius: 999 }}>{ages[card.id]}</span>
                 </div>
               </div>
 
               {/* Content */}
-              <div style={{ padding: '24px 28px 28px', display: 'flex', flexDirection: 'column', gap: 12 }}>
-                <h3 style={{ fontFamily: "'Tagbogy','HipsterHatch','Anton',sans-serif", fontSize: 'clamp(1.3rem,2vw,1.7rem)', color: '#0A0A0A', lineHeight: '1.05', margin: 0, textTransform: 'uppercase' }}>
+              <div style={{ padding: '24px 26px 28px', display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <h3 style={{ fontFamily: "'Tagbogy','HipsterHatch','Anton',sans-serif", fontSize: 'clamp(1.8rem,2.8vw,2.6rem)', color: '#0A0A0A', lineHeight: '1.05', margin: 0, textTransform: 'uppercase' }}>
                   {card.title}
                 </h3>
-                <p style={{ color: '#666', fontSize: '0.9375rem', lineHeight: '1.65', margin: 0 }}>
+                <p style={{ fontFamily: "'Montserrat',sans-serif", color: '#666', fontSize: '0.875rem', lineHeight: '1.65', margin: 0 }}>
                   {card.desc}
                 </p>
-                <button onClick={openModal}
-                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', background: hoveredCard === card.id ? card.accent : '#F5F5F5', color: hoveredCard === card.id ? '#fff' : '#0A0A0A', border: 'none', borderRadius: 12, padding: '0.875rem 1.25rem', fontSize: '0.8rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', cursor: 'pointer', transition: 'all 0.3s ease', marginTop: 4 }}
-                >
-                  Book a free trial class
-                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 9H14M14 9L10 5M14 9L10 13" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                </button>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 4 }}>
+                  {features[card.id].map((f, i) => (
+                    <span key={i} style={{ fontFamily: "'Montserrat',sans-serif", display: 'inline-flex', alignItems: 'center', gap: 6, background: '#F5F5F5', border: '1px solid #EBEBEB', borderRadius: 999, padding: '5px 13px', fontSize: '0.78rem', fontWeight: 600, color: '#333' }}>
+                      <span style={{ width: 6, height: 6, borderRadius: '50%', background: card.accent, display: 'inline-block', flexShrink: 0 }} />
+                      {f}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
           ))}
+        </div>
+
+        {/* CTA */}
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 52 }}>
+          <button onClick={openModal} className="inline-flex items-center gap-2 font-bold cursor-pointer transition-all hover:scale-[1.03] active:scale-[0.98]"
+            style={{ background: '#CC0000', color: '#fff', padding: '1rem 2.6rem', fontSize: '0.875rem', letterSpacing: '0.08em', textTransform: 'uppercase', borderRadius: 8, boxShadow: '0 6px 24px rgba(204,0,0,0.32)', border: 'none' }}>
+            Book a Free Trial Class →
+          </button>
         </div>
 
       </div>
@@ -336,56 +447,74 @@ function Programs() {
 function Process() {
   const { openModal } = useModal()
 
-  return (
-    <section style={{ background: '#CC0000', padding: '96px 0', position: 'relative', overflow: 'hidden' }}>
-      {/* Subtle texture */}
-      <div className="absolute inset-0 pointer-events-none" style={{
-        backgroundImage: `
-          repeating-linear-gradient(0deg, rgba(255,255,255,0.06) 0px, rgba(255,255,255,0.06) 1px, transparent 1px, transparent 32px),
-          repeating-linear-gradient(90deg, rgba(255,255,255,0.06) 0px, rgba(255,255,255,0.06) 1px, transparent 1px, transparent 32px)
-        `,
-        zIndex: 0,
-      }} />
-      <div className="absolute inset-0 pointer-events-none" style={{
-        background: 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(255,255,255,0.08) 0%, transparent 70%)',
-        zIndex: 0,
-      }} />
-      <div className="max-w-[1320px] mx-auto px-4 md:px-8 relative" style={{ zIndex: 1 }}>
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16">
+  const stepIcons = [
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>,
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>,
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>,
+  ]
 
-          {/* LEFT */}
-          <div className="md:col-span-5 flex flex-col gap-8">
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <div style={{ width: 28, height: 2, background: 'rgba(255,255,255,0.4)', borderRadius: 9999 }} />
-              <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.65rem', letterSpacing: '0.2em', textTransform: 'uppercase', fontWeight: 700 }}>3 Simple Steps</span>
+  const stepColors = ['#CC0000', '#F9B80E', '#1a1a1a']
+
+  return (
+    <section style={{ background: '#CC0000', padding: '72px 0', position: 'relative', overflow: 'hidden' }}>
+      {/* Grid texture */}
+      <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: `repeating-linear-gradient(0deg,rgba(255,255,255,0.05) 0px,rgba(255,255,255,0.05) 1px,transparent 1px,transparent 32px),repeating-linear-gradient(90deg,rgba(255,255,255,0.05) 0px,rgba(255,255,255,0.05) 1px,transparent 1px,transparent 32px)`, zIndex: 0 }} />
+      {/* Decorative circles */}
+      <div style={{ position: 'absolute', top: '-60px', right: '8%', width: 220, height: 220, borderRadius: '50%', background: 'rgba(255,255,255,0.06)', zIndex: 0, pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', bottom: '-80px', left: '3%', width: 280, height: 280, borderRadius: '50%', background: 'rgba(255,255,255,0.04)', zIndex: 0, pointerEvents: 'none' }} />
+
+      <div className="max-w-[1280px] mx-auto px-4 md:px-8 relative" style={{ zIndex: 1 }}>
+        {/* Title row — full width above grid */}
+        <div style={{ marginBottom: 28 }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(255,255,255,0.15)', borderRadius: 999, padding: '5px 14px', marginBottom: 16 }}>
+            <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#fff' }} />
+            <span style={{ fontFamily: "'Montserrat',sans-serif", color: '#fff', fontSize: '0.62rem', letterSpacing: '0.2em', textTransform: 'uppercase', fontWeight: 700 }}>3 Simple Steps</span>
+          </div>
+          <h2 style={{ fontFamily: "'Tagbogy','HipsterHatch','Anton',sans-serif", fontSize: 'clamp(2.6rem,4.5vw,4rem)', lineHeight: '1.0', color: '#FFFFFF', margin: 0, textTransform: 'uppercase' }}>
+            How to get started?
+          </h2>
+        </div>
+
+        <div className="k-proc-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32, alignItems: 'stretch' }}>
+
+          {/* LEFT: calendar centered vertically */}
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <div style={{ width: '100%' }}>
+              <CalendarWidget />
             </div>
-            <h2 style={{ fontFamily: "'HipsterHatch','Tagbogy','HipsterHatch','Anton',sans-serif", fontSize: 'clamp(2.4rem,5vw,3.6rem)', lineHeight: '1.05', color: '#FFFFFF', margin: 0 }}>
-              How to get started?
-            </h2>
-            <CalendarWidget />
           </div>
 
-          {/* RIGHT */}
-          <div className="md:col-span-7 flex flex-col gap-5" style={{ paddingTop: '6rem' }}>
-            <ol className="flex flex-col gap-4">
-              {steps.map((s, idx) => (
-                <li key={s.num}>
-                  <div className="grid items-center gap-5 p-5 md:p-6" style={{ gridTemplateColumns: 'auto 1fr', background: '#FFFFFF', border: '1.5px solid #E8ECF8', borderRadius: 16, boxShadow: '0 4px 16px rgba(204,0,0,0.07)', transition: 'box-shadow 0.2s ease' }}
-                    onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 8px 32px rgba(204,0,0,0.14)'; e.currentTarget.style.borderColor = '#CC0000' }}
-                    onMouseLeave={e => { e.currentTarget.style.boxShadow = '0 4px 16px rgba(204,0,0,0.07)'; e.currentTarget.style.borderColor = '#E8ECF8' }}
-                  >
-                    <span style={{ fontFamily: "'Tagbogy','HipsterHatch','Anton',sans-serif", fontSize: 'clamp(2.5rem,6vw,4.5rem)', lineHeight: 1, color: idx === 0 ? '#CC0000' : idx === 1 ? '#F9B80E' : '#0A0A0A', userSelect: 'none', minWidth: 72 }}>{s.num}</span>
-                    <div className="min-w-0">
-                      <p style={{ fontSize: '0.625rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#CC0000', marginBottom: 6 }}>{s.label}</p>
-                      <p style={{ fontSize: 'clamp(0.9375rem,1.5vw,1.125rem)', lineHeight: '1.5', color: '#333', margin: 0 }}>{s.text}</p>
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ol>
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5 pt-6 mt-2" style={{ borderTop: '1px solid rgba(255,255,255,0.2)' }}>
-              <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: '0.9375rem', lineHeight: '1.6', maxWidth: '36ch', margin: 0 }}>The first class is completely free. No commitment. No pressure.</p>
-              <button onClick={openModal} className="shrink-0 font-bold cursor-pointer transition-all duration-200 hover:scale-[1.02] active:scale-[0.99] min-h-[52px] whitespace-nowrap" style={{ background: '#FFFFFF', color: '#CC0000', padding: '0.875rem 2rem', borderRadius: 6, fontSize: '0.8125rem', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+          {/* RIGHT: 3 step cards + CTA */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {steps.map((s, idx) => (
+              <div key={s.num}
+                style={{ background: '#FFFFFF', borderRadius: 16, padding: '20px 22px', display: 'flex', alignItems: 'center', gap: 20, boxShadow: '0 4px 20px rgba(0,0,0,0.12)', transition: 'all 0.25s ease', cursor: 'default' }}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'translateX(4px)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.18)' }}
+                onMouseLeave={e => { e.currentTarget.style.transform = 'translateX(0)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.12)' }}
+              >
+                {/* Number */}
+                <span style={{ fontFamily: "'Tagbogy','HipsterHatch','Anton',sans-serif", fontSize: 'clamp(2rem,3.5vw,3rem)', lineHeight: 1, color: stepColors[idx], userSelect: 'none', flexShrink: 0, minWidth: 56 }}>{s.num}</span>
+                {/* Divider */}
+                <div style={{ width: 1, background: '#EFEFEF', alignSelf: 'stretch', flexShrink: 0 }} />
+                {/* Text */}
+                <div style={{ flex: 1 }}>
+                  <p style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '0.58rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: stepColors[idx], margin: '0 0 4px' }}>{s.label}</p>
+                  <p style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '0.9rem', lineHeight: '1.5', color: '#222', margin: 0 }}>{s.text}</p>
+                </div>
+                {/* Icon */}
+                <div style={{ width: 38, height: 38, borderRadius: 10, background: `${stepColors[idx]}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: stepColors[idx], flexShrink: 0 }}>
+                  {stepIcons[idx]}
+                </div>
+              </div>
+            ))}
+
+            {/* CTA */}
+            <div className="k-proc-cta" style={{ marginTop: 4, padding: '18px 22px', background: 'rgba(255,255,255,0.13)', borderRadius: 16, border: '1px solid rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
+              <p style={{ fontFamily: "'Montserrat',sans-serif", color: 'rgba(255,255,255,0.9)', fontSize: '0.875rem', lineHeight: 1.6, margin: 0 }}>
+                First class completely free.<br /><strong style={{ color: '#fff' }}>No commitment. No pressure.</strong>
+              </p>
+              <button onClick={openModal} className="k-proc-cta-btn shrink-0 font-bold cursor-pointer transition-all hover:scale-[1.02] active:scale-[0.99] whitespace-nowrap"
+                style={{ background: '#FFFFFF', color: '#CC0000', padding: '0.875rem 1.75rem', borderRadius: 8, fontSize: '0.8rem', letterSpacing: '0.1em', textTransform: 'uppercase', border: 'none' }}>
                 Schedule Free Trial Class →
               </button>
             </div>
@@ -398,31 +527,12 @@ function Process() {
 }
 
 function KidsTestimonials() {
-  const trackRef = useRef<HTMLDivElement>(null)
+  const { openModal } = useModal()
   const [hovered, setHovered] = useState(false)
   const [hoveredCard, setHoveredCard] = useState<number | null>(null)
-  const pausedRef = useRef(false)
-  pausedRef.current = hovered
-  const CARD_W = 280
-  const GAP = 16
-  const JUMP = CARD_W + GAP
-  const SPEED = 0.5
-
-  useEffect(() => {
-    const el = trackRef.current
-    if (!el) return
-    const t = el
-    let id: number
-    function tick() {
-      if (!pausedRef.current) {
-        t.scrollLeft += SPEED
-        if (t.scrollLeft >= t.scrollWidth - t.clientWidth - 2) t.scrollLeft = 0
-      }
-      id = requestAnimationFrame(tick)
-    }
-    id = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(id)
-  }, [])
+  const CARD_W = 300
+  const GAP = 20
+  const ONE_SET = testimonials.length * (CARD_W + GAP)
 
   function getInitials(name: string) {
     const parts = name.replace(/\./g, '').trim().split(/\s+/)
@@ -430,29 +540,10 @@ function KidsTestimonials() {
     return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
   }
 
-  function go(dir: 'prev' | 'next') {
-    const el = trackRef.current
-    if (!el) return
-    pausedRef.current = true
-    const start = el.scrollLeft
-    const distance = dir === 'next' ? JUMP : -JUMP
-    const duration = 700
-    const startTime = performance.now()
-    const track = el
-    function ease(t: number) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t }
-    function animate(now: number) {
-      const t = Math.min((now - startTime) / duration, 1)
-      track.scrollLeft = start + distance * ease(t)
-      if (t < 1) requestAnimationFrame(animate)
-      else setTimeout(() => { pausedRef.current = hovered }, 300)
-    }
-    requestAnimationFrame(animate)
-  }
-
-  const Stars = () => (
-    <div className="flex gap-0.5">
+  const Stars = ({ size = 14 }: { size?: number }) => (
+    <div style={{ display: 'flex', gap: 2 }}>
       {[...Array(5)].map((_, i) => (
-        <svg key={i} width="14" height="14" viewBox="0 0 16 16" fill="none">
+        <svg key={i} width={size} height={size} viewBox="0 0 16 16" fill="none">
           <path d="M8 1L9.796 5.879H15L10.854 8.621L12.472 13.5L8 10.677L3.528 13.5L5.146 8.621L1 5.879H6.204L8 1Z" fill="#FBBC04" />
         </svg>
       ))}
@@ -460,91 +551,99 @@ function KidsTestimonials() {
   )
 
   return (
-    <section id="reviews" style={{ background: '#FFFFFF', padding: '96px 0', overflow: 'hidden', position: 'relative' }}>
-      <div className="max-w-7xl mx-auto px-4 md:px-8 relative" style={{ zIndex: 1 }}>
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16 items-center">
+    <section id="reviews" style={{ background: '#FFFFFF', padding: '80px 0 72px', overflow: 'hidden', position: 'relative' }}>
+      <style>{`
+        @keyframes kTestiRoll {
+          from { transform: translateX(0); }
+          to   { transform: translateX(-${ONE_SET}px); }
+        }
+      `}</style>
 
-          {/* LEFT: title + stats */}
-          <div className="md:col-span-4 flex flex-col gap-6">
-            <h2 style={{ fontFamily: "'HipsterHatch','Tagbogy','HipsterHatch','Anton',sans-serif", fontSize: 'clamp(2rem,3.5vw,3rem)', lineHeight: '1.1', color: '#0A0A0A', margin: 0 }}>
-              Get to know some of{' '}
-              <span style={{ color: '#CC0000' }}>our students</span>
+      <div className="max-w-7xl mx-auto px-4 md:px-8">
+
+        {/* HEADER */}
+        <div className="k-testi-header" style={{ display: 'grid', gridTemplateColumns: '1fr auto', alignItems: 'center', gap: 24, marginBottom: 48 }}>
+
+          {/* Title */}
+          <div>
+            <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: '#CC0000', display: 'block', marginBottom: 10 }}>Students</span>
+            <h2 style={{ fontFamily: "'Tagbogy','HipsterHatch','Anton',sans-serif", fontSize: 'clamp(2.6rem,5vw,4.4rem)', lineHeight: '1.0', color: '#0A0A0A', margin: 0, textTransform: 'uppercase' }}>
+              Meet some of <span style={{ color: '#CC0000' }}>our students</span>
             </h2>
-
-            {/* Rating */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <div style={{ display: 'flex' }}>
-                {[...Array(3)].map((_, i) => (
-                  <div key={i} style={{ width: 32, height: 32, borderRadius: '50%', background: testimonials[i].avatarBg, border: '2px solid #fff', marginLeft: i > 0 ? -10 : 0, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '0.7rem', fontWeight: 700 }}>
-                    {getInitials(testimonials[i].name)}
-                  </div>
-                ))}
-              </div>
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <span style={{ fontWeight: 700, fontSize: '0.9rem', color: '#0A0A0A' }}>5/5</span>
-                  <Stars />
-                </div>
-                <div style={{ fontSize: '0.72rem', color: '#888', marginTop: 2 }}>Based on Google reviews</div>
-              </div>
-            </div>
-
-            {/* Arrows */}
-            <div style={{ display: 'flex', gap: 10 }}>
-              <button onClick={() => go('prev')} style={{ width: 44, height: 44, borderRadius: '50%', border: '1.5px solid #0A0A0A', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}
-                onMouseEnter={e => { e.currentTarget.style.background = '#0A0A0A' }}
-                onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}>
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              </button>
-              <button onClick={() => go('next')} style={{ width: 44, height: 44, borderRadius: '50%', border: '1.5px solid #0A0A0A', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}
-                onMouseEnter={e => { e.currentTarget.style.background = '#0A0A0A' }}
-                onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}>
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-              </button>
-            </div>
           </div>
 
-          {/* RIGHT: scrollable cards */}
-          <div className="md:col-span-8" style={{ position: 'relative' }}>
-
-            <div
-              ref={trackRef}
-              onMouseEnter={() => setHovered(true)}
-              onMouseLeave={() => setHovered(false)}
-              style={{ display: 'flex', gap: GAP, overflowX: 'auto', scrollbarWidth: 'none', padding: '12px 8px 16px' }}
-              className="[&::-webkit-scrollbar]:hidden"
-            >
-              {[...testimonials, ...testimonials, ...testimonials].map((t, idx) => (
-                <div key={`${t.id}-${idx}`}
-                  onMouseEnter={() => setHoveredCard(idx)}
-                  onMouseLeave={() => setHoveredCard(null)}
-                  style={{
-                    flexShrink: 0, width: CARD_W, background: '#FFFFFF', borderRadius: 16, padding: 20,
-                    border: hoveredCard === idx ? '1.5px solid #CC0000' : '1px solid #E8E8E8',
-                    boxShadow: hoveredCard === idx ? '0 8px 32px rgba(204,0,0,0.15)' : '0 2px 12px rgba(0,0,0,0.05)',
-                    transform: hoveredCard === null ? 'scale(1)' : hoveredCard === idx ? 'scale(1.03)' : 'scale(0.97)',
-                    filter: hoveredCard === null ? 'none' : hoveredCard === idx ? 'none' : 'blur(1.5px) brightness(0.75)',
-                    transition: 'all 0.35s ease',
-                    zIndex: hoveredCard === idx ? 2 : 1,
-                    position: 'relative',
-                  }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-                    <div style={{ width: 40, height: 40, borderRadius: '50%', background: t.avatarBg, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: '0.8rem', flexShrink: 0 }}>
-                      {getInitials(t.name)}
-                    </div>
-                    <div>
-                      <div style={{ fontWeight: 600, fontSize: '0.875rem', color: '#0A0A0A' }}>{t.name}</div>
-                      <div style={{ fontSize: '0.7rem', color: '#AAA', marginTop: 1 }}>{t.timeAgo}</div>
-                    </div>
-                  </div>
-                  <Stars />
-                  <p style={{ fontSize: '0.85rem', lineHeight: '1.65', color: '#444', marginTop: 10 }}>"{t.text}"</p>
+          {/* Google badge */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, background: '#F9F7F5', border: '1px solid #EBEBEB', borderRadius: 14, padding: '12px 18px' }}>
+            <div style={{ display: 'flex' }}>
+              {[...Array(3)].map((_, i) => (
+                <div key={i} style={{ width: 34, height: 34, borderRadius: '50%', background: testimonials[i].avatarBg, border: '2px solid #fff', marginLeft: i > 0 ? -10 : 0, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '0.7rem', fontWeight: 700 }}>
+                  {getInitials(testimonials[i].name)}
                 </div>
               ))}
             </div>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 700, fontSize: '0.95rem', color: '#0A0A0A' }}>5.0</span>
+                <Stars size={13} />
+              </div>
+              <div style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '0.68rem', color: '#999', marginTop: 1 }}>Google reviews</div>
+            </div>
           </div>
-
         </div>
+
+        {/* CAROUSEL — CSS animation, pausa no hover */}
+        <div
+          style={{ overflow: 'hidden', position: 'relative', paddingBottom: 4 }}
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => { setHovered(false); setHoveredCard(null) }}
+        >
+          <div style={{
+            display: 'flex',
+            gap: GAP,
+            animation: `kTestiRoll 28s linear infinite`,
+            animationPlayState: hovered ? 'paused' : 'running',
+          }}>
+            {[...testimonials, ...testimonials, ...testimonials].map((t, idx) => (
+              <div key={`${t.id}-${idx}`}
+                onMouseEnter={() => setHoveredCard(idx)}
+                onMouseLeave={() => setHoveredCard(null)}
+                style={{
+                  flexShrink: 0, width: CARD_W,
+                  background: '#FAFAFA',
+                  borderRadius: 20, padding: '26px 24px',
+                  border: hoveredCard === idx ? '1.5px solid #CC0000' : '1.5px solid #EBEBEB',
+                  boxShadow: hoveredCard === idx ? '0 12px 36px rgba(204,0,0,0.1)' : '0 2px 12px rgba(0,0,0,0.04)',
+                  transform: hoveredCard === idx ? 'translateY(-4px)' : 'translateY(0)',
+                  opacity: hoveredCard === null ? 1 : hoveredCard === idx ? 1 : 0.6,
+                  transition: 'border-color 0.3s, box-shadow 0.3s, transform 0.3s, opacity 0.3s',
+                  position: 'relative', overflow: 'hidden',
+                  cursor: 'default',
+                }}>
+                <div style={{ position: 'absolute', top: 12, right: 18, fontFamily: 'Georgia,serif', fontSize: '4.5rem', color: 'rgba(204,0,0,0.08)', lineHeight: 1, userSelect: 'none', pointerEvents: 'none' }}>"</div>
+                <Stars size={14} />
+                <p style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '0.875rem', lineHeight: '1.7', color: '#444', margin: '14px 0 20px' }}>"{t.text}"</p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, borderTop: '1px solid #F0F0F0', paddingTop: 14 }}>
+                  <div style={{ width: 40, height: 40, borderRadius: '50%', background: t.avatarBg, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: '0.8rem', flexShrink: 0 }}>
+                    {getInitials(t.name)}
+                  </div>
+                  <div>
+                    <div style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 700, fontSize: '0.875rem', color: '#0A0A0A' }}>{t.name}</div>
+                    <div style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '0.68rem', color: '#AAA', marginTop: 1 }}>{t.timeAgo}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* CTA */}
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 40 }}>
+          <button onClick={openModal} className="inline-flex items-center gap-2 font-bold cursor-pointer transition-all hover:scale-[1.03] active:scale-[0.98]"
+            style={{ background: '#CC0000', color: '#fff', padding: '1rem 2.4rem', fontSize: '0.875rem', letterSpacing: '0.08em', textTransform: 'uppercase', borderRadius: 8, boxShadow: '0 6px 24px rgba(204,0,0,0.32)', border: 'none' }}>
+            Meet them at Fight Factory for free →
+          </button>
+        </div>
+
       </div>
     </section>
   )
@@ -555,8 +654,6 @@ const allFacilityPhotos = [
   { src: '/kids/imagem/gallery/2.webp', alt: 'Kids class' },
   { src: '/kids/imagem/gallery/3.webp', alt: 'Academy' },
   { src: '/kids/imagem/gallery/4.webp', alt: 'Training session' },
-  { src: '/kids/imagem/gallery/5.webp', alt: 'Kids program' },
-  { src: '/kids/imagem/gallery/6.webp', alt: 'Facility' },
 ]
 
 function KidsFacility() {
@@ -579,8 +676,8 @@ function KidsFacility() {
 
           {/* LEFT: text */}
           <div className="flex flex-col gap-6">
-            <h2 style={{ fontFamily: "'HipsterHatch','Tagbogy','HipsterHatch','Anton',sans-serif", fontSize: 'clamp(2rem,4vw,3.2rem)', lineHeight: '1.1', color: '#0A0A0A', margin: 0 }}>
-              <span style={{ color: '#CC0000' }}>For kids to learn confidently,</span>{' '}they need the right environment.
+            <h2 style={{ fontFamily: "'Tagbogy','HipsterHatch','Anton',sans-serif", fontSize: 'clamp(2.6rem,5vw,4.2rem)', lineHeight: '1.05', color: '#0A0A0A', margin: 0, textTransform: 'uppercase' }}>
+              <span style={{ color: '#CC0000' }}>For kids to learn confidently,</span><br />they need the right environment.
             </h2>
             <p style={{ color: '#555', fontSize: 'clamp(1rem,0.5vw + 0.875rem,1.125rem)', lineHeight: '1.65', margin: 0 }}>
               Fight Factory was designed to help children feel comfortable from day one, with:
@@ -602,7 +699,7 @@ function KidsFacility() {
           </div>
 
           {/* RIGHT: bento photo cards */}
-          <div style={{ position: 'relative', height: 520 }}>
+          <div className="k-facility-bento" style={{ position: 'relative', height: 520 }}>
             {/* Card 1 — large top-left */}
             <div
               onMouseEnter={() => setHoveredPhoto(0)}
@@ -677,7 +774,7 @@ function KidsFacility() {
             </div>
 
             {/* Decorative dot */}
-            <div style={{ position: 'absolute', top: '46%', left: '45%', width: 16, height: 16, borderRadius: '50%', background: '#CC0000', zIndex: 5, boxShadow: '0 0 0 4px rgba(204,0,0,0.2)' }} />
+            <div className="k-facility-dot" style={{ position: 'absolute', top: '46%', left: '45%', width: 16, height: 16, borderRadius: '50%', background: '#CC0000', zIndex: 5, boxShadow: '0 0 0 4px rgba(204,0,0,0.2)' }} />
           </div>
 
         </div>
@@ -731,15 +828,15 @@ function Coach() {
           <div style={{ display:'flex', flexDirection:'column', gap:20 }}>
             <div style={{ display:'flex', alignItems:'center', gap:8 }}>
               <div style={{ width:24, height:3, background:'rgba(255,255,255,0.6)', borderRadius:999 }} />
-              <span style={{ color:'rgba(255,255,255,0.7)', fontSize:'0.65rem', letterSpacing:'0.2em', textTransform:'uppercase', fontWeight:700 }}>Meet Rodrigo, Head Coach</span>
+              <span style={{ fontFamily:"'Montserrat',sans-serif", color:'rgba(255,255,255,0.7)', fontSize:'0.65rem', letterSpacing:'0.2em', textTransform:'uppercase', fontWeight:700 }}>Coach</span>
             </div>
 
-            <h2 style={{ fontFamily:"'HipsterHatch','Tagbogy','HipsterHatch','Anton',sans-serif", fontSize:'clamp(2.5rem,5vw,4rem)', lineHeight:1.05, color:'#FFFFFF', margin:0 }}>
-              Rodrigo Cabral
+            <h2 style={{ fontFamily:"'Tagbogy','HipsterHatch','Anton',sans-serif", fontSize:'clamp(2.5rem,5vw,4rem)', lineHeight:1.05, color:'#FFFFFF', margin:0, textTransform:'uppercase' }}>
+              Meet Rodrigo, head coach
             </h2>
 
             {/* Stats cards */}
-            <div style={{ display:'flex', gap:12 }}>
+            <div className="k-coach-stats" style={{ display:'flex', gap:12 }}>
               {coachStats.map((s, i) => (
                 <div key={s.label} style={{ flex:1, background: i===0 ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.1)', borderRadius:14, padding:'14px 16px', border:'1.5px solid rgba(255,255,255,0.25)' }}>
                   <div style={{ fontFamily:"'Tagbogy','HipsterHatch','Anton',sans-serif", fontSize:'clamp(1.5rem,2.5vw,2rem)', color:'#FFFFFF', lineHeight:1 }}>{s.value}</div>
@@ -754,9 +851,9 @@ function Coach() {
 
             <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
               {coachBullets.map(b => (
-                <div key={b.label} style={{ display:'flex', alignItems:'center', gap:12, background:'#FFFFFF', borderRadius:10, padding:'10px 14px', border:'1px solid rgba(204,0,0,0.15)' }}>
+                <div key={b.label} className="k-coach-bullet-row" style={{ display:'flex', alignItems:'center', gap:12, background:'#FFFFFF', borderRadius:10, padding:'10px 14px', border:'1px solid rgba(204,0,0,0.15)' }}>
                   <div style={{ width:8, height:8, borderRadius:'50%', background:'#CC0000', flexShrink:0 }} />
-                  <span style={{ color:'rgba(204,0,0,0.55)', fontSize:'0.625rem', fontWeight:700, letterSpacing:'0.15em', textTransform:'uppercase', minWidth:110 }}>{b.label}</span>
+                  <span className="k-coach-bullet-label" style={{ color:'rgba(204,0,0,0.55)', fontSize:'0.625rem', fontWeight:700, letterSpacing:'0.15em', textTransform:'uppercase', minWidth:110 }}>{b.label}</span>
                   <span style={{ color:'#CC0000', fontSize:'0.875rem', fontWeight:600 }}>{b.text}</span>
                 </div>
               ))}
@@ -776,36 +873,142 @@ function Coach() {
 
 function KidsFAQ() {
   const [open, setOpen] = useState<string | null>(null)
+  const [hovered, setHovered] = useState<string | null>(null)
   const { openModal } = useModal()
 
   return (
-    <section id="faq" style={{ background: '#FFFFFF', padding: '96px 0', position: 'relative' }}>
-      <div className="max-w-7xl mx-auto px-4 md:px-8 relative" style={{ zIndex: 1 }}>
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-16">
-          <div className="md:col-span-4">
-            <span style={{ fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#CC0000', display: 'block', marginBottom: 12 }}>COMMON QUESTIONS</span>
-            <h2 className="text-[#0A0A0A] mb-5" style={{ fontFamily: "'HipsterHatch','Tagbogy','HipsterHatch','Anton',sans-serif", fontSize: 'clamp(2rem,4vw + 0.75rem,3.5rem)', letterSpacing: '0.01em', lineHeight: '1.1', textTransform: 'uppercase' }}>
-              Common <span style={{ color: '#CC0000' }}>Questions</span>
+    <section id="faq" style={{ background: '#F4F4F4', padding: '104px 0' }}>
+      <div className="max-w-6xl mx-auto px-4 md:px-8">
+        <div className="k-faq-grid" style={{ display: 'grid', gridTemplateColumns: '4fr 6fr', gap: 96, alignItems: 'start' }}>
+
+          {/* Coluna esquerda — sticky */}
+          <div className="k-faq-sticky" style={{ position: 'sticky', top: 120 }}>
+            <span style={{
+              fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.22em',
+              textTransform: 'uppercase', color: '#CC0000',
+              display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 20,
+            }}>
+              <span style={{ display: 'inline-block', width: 20, height: 1.5, background: '#CC0000', borderRadius: 2 }} />
+              COMMON QUESTIONS
+            </span>
+
+            <h2 style={{
+              fontFamily: "'HipsterHatch','Tagbogy','Anton',sans-serif",
+              fontSize: 'clamp(2.8rem,4.5vw,4rem)',
+              textTransform: 'uppercase',
+              lineHeight: 1.05,
+              color: '#0A0A0A',
+              marginBottom: 36,
+              letterSpacing: '-0.01em',
+            }}>
+              Common<br /><span style={{ color: '#CC0000' }}>Questions</span>
             </h2>
-            <button onClick={openModal} className="inline-flex items-center font-semibold cursor-pointer transition-all duration-200 hover:scale-[1.02] active:scale-[0.99] mt-4 whitespace-nowrap" style={{ background: '#CC0000', color: '#FFFFFF', padding: '0.75rem 1.5rem', borderRadius: 6, fontSize: '0.8125rem', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+
+            <p style={{ color: '#888', fontSize: '0.9rem', lineHeight: 1.75, marginBottom: 36, maxWidth: 260 }}>
+              Can't find your answer? Book a free class and ask us in person.
+            </p>
+
+            <button
+              onClick={openModal}
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: 10,
+                background: '#CC0000', color: '#fff',
+                padding: '0.9rem 1.75rem', borderRadius: 8,
+                fontSize: '0.875rem', fontWeight: 700,
+                cursor: 'pointer', border: 'none',
+                letterSpacing: '0.015em', transition: 'background 0.2s',
+                boxShadow: '0 4px 16px rgba(204,0,0,0.28)',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = '#AA0000' }}
+              onMouseLeave={e => { e.currentTarget.style.background = '#CC0000' }}
+            >
               Click to book your free trial class →
             </button>
           </div>
-          <div className="md:col-span-8" style={{ borderTop: '1px solid #D8D8D8' }}>
-            {faqItems.map(item => (
-              <div key={item.id} className="border-b transition-colors" style={{ borderColor: '#D8D8D8' }}>
-                <button onClick={() => setOpen(open === item.id ? null : item.id)} className="w-full flex items-center justify-between py-5 text-left cursor-pointer group min-h-[44px]" aria-expanded={open === item.id}>
-                  <span className="text-[#0A0A0A] font-semibold pr-4 group-hover:text-[#555555] transition-colors" style={{ fontSize: 'clamp(0.9375rem,0.3vw + 0.875rem,1rem)' }}>{item.question}</span>
-                  <span className="shrink-0 transition-transform duration-200" style={{ transform: open === item.id ? 'rotate(45deg)' : 'rotate(0deg)', color: open === item.id ? '#CC0000' : '#0A0A0A' }}>
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 4V16M4 10H16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
+
+          {/* Coluna direita — accordion numerado */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {faqItems.map((item, i) => (
+              <div
+                key={item.id}
+                onMouseEnter={() => setHovered(item.id)}
+                onMouseLeave={() => setHovered(null)}
+                style={{
+                  background: open === item.id || hovered === item.id ? '#FFFFFF' : 'rgba(255,255,255,0.55)',
+                  borderRadius: 16,
+                  overflow: 'hidden',
+                  border: `1px solid ${open === item.id ? 'rgba(204,0,0,0.15)' : hovered === item.id ? 'rgba(204,0,0,0.07)' : 'transparent'}`,
+                  boxShadow: open === item.id
+                    ? '0 8px 32px rgba(0,0,0,0.07)'
+                    : hovered === item.id
+                      ? '0 6px 20px rgba(0,0,0,0.06)'
+                      : '0 1px 4px rgba(0,0,0,0.03)',
+                  transform: hovered === item.id && open !== item.id ? 'translateY(-2px)' : 'translateY(0)',
+                  transition: 'background 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease, transform 0.35s ease',
+                }}
+              >
+                <button
+                  onClick={() => setOpen(open === item.id ? null : item.id)}
+                  aria-expanded={open === item.id}
+                  style={{
+                    width: '100%', display: 'flex', alignItems: 'center',
+                    gap: 16, padding: '22px 24px',
+                    background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left',
+                  }}
+                >
+                  {/* Número */}
+                  <span style={{
+                    flexShrink: 0, width: 38, height: 38, borderRadius: '50%',
+                    background: open === item.id ? '#CC0000' : 'transparent',
+                    color: open === item.id ? '#fff' : '#CC0000',
+                    border: `1.5px solid ${open === item.id ? '#CC0000' : '#D8D8D8'}`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: '0.68rem', fontWeight: 800, letterSpacing: '0.04em',
+                    transition: 'all 0.25s',
+                  }}>
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+
+                  {/* Pergunta */}
+                  <span style={{
+                    flex: 1, fontWeight: 600, fontSize: '0.9375rem',
+                    color: open === item.id ? '#0A0A0A' : '#1A1A1A',
+                    lineHeight: 1.5, letterSpacing: '0.005em',
+                  }}>
+                    {item.question}
+                  </span>
+
+                  {/* Toggle */}
+                  <span style={{
+                    flexShrink: 0,
+                    width: 28, height: 28, borderRadius: '50%',
+                    background: open === item.id ? 'rgba(204,0,0,0.08)' : 'transparent',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    color: open === item.id ? '#CC0000' : '#BBBBBB',
+                    transform: open === item.id ? 'rotate(45deg)' : 'rotate(0deg)',
+                    transition: 'all 0.25s',
+                  }}>
+                    <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+                      <path d="M10 4V16M4 10H16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                    </svg>
                   </span>
                 </button>
-                <div className="overflow-hidden transition-all duration-300" style={{ maxHeight: open === item.id ? '200px' : '0px' }}>
-                  <p className="text-[#555555] pb-5" style={{ lineHeight: '1.75', fontSize: '0.9375rem' }}>{item.answer}</p>
+
+                {/* Resposta */}
+                <div style={{ maxHeight: open === item.id ? 240 : 0, overflow: 'hidden', transition: 'max-height 0.35s ease' }}>
+                  <p className="k-faq-answer" style={{
+                    padding: '4px 24px 24px 78px',
+                    color: '#666', lineHeight: 1.8, fontSize: '0.9125rem',
+                    borderTop: '1px solid rgba(0,0,0,0.05)',
+                    paddingTop: 16,
+                  }}>
+                    {item.answer}
+                  </p>
                 </div>
               </div>
             ))}
           </div>
+
         </div>
       </div>
     </section>
@@ -821,8 +1024,42 @@ export function KidsPage() {
     const style = document.createElement('style')
     style.id = 'kids-font-override'
     style.textContent = `
-      p, span, a, li, button, input, label, div:not([style*="Tagbogy"]):not([style*="HipsterHatch"]) {
-        font-family: 'Montserrat', sans-serif !important;
+      p, a, li, button, input, label {
+        font-family: 'Montserrat', sans-serif;
+      }
+      @media (max-width:480px) {
+        h2 { word-break: break-word; }
+        section h2 { font-size: clamp(1.75rem, 8vw, 2.2rem) !important; line-height: 1.12 !important; }
+        .k-why-benefits { grid-template-columns: 1fr !important; }
+        .k-prog-header { align-items: flex-start !important; }
+        .k-prog-header p { text-align: left !important; max-width: 100% !important; }
+        .k-prog-cards { grid-template-columns: 1fr !important; }
+        .k-proc-grid { grid-template-columns: 1fr !important; gap: 24px !important; }
+        .k-proc-cta { flex-direction: column !important; align-items: stretch !important; }
+        .k-proc-cta-btn { width: 100% !important; white-space: normal !important; flex-shrink: 1 !important; justify-content: center !important; text-align: center !important; }
+        .k-testi-header { grid-template-columns: 1fr !important; }
+        .k-facility-bento {
+          position: static !important;
+          height: auto !important;
+          display: grid !important;
+          grid-template-columns: 1fr 1fr !important;
+          gap: 8px !important;
+        }
+        .k-facility-bento > div {
+          position: static !important;
+          width: 100% !important;
+          height: 140px !important;
+          transform: none !important;
+          animation: none !important;
+        }
+        .k-facility-dot { display: none !important; }
+        .k-coach-stats { flex-wrap: wrap !important; }
+        .k-coach-stats > div { min-width: calc(50% - 6px) !important; flex: none !important; }
+        .k-coach-bullet-row { flex-wrap: wrap !important; }
+        .k-coach-bullet-label { min-width: unset !important; }
+        .k-faq-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+        .k-faq-sticky { position: static !important; }
+        .k-faq-answer { padding-left: 24px !important; padding-right: 16px !important; }
       }
     `
     document.head.appendChild(style)
@@ -850,6 +1087,14 @@ export function KidsPage() {
     </BookingProvider>
   )
 }
+
+
+
+
+
+
+
+
 
 
 

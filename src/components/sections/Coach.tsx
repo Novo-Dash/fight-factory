@@ -41,7 +41,7 @@ export function Coach() {
               border: '1px solid rgba(255,255,255,0.08)',
               aspectRatio: '3/4',
             }}>
-              <img src="/images/10.png" alt="Coach Rodrigo Cabral" className="w-full h-full object-cover object-top" />
+              <img src="/images/10.webp" alt="Coach Rodrigo Cabral" className="w-full h-full object-cover object-top" />
               <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, transparent 55%, rgba(0,0,0,0.75) 100%)' }} />
               <div style={{
                 position: 'absolute', bottom: 20, left: 20, right: 20,

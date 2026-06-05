@@ -87,7 +87,8 @@ export function KidsNavbar() {
             borderRadius: 6,
           }}
         >
-          Book a Free Trial Class
+          <span className="hidden sm:inline">Book a Free Trial Class</span>
+          <span className="sm:hidden">Free Trial</span>
         </button>
 
       </div>
