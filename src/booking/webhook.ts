@@ -99,8 +99,8 @@ export function sendBookingWebhook(data: BookingData): void {
     return
   }
   const payload = {
-    parent_name: data.name, // obrigatório e não-nulo (form de nome único)
-    child_name: data.name, // mesmo valor (form de nome único)
+    parent_name: data.parentName ?? data.name,
+    child_name: data.childName ?? data.name,
     email: data.email,
     phone: data.phone, // formato exibido "(555) 555-5555" é aceito
     class_type: PROGRAM_LABEL[data.program], // = nome EXATO do calendário no GHL

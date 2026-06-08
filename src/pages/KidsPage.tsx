@@ -1054,7 +1054,7 @@ export function KidsPage() {
   }, [])
 
   return (
-    <BookingProvider>
+    <BookingProvider kidsMode>
       <KidsNavbar />
       <main>
         <Hero />

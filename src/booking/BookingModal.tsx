@@ -5,9 +5,10 @@ import { BookingForm } from './BookingForm'
 interface BookingModalProps {
   isOpen: boolean
   onClose: () => void
+  kidsMode?: boolean
 }
 
-export function BookingModal({ isOpen, onClose }: BookingModalProps) {
+export function BookingModal({ isOpen, onClose, kidsMode }: BookingModalProps) {
   // Esc fecha + trava o scroll do body enquanto aberto.
   useEffect(() => {
     if (!isOpen) return
@@ -50,7 +51,7 @@ export function BookingModal({ isOpen, onClose }: BookingModalProps) {
           </svg>
         </button>
 
-        <BookingForm onDone={onClose} />
+        <BookingForm onDone={onClose} kidsMode={kidsMode} />
       </div>
     </div>,
     document.body,

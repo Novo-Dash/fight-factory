@@ -51,11 +51,15 @@ function makeInitial(): BookingData {
 interface BookingFormProps {
   /** Chamado após o reset, ao concluir. No modal: fecha. No /book: undefined (fica na Etapa 1). */
   onDone?: () => void
+  kidsMode?: boolean
 }
 
-export function BookingForm({ onDone }: BookingFormProps) {
+export function BookingForm({ onDone, kidsMode }: BookingFormProps) {
   const [step, setStep] = useState<Step>(1)
-  const [data, setData] = useState<BookingData>(makeInitial)
+  const [data, setData] = useState<BookingData>(() => ({
+    ...makeInitial(),
+    ...(kidsMode ? { program: 'kids' as const } : {}),
+  }))
   const leadSent = useRef(false) // dedupe do Webhook 1 (1x por sessão de booking)
 
   function patch(p: Partial<BookingData>) {
@@ -63,7 +67,7 @@ export function BookingForm({ onDone }: BookingFormProps) {
   }
 
   function handleNext() {
-    if (!isStep1Valid(data)) return
+    if (!isStep1Valid(data, kidsMode)) return
     // Webhook 1: dispara uma vez por sessão, mesmo se voltar e avançar de novo.
     if (!leadSent.current) {
       leadSent.current = true
@@ -90,5 +94,5 @@ export function BookingForm({ onDone }: BookingFormProps) {
   if (step === 2) {
     return <Step2Schedule data={data} onChange={patch} onBack={() => setStep(1)} onConfirm={handleConfirm} />
   }
-  return <Step1Details data={data} onChange={patch} onNext={handleNext} />
+  return <Step1Details data={data} onChange={patch} onNext={handleNext} kidsMode={kidsMode} />
 }

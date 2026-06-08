@@ -6,13 +6,15 @@ interface Step1Props {
   data: BookingData
   onChange: (patch: Partial<BookingData>) => void
   onNext: () => void
+  kidsMode?: boolean
 }
 
 const inputClass =
   'w-full px-4 py-3 rounded-full text-[#0A0A0A] border border-[#D8D8D8] focus:border-[#0A0A0A] focus:outline-none transition-colors'
 
-export function Step1Details({ data, onChange, onNext }: Step1Props) {
-  const valid = isStep1Valid(data)
+export function Step1Details({ data, onChange, onNext, kidsMode }: Step1Props) {
+  const valid = isStep1Valid(data, kidsMode)
+  const visiblePrograms = kidsMode ? (['kids'] as Program[]) : PROGRAMS
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -32,23 +34,62 @@ export function Step1Details({ data, onChange, onNext }: Step1Props) {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label htmlFor="bk-name" className="block text-[#666666] text-xs mb-1.5 uppercase tracking-wider">
-            Full Name
-          </label>
-          <input
-            id="bk-name"
-            name="name"
-            type="text"
-            required
-            value={data.name}
-            onChange={(e) => onChange({ name: e.target.value })}
-            className={inputClass}
-            style={{ background: '#F5F5F5', fontSize: '16px' }}
-            placeholder="Your full name"
-            autoComplete="name"
-          />
-        </div>
+        {kidsMode ? (
+          <>
+            <div>
+              <label htmlFor="bk-child" className="block text-[#666666] text-xs mb-1.5 uppercase tracking-wider">
+                Child's Name
+              </label>
+              <input
+                id="bk-child"
+                name="childName"
+                type="text"
+                required
+                value={data.childName ?? ''}
+                onChange={(e) => onChange({ childName: e.target.value })}
+                className={inputClass}
+                style={{ background: '#F5F5F5', fontSize: '16px' }}
+                placeholder="Child's full name"
+                autoComplete="off"
+              />
+            </div>
+            <div>
+              <label htmlFor="bk-parent" className="block text-[#666666] text-xs mb-1.5 uppercase tracking-wider">
+                Parent / Guardian Name
+              </label>
+              <input
+                id="bk-parent"
+                name="parentName"
+                type="text"
+                required
+                value={data.parentName ?? ''}
+                onChange={(e) => onChange({ parentName: e.target.value })}
+                className={inputClass}
+                style={{ background: '#F5F5F5', fontSize: '16px' }}
+                placeholder="Your full name"
+                autoComplete="name"
+              />
+            </div>
+          </>
+        ) : (
+          <div>
+            <label htmlFor="bk-name" className="block text-[#666666] text-xs mb-1.5 uppercase tracking-wider">
+              Full Name
+            </label>
+            <input
+              id="bk-name"
+              name="name"
+              type="text"
+              required
+              value={data.name}
+              onChange={(e) => onChange({ name: e.target.value })}
+              className={inputClass}
+              style={{ background: '#F5F5F5', fontSize: '16px' }}
+              placeholder="Your full name"
+              autoComplete="name"
+            />
+          </div>
+        )}
 
         <div>
           <label htmlFor="bk-email" className="block text-[#666666] text-xs mb-1.5 uppercase tracking-wider">
@@ -86,44 +127,46 @@ export function Step1Details({ data, onChange, onNext }: Step1Props) {
           />
         </div>
 
-        <div>
-          <span className="block text-[#666666] text-xs mb-2 uppercase tracking-wider">Program</span>
-          <div className="space-y-2.5">
-            {PROGRAMS.map((p: Program) => {
-              const checked = data.program === p
-              return (
-                <label
-                  key={p}
-                  className={[
-                    'flex items-start gap-3 p-3.5 rounded-2xl border cursor-pointer transition-colors',
-                    checked ? 'border-[#CC0000] bg-[#FFF5F5]' : 'border-[#D8D8D8] hover:border-[#0A0A0A]',
-                  ].join(' ')}
-                >
-                  <input
-                    type="radio"
-                    name="program"
-                    value={p}
-                    checked={checked}
-                    onChange={() => onChange({ program: p })}
-                    className="sr-only"
-                  />
-                  <span
+        {!kidsMode && (
+          <div>
+            <span className="block text-[#666666] text-xs mb-2 uppercase tracking-wider">Program</span>
+            <div className="space-y-2.5">
+              {visiblePrograms.map((p: Program) => {
+                const checked = data.program === p
+                return (
+                  <label
+                    key={p}
                     className={[
-                      'mt-0.5 w-4 h-4 rounded-full border-2 shrink-0 flex items-center justify-center',
-                      checked ? 'border-[#CC0000]' : 'border-[#BBBBBB]',
+                      'flex items-start gap-3 p-3.5 rounded-2xl border cursor-pointer transition-colors',
+                      checked ? 'border-[#CC0000] bg-[#FFF5F5]' : 'border-[#D8D8D8] hover:border-[#0A0A0A]',
                     ].join(' ')}
                   >
-                    {checked && <span className="w-2 h-2 rounded-full bg-[#CC0000]" />}
-                  </span>
-                  <span>
-                    <span className="block text-[#0A0A0A] font-semibold text-sm">{PROGRAM_LABEL[p]}</span>
-                    <span className="block text-[#666666] text-xs">{PROGRAM_HINT[p]}</span>
-                  </span>
-                </label>
-              )
-            })}
+                    <input
+                      type="radio"
+                      name="program"
+                      value={p}
+                      checked={checked}
+                      onChange={() => onChange({ program: p })}
+                      className="sr-only"
+                    />
+                    <span
+                      className={[
+                        'mt-0.5 w-4 h-4 rounded-full border-2 shrink-0 flex items-center justify-center',
+                        checked ? 'border-[#CC0000]' : 'border-[#BBBBBB]',
+                      ].join(' ')}
+                    >
+                      {checked && <span className="w-2 h-2 rounded-full bg-[#CC0000]" />}
+                    </span>
+                    <span>
+                      <span className="block text-[#0A0A0A] font-semibold text-sm">{PROGRAM_LABEL[p]}</span>
+                      <span className="block text-[#666666] text-xs">{PROGRAM_HINT[p]}</span>
+                    </span>
+                  </label>
+                )
+              })}
+            </div>
           </div>
-        </div>
+        )}
 
         <button
           type="submit"
