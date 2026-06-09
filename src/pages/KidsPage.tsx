@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from 'react'
+﻿import { useEffect, useRef, useState } from 'react'
 import { BookingProvider } from '../booking/BookingProvider'
 import { KidsNavbar } from '../components/layout/KidsNavbar'
 import { KidsFooter } from '../components/sections/KidsFooter'
@@ -512,11 +512,58 @@ function Process() {
 
 function KidsTestimonials() {
   const { openModal } = useModal()
-  const [hovered, setHovered] = useState(false)
   const [hoveredCard, setHoveredCard] = useState<number | null>(null)
+
   const CARD_W = 300
   const GAP = 20
-  const ONE_SET = testimonials.length * (CARD_W + GAP)
+  const STEP = CARD_W + GAP
+  const N = testimonials.length
+  const ONE_SET = N * STEP        // px de um set completo
+  const SPEED = 0.55              // px por frame (~33px/s)
+  const EASE = 0.09               // fator de suavização para setas
+
+  const items = [...testimonials, ...testimonials, ...testimonials]
+
+  const trackRef = useRef<HTMLDivElement>(null)
+  const xRef     = useRef(ONE_SET)       // posição atual renderizada (px)
+  const targetRef = useRef(ONE_SET)      // posição alvo (drift + setas)
+  const pausedRef = useRef(false)
+  const rafRef    = useRef(0)
+
+  useEffect(() => {
+    function tick() {
+      // avança o alvo continuamente (pausa no hover)
+      if (!pausedRef.current) {
+        targetRef.current += SPEED
+        if (targetRef.current >= ONE_SET * 2) targetRef.current -= ONE_SET
+      }
+
+      // suaviza xRef em direção ao targetRef
+      let diff = targetRef.current - xRef.current
+      if (diff >  ONE_SET) diff -= ONE_SET * 2
+      if (diff < -ONE_SET) diff += ONE_SET * 2
+      xRef.current += diff * EASE
+      if (xRef.current >= ONE_SET * 2) xRef.current -= ONE_SET
+      if (xRef.current < 0) xRef.current += ONE_SET
+
+      if (trackRef.current) {
+        trackRef.current.style.transform = `translateX(-${xRef.current}px)`
+      }
+      rafRef.current = requestAnimationFrame(tick)
+    }
+    rafRef.current = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(rafRef.current)
+  }, [])
+
+  function prev() {
+    targetRef.current -= STEP
+    if (targetRef.current < 0) targetRef.current += ONE_SET
+  }
+
+  function next() {
+    targetRef.current += STEP
+    if (targetRef.current >= ONE_SET * 2) targetRef.current -= ONE_SET
+  }
 
   function getInitials(name: string) {
     const parts = name.replace(/\./g, '').trim().split(/\s+/)
@@ -534,21 +581,27 @@ function KidsTestimonials() {
     </div>
   )
 
-  return (
-    <section id="reviews" style={{ background: '#FFFFFF', padding: '80px 0 72px', overflow: 'hidden', position: 'relative' }}>
-      <style>{`
-        @keyframes kTestiRoll {
-          from { transform: translateX(0); }
-          to   { transform: translateX(-${ONE_SET}px); }
-        }
-      `}</style>
+  const NavBtn = ({ onClick, dir }: { onClick: () => void; dir: 'prev' | 'next' }) => (
+    <button
+      onClick={onClick}
+      style={{ width: 44, height: 44, borderRadius: '50%', border: '1.5px solid #E0E0E0', background: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'border-color 0.2s, background 0.2s' }}
+      onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#CC0000'; (e.currentTarget as HTMLButtonElement).style.background = '#FFF5F5' }}
+      onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = '#E0E0E0'; (e.currentTarget as HTMLButtonElement).style.background = '#fff' }}
+    >
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        {dir === 'prev'
+          ? <path d="M10 3L5 8L10 13" stroke="#0A0A0A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          : <path d="M6 3L11 8L6 13" stroke="#0A0A0A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>}
+      </svg>
+    </button>
+  )
 
+  return (
+    <section id="reviews" style={{ background: '#FFFFFF', padding: '80px 0 72px', position: 'relative' }}>
       <div className="max-w-7xl mx-auto px-4 md:px-8">
 
         {/* HEADER */}
         <div className="k-testi-header" style={{ display: 'grid', gridTemplateColumns: '1fr auto', alignItems: 'center', gap: 24, marginBottom: 48 }}>
-
-          {/* Title */}
           <div>
             <span style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: '#CC0000', display: 'block', marginBottom: 10 }}>Students</span>
             <h2 style={{ fontFamily: "'Tagbogy','HipsterHatch','Anton',sans-serif", fontSize: 'clamp(2.6rem,5vw,4.4rem)', lineHeight: '1.0', color: '#0A0A0A', margin: 0, textTransform: 'uppercase' }}>
@@ -556,39 +609,41 @@ function KidsTestimonials() {
             </h2>
           </div>
 
-          {/* Google badge */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, background: '#F9F7F5', border: '1px solid #EBEBEB', borderRadius: 14, padding: '12px 18px' }}>
-            <div style={{ display: 'flex' }}>
-              {[...Array(3)].map((_, i) => (
-                <div key={i} style={{ width: 34, height: 34, borderRadius: '50%', background: testimonials[i].avatarBg, border: '2px solid #fff', marginLeft: i > 0 ? -10 : 0, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '0.7rem', fontWeight: 700 }}>
-                  {getInitials(testimonials[i].name)}
-                </div>
-              ))}
-            </div>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 700, fontSize: '0.95rem', color: '#0A0A0A' }}>5.0</span>
-                <Stars size={13} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <NavBtn onClick={prev} dir="prev" />
+            <NavBtn onClick={next} dir="next" />
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, background: '#F9F7F5', border: '1px solid #EBEBEB', borderRadius: 14, padding: '12px 18px' }}>
+              <div style={{ display: 'flex' }}>
+                {[...Array(3)].map((_, i) => (
+                  <div key={i} style={{ width: 34, height: 34, borderRadius: '50%', background: testimonials[i].avatarBg, border: '2px solid #fff', marginLeft: i > 0 ? -10 : 0, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '0.7rem', fontWeight: 700 }}>
+                    {getInitials(testimonials[i].name)}
+                  </div>
+                ))}
               </div>
-              <div style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '0.68rem', color: '#999', marginTop: 1 }}>Google reviews</div>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <span style={{ fontFamily: "'Montserrat',sans-serif", fontWeight: 700, fontSize: '0.95rem', color: '#0A0A0A' }}>5.0</span>
+                  <Stars size={13} />
+                </div>
+                <div style={{ fontFamily: "'Montserrat',sans-serif", fontSize: '0.68rem', color: '#999', marginTop: 1 }}>Google reviews</div>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* CAROUSEL — CSS animation, pausa no hover */}
+        {/* CAROUSEL — scroll contínuo via rAF, pausa no hover */}
         <div
-          style={{ overflow: 'hidden', position: 'relative', paddingBottom: 4 }}
-          onMouseEnter={() => setHovered(true)}
-          onMouseLeave={() => { setHovered(false); setHoveredCard(null) }}
+          style={{ overflow: 'hidden', position: 'relative' }}
+          onMouseEnter={() => { pausedRef.current = true }}
+          onMouseLeave={() => { pausedRef.current = false; setHoveredCard(null) }}
         >
-          <div style={{
-            display: 'flex',
-            gap: GAP,
-            animation: `kTestiRoll 28s linear infinite`,
-            animationPlayState: hovered ? 'paused' : 'running',
-          }}>
-            {[...testimonials, ...testimonials, ...testimonials].map((t, idx) => (
-              <div key={`${t.id}-${idx}`}
+          <div
+            ref={trackRef}
+            style={{ display: 'flex', gap: GAP, willChange: 'transform' }}
+          >
+            {items.map((t, idx) => (
+              <div
+                key={`${t.id}-${idx}`}
                 onMouseEnter={() => setHoveredCard(idx)}
                 onMouseLeave={() => setHoveredCard(null)}
                 style={{
@@ -596,10 +651,10 @@ function KidsTestimonials() {
                   background: '#FAFAFA',
                   borderRadius: 20, padding: '26px 24px',
                   border: hoveredCard === idx ? '1.5px solid #CC0000' : '1.5px solid #EBEBEB',
-                  boxShadow: hoveredCard === idx ? '0 12px 36px rgba(204,0,0,0.1)' : '0 2px 12px rgba(0,0,0,0.04)',
-                  transform: hoveredCard === idx ? 'translateY(-4px)' : 'translateY(0)',
-                  opacity: hoveredCard === null ? 1 : hoveredCard === idx ? 1 : 0.6,
-                  transition: 'border-color 0.3s, box-shadow 0.3s, transform 0.3s, opacity 0.3s',
+                  boxShadow: hoveredCard === idx ? '0 14px 40px rgba(204,0,0,0.12)' : '0 2px 12px rgba(0,0,0,0.04)',
+                  transform: hoveredCard === idx ? 'translateY(-6px)' : 'translateY(0)',
+                  opacity: hoveredCard === null ? 1 : hoveredCard === idx ? 1 : 0.55,
+                  transition: 'border-color 0.25s, box-shadow 0.25s, transform 0.25s, opacity 0.25s',
                   position: 'relative', overflow: 'hidden',
                   cursor: 'default',
                 }}>
