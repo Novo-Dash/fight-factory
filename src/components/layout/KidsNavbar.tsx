@@ -41,8 +41,8 @@ export function KidsNavbar() {
     >
       <div className="max-w-[1440px] mx-auto px-4 md:px-8 flex items-center justify-between" style={{ gap: '2rem' }}>
 
-        {/* Logo — branca no hero, escura ao scrollar */}
-        <a href="/" aria-label="Fight Factory Jiu-Jitsu Kids" className="flex items-center shrink-0" style={{ lineHeight: 0 }}>
+        {/* Logo — volta ao topo da página (não navega para fora) */}
+        <a href="#top" onClick={e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }) }} aria-label="Fight Factory Jiu-Jitsu Kids" className="flex items-center shrink-0" style={{ lineHeight: 0 }}>
           <img
             src="/images/FONTE.webp"
             alt="Fight Factory Jiu-Jitsu"
