@@ -2,12 +2,13 @@ import type { Program } from './schedule'
 
 /** Estado do formulário de booking (compartilhado entre modal e /book). */
 export interface BookingData {
-  /** Nome completo (campo único — LP adultos). Vira parent_name e child_name no Webhook 2. */
+  /**
+   * "Seu nome" — o responsável que preenche. É o Full Name do contato no GHL
+   * e vira o `parent_name` no Webhook 2 (parent_name === nome do contato).
+   */
   name: string
-  /** Nome da criança (kidsMode). */
+  /** Nome da criança — só aparece/é exigido quando o programa é de kids. */
   childName?: string
-  /** Nome do responsável (kidsMode). */
-  parentName?: string
   email: string
   phone: string
   program: Program

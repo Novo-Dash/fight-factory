@@ -20,10 +20,8 @@ export function KidsNavbar() {
   }, [])
 
   function handleCTA() {
+    // ViewContent é disparado pelo modal ao abrir. Sem InitiateCheckout (§7.5).
     openModal()
-    if (typeof window !== 'undefined' && typeof (window as any).fbq === 'function') {
-      (window as any).fbq('track', 'InitiateCheckout')
-    }
   }
 
   return (

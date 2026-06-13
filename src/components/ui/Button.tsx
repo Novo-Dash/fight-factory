@@ -20,10 +20,9 @@ export function Button({
 
   function handleClick(e: React.MouseEvent<HTMLButtonElement>) {
     if (shouldOpenModal) {
+      // ViewContent é disparado pelo próprio modal ao abrir (analytics.ts).
+      // NÃO disparar InitiateCheckout aqui — proibido neste funil (trial grátis).
       openModal()
-      if (typeof window !== 'undefined' && typeof (window as any).fbq === 'function') {
-        (window as any).fbq('track', 'InitiateCheckout')
-      }
     }
     onClick?.(e)
   }

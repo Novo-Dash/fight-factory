@@ -1,12 +1,19 @@
 import { useRef, useState } from 'react'
-import { pushEvent } from './analytics'
+import {
+  GADS_BOOKING,
+  GADS_LEAD,
+  fbqTrack,
+  ga4Event,
+  gtagConversion,
+  setUserData,
+} from './analytics'
 import { Step1Details } from './Step1Details'
 import { Step2Schedule } from './Step2Schedule'
 import { isStep1Valid } from './validation'
 import { Success } from './Success'
-import { sendBookingWebhook, sendLeadWebhook } from './webhook'
+import { sendBookingWebhook, sendLeadWebhook, toE164 } from './webhook'
 import type { BookingData } from './types'
-import { PROGRAMS } from './schedule'
+import { KIDS_PROGRAMS, PROGRAMS, PROGRAM_AUDIENCE } from './schedule'
 
 type Step = 1 | 2 | 'success'
 
@@ -36,12 +43,13 @@ function readPrefill(): Partial<BookingData> {
   return out
 }
 
-function makeInitial(): BookingData {
+function makeInitial(kidsMode?: boolean): BookingData {
   return {
     name: '',
     email: '',
     phone: '',
-    program: PROGRAMS[0],
+    // /kids abre num programa de kids; página principal abre no primeiro programa.
+    program: kidsMode ? KIDS_PROGRAMS[0] : PROGRAMS[0],
     date: null,
     time: null,
     ...readPrefill(), // leitura única no mount; edições do usuário sempre vencem
@@ -56,10 +64,7 @@ interface BookingFormProps {
 
 export function BookingForm({ onDone, kidsMode }: BookingFormProps) {
   const [step, setStep] = useState<Step>(1)
-  const [data, setData] = useState<BookingData>(() => ({
-    ...makeInitial(),
-    ...(kidsMode ? { program: 'kids' as const } : {}),
-  }))
+  const [data, setData] = useState<BookingData>(() => makeInitial(kidsMode))
   const leadSent = useRef(false) // dedupe do Webhook 1 (1x por sessão de booking)
 
   function patch(p: Partial<BookingData>) {
@@ -67,24 +72,33 @@ export function BookingForm({ onDone, kidsMode }: BookingFormProps) {
   }
 
   function handleNext() {
-    if (!isStep1Valid(data, kidsMode)) return
-    // Webhook 1: dispara uma vez por sessão, mesmo se voltar e avançar de novo.
+    if (!isStep1Valid(data)) return
+    // Webhook 1 + conversões de Lead: 1x por sessão, mesmo se voltar e avançar.
     if (!leadSent.current) {
       leadSent.current = true
+      const audience = PROGRAM_AUDIENCE[data.program]
+      // Enhanced Conversions: setar antes da conversão de Lead cobre as duas da sessão.
+      setUserData(data.email, toE164(data.phone))
       sendLeadWebhook(data) // fire-and-forget
+      fbqTrack('Lead', { content_category: audience })
+      ga4Event('generate_lead', { audience })
+      gtagConversion(GADS_LEAD)
     }
     setStep(2)
   }
 
   function handleConfirm() {
     if (data.date == null || data.time == null) return
-    pushEvent('trial_booked')
+    const audience = PROGRAM_AUDIENCE[data.program]
+    fbqTrack('Schedule', { content_category: audience }) // sem value — trial é grátis
+    ga4Event('trial_booked', { audience })
+    gtagConversion(GADS_BOOKING)
     sendBookingWebhook(data) // fire-and-forget
     setStep('success')
   }
 
   function handleDone() {
-    setData(makeInitial())
+    setData(makeInitial(kidsMode))
     setStep(1)
     leadSent.current = false
     onDone?.()

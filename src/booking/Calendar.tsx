@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import {
-  type Program,
+  type SlotMap,
   formatMonthYear,
   getBookingWindow,
   isDateBookable,
@@ -8,7 +8,10 @@ import {
 } from './schedule'
 
 interface CalendarProps {
-  program: Program
+  /** Disponibilidade ao vivo do GHL (ou fallback): "YYYY-MM-DD" → ["HH:MM"]. */
+  slots: SlotMap
+  /** Mês em que o calendário abre (mês da primeira data agendável). */
+  initialMonth: Date
   selected: Date | null
   onSelect: (date: Date) => void
 }
@@ -16,10 +19,12 @@ interface CalendarProps {
 const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
 /** Grid de mês, navegação, desabilita datas fora da janela / sem horário. */
-export function Calendar({ program, selected, onSelect }: CalendarProps) {
+export function Calendar({ slots, initialMonth, selected, onSelect }: CalendarProps) {
   const { min, max } = getBookingWindow()
-  // Mês visível: começa no mês de hoje.
-  const [viewMonth, setViewMonth] = useState(() => new Date(min.getFullYear(), min.getMonth(), 1))
+  // Mês visível: abre no mês da primeira data agendável (não no mês cru de hoje).
+  const [viewMonth, setViewMonth] = useState(
+    () => new Date(initialMonth.getFullYear(), initialMonth.getMonth(), 1),
+  )
 
   const year = viewMonth.getFullYear()
   const month = viewMonth.getMonth()
@@ -82,7 +87,7 @@ export function Calendar({ program, selected, onSelect }: CalendarProps) {
       <div className="grid grid-cols-7 gap-1">
         {cells.map((date, i) => {
           if (!date) return <div key={`empty-${i}`} />
-          const bookable = isDateBookable(program, date)
+          const bookable = isDateBookable(slots, date)
           const isSelected = selected != null && isoDate(selected) === isoDate(date)
           return (
             <button

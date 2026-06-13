@@ -1,11 +1,17 @@
+import { useEffect, useRef, useState } from 'react'
 import { Calendar } from './Calendar'
 import {
   PROGRAM_LABEL,
   formatDateLong,
   formatTimeLabel,
+  getBookingWindow,
+  getFirstBookableDate,
   getTimesForDay,
+  staticFallbackSlots,
   type Program,
+  type SlotMap,
 } from './schedule'
+import { fetchSlots } from './webhook'
 import type { BookingData } from './types'
 
 interface Step2Props {
@@ -15,14 +21,54 @@ interface Step2Props {
   onConfirm: () => void
 }
 
+type Status = 'loading' | 'ready' | 'error'
+
 export function Step2Schedule({ data, onChange, onBack, onConfirm }: Step2Props) {
   const program = data.program as Program
-  const times = data.date ? getTimesForDay(program, data.date) : []
+  const [status, setStatus] = useState<Status>('loading')
+  const [slots, setSlots] = useState<SlotMap>({})
+  const preselected = useRef(false)
+
+  // Busca os horários AO VIVO no GHL ao entrar na Etapa 2. O estado inicial já é
+  // 'loading' (mount fresco), então a agenda nunca pinta antes dos slots (§8
+  // item 15) — sem setState síncrono no effect. As atualizações de slots/status
+  // saem dentro dos callbacks async do fetch.
+  useEffect(() => {
+    let alive = true
+    fetchSlots(program)
+      .then((map) => {
+        if (!alive) return
+        setSlots(map)
+        setStatus('ready')
+      })
+      .catch(() => {
+        if (!alive) return
+        // Fallback: agenda estática mínima (nunca trava o usuário).
+        setSlots(staticFallbackSlots(program))
+        setStatus('error')
+      })
+    return () => {
+      alive = false
+    }
+  }, [program])
+
+  // Pré-seleciona a primeira data agendável quando os slots chegam (1x).
+  useEffect(() => {
+    if (status === 'loading' || preselected.current) return
+    preselected.current = true
+    if (!data.date) {
+      const first = getFirstBookableDate(slots)
+      if (first) onChange({ date: first, time: null })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status, slots])
+
+  const times = data.date ? getTimesForDay(slots, data.date) : []
   const canConfirm = data.date != null && data.time != null
+  const initialMonth = data.date ?? getFirstBookableDate(slots) ?? getBookingWindow().min
 
   function selectDate(date: Date) {
-    // troca de data limpa o horário escolhido
-    onChange({ date, time: null })
+    onChange({ date, time: null }) // troca de data limpa o horário escolhido
   }
 
   return (
@@ -46,43 +92,53 @@ export function Step2Schedule({ data, onChange, onBack, onConfirm }: Step2Props)
         </button>
       </div>
 
-      <Calendar program={program} selected={data.date} onSelect={selectDate} />
+      {status === 'loading' ? (
+        // Loading ANTES de desenhar a agenda — não pinta horários de estado antigo.
+        <div className="flex flex-col items-center justify-center py-16 gap-3">
+          <span className="w-6 h-6 rounded-full border-2 border-[#E5E5E5] border-t-[#CC0000] animate-spin" />
+          <span className="text-[#999999] text-sm">Loading available times…</span>
+        </div>
+      ) : (
+        <>
+          <Calendar slots={slots} initialMonth={initialMonth} selected={data.date} onSelect={selectDate} />
 
-      {/* Lista de horários do dia selecionado */}
-      <div className="mt-6">
-        {!data.date ? (
-          <p className="text-[#999999] text-sm text-center py-2">Select a date to see available times.</p>
-        ) : times.length === 0 ? (
-          <p className="text-[#999999] text-sm text-center py-2">No times available on this day.</p>
-        ) : (
-          <>
-            <span className="block text-[#666666] text-xs mb-2 uppercase tracking-wider">
-              {formatDateLong(data.date)}
-            </span>
-            <div className="grid grid-cols-3 gap-2">
-              {times.map((t) => {
-                const selected = data.time === t
-                return (
-                  <button
-                    key={t}
-                    type="button"
-                    onClick={() => onChange({ time: t })}
-                    aria-pressed={selected}
-                    className={[
-                      'py-2.5 rounded-full text-sm font-medium border transition-colors cursor-pointer',
-                      selected
-                        ? 'bg-[#CC0000] text-white border-[#CC0000]'
-                        : 'text-[#0A0A0A] border-[#D8D8D8] hover:border-[#0A0A0A]',
-                    ].join(' ')}
-                  >
-                    {formatTimeLabel(t)}
-                  </button>
-                )
-              })}
-            </div>
-          </>
-        )}
-      </div>
+          {/* Lista de horários do dia selecionado */}
+          <div className="mt-6">
+            {!data.date ? (
+              <p className="text-[#999999] text-sm text-center py-2">Select a date to see available times.</p>
+            ) : times.length === 0 ? (
+              <p className="text-[#999999] text-sm text-center py-2">No times available on this day.</p>
+            ) : (
+              <>
+                <span className="block text-[#666666] text-xs mb-2 uppercase tracking-wider">
+                  {formatDateLong(data.date)}
+                </span>
+                <div className="grid grid-cols-3 gap-2">
+                  {times.map((t) => {
+                    const selected = data.time === t
+                    return (
+                      <button
+                        key={t}
+                        type="button"
+                        onClick={() => onChange({ time: t })}
+                        aria-pressed={selected}
+                        className={[
+                          'py-2.5 rounded-full text-sm font-medium border transition-colors cursor-pointer',
+                          selected
+                            ? 'bg-[#CC0000] text-white border-[#CC0000]'
+                            : 'text-[#0A0A0A] border-[#D8D8D8] hover:border-[#0A0A0A]',
+                        ].join(' ')}
+                      >
+                        {formatTimeLabel(t)}
+                      </button>
+                    )
+                  })}
+                </div>
+              </>
+            )}
+          </div>
+        </>
+      )}
 
       <button
         type="button"

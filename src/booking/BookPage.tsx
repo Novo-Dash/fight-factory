@@ -1,4 +1,6 @@
+import { useEffect } from 'react'
 import { BookingForm } from './BookingForm'
+import { trackViewContent } from './analytics'
 
 /**
  * Rota dedicada /book — destino direto de anúncios/links.
@@ -6,6 +8,11 @@ import { BookingForm } from './BookingForm'
  * marca. Renderiza o MESMO <BookingForm /> do modal (zero duplicação).
  */
 export function BookPage() {
+  // /book não tem botão de abrir modal → ViewContent dispara ao montar a página.
+  useEffect(() => {
+    trackViewContent()
+  }, [])
+
   return (
     <div className="relative min-h-dvh w-full overflow-hidden flex flex-col items-center justify-center px-4 py-10" style={{ background: '#FFFFFF' }}>
       {/* Background estilizado: glow vermelho sutil + grid hairline com máscara radial */}
