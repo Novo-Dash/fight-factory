@@ -8,8 +8,8 @@ const contactItems = [
   },
   {
     label: 'Phone',
-    text: '+1 (737) 283-6237',
-    href: 'tel:+17372836237',
+    text: '512-428-6125',
+    href: 'tel:+15124286125',
   },
 ]
 

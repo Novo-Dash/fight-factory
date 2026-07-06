@@ -1,6 +1,6 @@
 ﻿const contactItems = [
   { label: 'Address', text: '9607 Research Blvd, Suite #675, Austin, TX 78759', href: 'https://maps.google.com/?q=Fight+Factory+Jiu-Jitsu+Austin+TX' },
-  { label: 'Phone',   text: '+1 (737) 283-6237', href: 'tel:+17372836237' },
+  { label: 'Phone',   text: '512-428-6125', href: 'tel:+15124286125' },
 ]
 
 const quickLinks = [
