@@ -9,7 +9,7 @@ import {
 } from './analytics'
 import { Step1Details } from './Step1Details'
 import { Step2Schedule } from './Step2Schedule'
-import { isStep1Valid } from './validation'
+import { formatUSPhone, isStep1Valid } from './validation'
 import { Success } from './Success'
 import { sendBookingWebhook, sendLeadWebhook, toE164 } from './webhook'
 import type { BookingData } from './types'
@@ -35,10 +35,8 @@ function readPrefill(): Partial<BookingData> {
     let digits = rawPhone.replace(/\D/g, '')
     // GHL manda E.164 (+15555555555) → remove o código de país antes de formatar.
     if (digits.length === 11 && digits.startsWith('1')) digits = digits.slice(1)
-    out.phone =
-      digits.length === 10
-        ? `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`
-        : rawPhone
+    // Número que não é US de 10 dígitos fica cru (a máscara truncaria dígitos).
+    out.phone = digits.length === 10 ? formatUSPhone(digits) : rawPhone
   }
   return out
 }

@@ -7,7 +7,7 @@ import {
   PROGRAM_LABEL,
   type Program,
 } from './schedule'
-import { isStep1Valid } from './validation'
+import { formatUSPhone, isStep1Valid } from './validation'
 import type { BookingData } from './types'
 
 interface Step1Props {
@@ -103,11 +103,13 @@ export function Step1Details({ data, onChange, onNext, kidsMode }: Step1Props) {
             type="tel"
             required
             value={data.phone}
-            onChange={(e) => onChange({ phone: e.target.value })}
+            onChange={(e) => onChange({ phone: formatUSPhone(e.target.value) })}
             className={inputClass}
             style={{ background: '#F5F5F5', fontSize: '16px' }}
             placeholder="(512) 000-0000"
             autoComplete="tel"
+            inputMode="numeric"
+            maxLength={14}
           />
         </div>
 
