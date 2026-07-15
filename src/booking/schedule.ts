@@ -13,11 +13,11 @@
 // =============================================================================
 
 // Chaves internas: ASCII, estáveis, nunca exibidas. Use para LÓGICA.
-export type Program = 'adults' | 'kids-7-12' | 'kids-4-6'
+export type Program = 'adults' | 'adults-advanced' | 'kids-7-12' | 'kids-4-6'
 export type Audience = 'adults' | 'kids'
 
 // Ordem de exibição dos radios na Etapa 1 (página principal).
-export const PROGRAMS: Program[] = ['adults', 'kids-7-12', 'kids-4-6']
+export const PROGRAMS: Program[] = ['adults', 'adults-advanced', 'kids-7-12', 'kids-4-6']
 
 // Subconjunto exibido na landing dedicada de kids (/kids).
 export const KIDS_PROGRAMS: Program[] = ['kids-7-12', 'kids-4-6']
@@ -26,6 +26,7 @@ export const KIDS_PROGRAMS: Program[] = ['kids-7-12', 'kids-4-6']
 // Copiado LITERALMENTE dos calendários da sub-account (GET /calendars/).
 export const PROGRAM_LABEL: Record<Program, string> = {
   adults: 'Adults Brazilian Jiu Jitsu All Levels',
+  'adults-advanced': 'Adults Advanced Jiu Jitsu',
   'kids-7-12': 'Kids (7-12 years) Brazilian Jiu Jitsu',
   'kids-4-6': 'Kids (4-6 Years) Brazilian Jiu Jitsu',
 }
@@ -33,6 +34,7 @@ export const PROGRAM_LABEL: Record<Program, string> = {
 // Audience por programa: padroniza o Webhook 1 para o workflow único (§3.1).
 export const PROGRAM_AUDIENCE: Record<Program, Audience> = {
   adults: 'adults',
+  'adults-advanced': 'adults',
   'kids-7-12': 'kids',
   'kids-4-6': 'kids',
 }
@@ -41,6 +43,7 @@ export const PROGRAM_AUDIENCE: Record<Program, Audience> = {
 // (Webhook 2 + slots). Puxado do GHL no onboarding (GET /calendars/ traz id+nome).
 export const PROGRAM_CALENDAR_ID: Record<Program, string> = {
   adults: 'k7wqlTV7HzXgMH7kPyeY',
+  'adults-advanced': 'Tf83WHwYS0gVV5KRUX9a',
   'kids-7-12': '8RAr2kpFrtPo7fWq4d3Z',
   'kids-4-6': 'C1QqynI6nU5flirq65W7',
 }
@@ -48,6 +51,7 @@ export const PROGRAM_CALENDAR_ID: Record<Program, string> = {
 // Descrição curta exibida abaixo do label no radio (apenas UI, não vai no payload).
 export const PROGRAM_HINT: Record<Program, string> = {
   adults: 'All levels · beginners welcome',
+  'adults-advanced': 'Advanced · experienced practitioners',
   'kids-7-12': 'Ages 7–12 · fundamentals, focus & fun',
   'kids-4-6': 'Ages 4–6 · playful first steps',
 }
@@ -59,11 +63,15 @@ export type SlotMap = Record<string, string[]>
 // Horários por programa por dia da semana (0=Dom … 6=Sáb), 24h "HH:MM".
 // FALLBACK ESTÁTICO apenas — derivado dos open hours reais dos calendários GHL.
 //   Adults BJJ All Levels:  Seg–Qui 18:15
+//   Adults Advanced:        Seg–Qui 07:00 e 19:15
 //   Kids (7-12 years):      Seg–Qui 17:15
 //   Kids (4-6 Years):       Seg, Qua, Qui 16:30
 const SCHEDULE: Record<Program, Record<number, string[]>> = {
   adults: {
     0: [], 1: ['18:15'], 2: ['18:15'], 3: ['18:15'], 4: ['18:15'], 5: [], 6: [],
+  },
+  'adults-advanced': {
+    0: [], 1: ['07:00', '19:15'], 2: ['07:00', '19:15'], 3: ['07:00', '19:15'], 4: ['07:00', '19:15'], 5: [], 6: [],
   },
   'kids-7-12': {
     0: [], 1: ['17:15'], 2: ['17:15'], 3: ['17:15'], 4: ['17:15'], 5: [], 6: [],
