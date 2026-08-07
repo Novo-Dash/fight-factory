@@ -5,6 +5,7 @@ import './index.css'
 import App from './App'
 import { BookPage } from './booking/BookPage'
 import { KidsPage } from './pages/KidsPage'
+import { BackToSchoolPage } from './pages/BackToSchoolPage'
 import { captureAttribution } from './booking/attribution'
 
 // Captura a atribuição (UTM + ad click IDs) ANTES de a navegação SPA limpar a
@@ -21,6 +22,7 @@ createRoot(root).render(
         <Route path="/" element={<App />} />
         <Route path="/book" element={<BookPage />} />
         <Route path="/kids" element={<KidsPage />} />
+        <Route path="/back-to-school" element={<BackToSchoolPage />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>
