@@ -11,7 +11,7 @@ import { BackToSchoolMarquee } from '../components/ui/BackToSchoolMarquee'
 
 const steps = [
   { num: '01', color: '#CC0000', label: 'Step 1', text: 'Click the button and fill out the form.' },
-  { num: '02', color: '#F9B80E', label: 'Step 2', text: 'Choose your class type and pick a date & time on the calendar.' },
+  { num: '02', color: '#F9B80E', label: 'Step 2', text: 'Choose your child class type and pick a date & time on the calendar.' },
   { num: '03', color: '#FFFFFF', label: 'Step 3', text: "You'll get email and SMS confirmations with all the details." },
 ]
 
