@@ -1,6 +1,7 @@
 ﻿const contactItems = [
-  { label: 'Address', text: '9607 Research Blvd, Suite #675, Austin, TX 78759', href: 'https://maps.google.com/?q=Fight+Factory+Jiu-Jitsu+Austin+TX' },
-  { label: 'Phone',   text: '512-428-6125', href: 'tel:+15124286125' },
+  { label: 'Address', text: '9607 Research Blvd #675, Austin, TX 78759', href: 'https://maps.google.com/?q=Fight+Factory+Jiu-Jitsu+Austin+TX' },
+  { label: 'Phone',   text: '(512) 428-6125', href: 'tel:+15124286125' },
+  { label: 'Email',   text: 'info@fightfactoryjiujitsu.com', href: 'mailto:info@fightfactoryjiujitsu.com' },
 ]
 
 const quickLinks = [
@@ -79,7 +80,10 @@ export function BackToSchoolFooter() {
                 <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 12 }}>
                   {contactItems.map(c => (
                     <li key={c.label}>
-                      <a href={c.href} target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(255,255,255,0.75)', fontSize: '0.875rem', textDecoration: 'none', lineHeight: '1.5', transition: 'color 0.2s' }}
+                      <a
+                        href={c.href}
+                        {...(c.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                        style={{ color: 'rgba(255,255,255,0.75)', fontSize: '0.875rem', textDecoration: 'none', lineHeight: '1.5', transition: 'color 0.2s' }}
                         onMouseEnter={e => { e.currentTarget.style.color = '#fff' }}
                         onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.75)' }}>
                         {c.text}
