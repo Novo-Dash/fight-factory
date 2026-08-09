@@ -1,20 +1,21 @@
 // =============================================================================
-// webhook.ts — Transporte e montagem dos 2 webhooks + fetch de slots ao vivo
+// webhook.ts — Transporte e montagem dos 2 webhooks + busca de turmas ao vivo
 // -----------------------------------------------------------------------------
 // Webhook 1 → LeadConnector/GHL (lead). Payload flexível, mapeado na UI do GHL.
 // Webhook 2 → workflow n8n compartilhado (agendamento). ⚠️ CONTRATO CRÍTICO:
 //   calendar_id casa o calendário, parent_name nomeia o contato, hora 12h AM/PM,
 //   data local, child_name só quando há criança.
-// Slots → mesmo workflow n8n (action:"get_slots"), free-slots ao vivo do GHL.
+// Turmas + horários → mesmo workflow n8n (action:"get_programs", §5.1): UMA
+// chamada ao abrir o modal/montar /book traz a lista de programas e os
+// free-slots de todos, ao vivo do GHL. Nada de lista estática no repositório.
 // =============================================================================
 
 import { getAttribution } from './attribution'
 import {
-  PROGRAM_AUDIENCE,
-  PROGRAM_CALENDAR_ID,
-  PROGRAM_LABEL,
+  PROGRAM_OVERRIDES,
   formatTimeLabel,
   isoDate,
+  type Audience,
   type Program,
   type SlotMap,
 } from './schedule'
@@ -27,7 +28,7 @@ const GHL_LOCATION_ID = '7ai3O8KqknYgJu59oYfE'
 const LEAD_WEBHOOK_UUID = 'zvG8tH1SZiNIXKU5a0GQ'
 const LEAD_WEBHOOK_URL = `https://services.leadconnectorhq.com/hooks/${GHL_LOCATION_ID}/webhook-trigger/${LEAD_WEBHOOK_UUID}`
 
-// --- Webhook 2 + slots: FIXO para todas as academias (produção, já validado) -
+// --- Webhook 2 + turmas: FIXO para todas as academias (produção, validado) ---
 const N8N_ORIGIN = 'https://n8n.novodash.com'
 const N8N_PATH = 'webhook' // "webhook-test" só se for mexer no workflow compartilhado
 const BOOKING_WEBHOOK_URL = `${N8N_ORIGIN}/${N8N_PATH}/landing-page-booking`
@@ -55,10 +56,10 @@ export function toE164(phone: string): string {
 /**
  * Nome da criança APENAS quando o programa é de kids E o campo está preenchido;
  * senão null → a chave `child_name` é OMITIDA do payload. Nunca manda o nome do
- * adulto como child_name.
+ * adulto como child_name. O audience vem pronto do GHL (§5.1), nunca do nome.
  */
 function childNameOrNull(d: BookingData): string | null {
-  if (PROGRAM_AUDIENCE[d.program] !== 'kids') return null
+  if (d.program?.audience !== 'kids') return null
   const v = (d.childName ?? '').trim()
   return v.length ? v : null
 }
@@ -93,6 +94,7 @@ async function post(url: string, payload: Record<string, unknown>): Promise<void
 // -----------------------------------------------------------------------------
 
 export function sendLeadWebhook(data: BookingData): void {
+  if (!data.program) return
   const { first, last } = splitName(data.name)
   const cn = childNameOrNull(data)
   const payload = {
@@ -103,8 +105,8 @@ export function sendLeadWebhook(data: BookingData): void {
     email: data.email,
     phone: data.phone,
     phoneE164: toE164(data.phone),
-    program: PROGRAM_LABEL[data.program], // nome do programa → campo Program do CRM
-    audience: PROGRAM_AUDIENCE[data.program], // adults | kids → roteamento do workflow
+    program: data.program.name, // nome CRU do calendário no GHL (nunca o apelido) → campo Program do CRM
+    audience: data.program.audience, // adults | kids, como veio do GHL → roteamento do workflow
     ...(cn ? { child_name: cn } : {}), // só quando há criança (kids)
     submittedAt: new Date().toISOString(),
     source: SOURCE_LABEL,
@@ -119,8 +121,8 @@ export function sendLeadWebhook(data: BookingData): void {
 // -----------------------------------------------------------------------------
 
 export function sendBookingWebhook(data: BookingData): void {
-  if (!data.date || !data.time) {
-    console.warn('[webhook] booking sem data/hora — ignorado')
+  if (!data.program || !data.date || !data.time) {
+    console.warn('[webhook] booking sem programa/data/hora — ignorado')
     return
   }
   const cn = childNameOrNull(data)
@@ -129,51 +131,83 @@ export function sendBookingWebhook(data: BookingData): void {
     ...(cn ? { child_name: cn } : {}), // só kids; adults omite → título cai no parent_name
     email: data.email,
     phone: data.phone, // formato exibido "(555) 555-5555" é aceito
-    calendar_id: PROGRAM_CALENDAR_ID[data.program], // casa o calendário no n8n (imune a rename)
+    calendar_id: data.program.calendar_id, // casa o calendário no n8n (imune a rename)
     location_id: GHL_LOCATION_ID,
     stage: 'appointment_selected', // ignorado pelo workflow; valor fixo
     appointment_date: isoDate(data.date), // YYYY-MM-DD local
     appointment_time: formatTimeLabel(data.time), // h:mm AM/PM
     source: SOURCE_LABEL,
+    // NADA de audience nem UTM aqui — contrato crítico do n8n (§3.2).
   }
   void post(BOOKING_WEBHOOK_URL, payload)
 }
 
 // -----------------------------------------------------------------------------
-// Slots ao vivo — mesmo workflow n8n, action:"get_slots" (§5.1)
+// Turmas + horários ao vivo — mesmo workflow n8n, action:"get_programs" (§5.1)
 // -----------------------------------------------------------------------------
 
-/**
- * Busca os free-slots do calendário ao vivo do GHL (via n8n). Devolve um
- * SlotMap { "YYYY-MM-DD": ["HH:MM", …] }. A resposta do GHL vem como
- * { "YYYY-MM-DD": { slots: ["<ISO já no fuso da academia>"] }, traceId }.
- * Cada ISO traz o offset da academia, então data/hora locais saem por string
- * (slice) sem conversão de fuso. Entradas sem `slots` array (ex.: traceId) são
- * ignoradas. LANÇA em erro de rede/HTTP — o chamador trata com fallback.
- */
-export async function fetchSlots(program: Program): Promise<SlotMap> {
-  const res = await fetch(BOOKING_WEBHOOK_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      action: 'get_slots',
-      location_id: GHL_LOCATION_ID,
-      calendar_id: PROGRAM_CALENDAR_ID[program],
-    }),
-  })
-  if (!res.ok) throw new Error(`get_slots → HTTP ${res.status}`)
-  const data: unknown = await res.json()
-  const out: SlotMap = {}
-  if (data && typeof data === 'object') {
-    for (const [key, val] of Object.entries(data as Record<string, unknown>)) {
-      const slots = (val as { slots?: unknown })?.slots
-      if (!Array.isArray(slots)) continue // ignora traceId e afins
-      const times = slots
-        .filter((iso): iso is string => typeof iso === 'string')
-        .map((iso) => iso.slice(11, 16)) // "2026-06-15T18:15:00-05:00" → "18:15"
-        .filter((t) => /^\d{2}:\d{2}$/.test(t))
-      if (times.length) out[key] = times
-    }
+type RawProgram = {
+  calendar_id?: string
+  name?: string
+  audience?: string
+  duration_minutes?: number | null
+  capacity?: number
+  slots?: Record<string, unknown>
+  slots_error?: string | null
+}
+
+/** Lista de ISOs → ["HH:MM"]. Cada ISO já traz o fuso da academia, então a
+ *  hora local sai por string (slice), sem conversão de fuso (§5.1). */
+function toSlotMap(raw: RawProgram['slots']): SlotMap {
+  const map: SlotMap = {}
+  for (const [date, value] of Object.entries(raw ?? {})) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !Array.isArray(value)) continue
+    const times = value
+      .filter((s): s is string => typeof s === 'string')
+      .map((iso) => iso.slice(11, 16)) // "2026-06-15T18:15:00-05:00" → "18:15"
+      .filter((t) => /^\d{2}:\d{2}$/.test(t))
+    if (times.length) map[date] = times
   }
-  return out
+  return map
+}
+
+/**
+ * POST { action:"get_programs" } — a ÚNICA busca ao vivo (§5.1): programas e os
+ * horários de todos juntos, uma vez por sessão (cache no módulo; a resposta já
+ * vem ordenada, adultos primeiro). Diferente dos webhooks, esta chamada NÃO é
+ * fire-and-forget: sem ela não há o que mostrar, então falha vira estado de
+ * erro na tela (§2).
+ */
+let programsPromise: Promise<Program[]> | null = null
+
+export function fetchPrograms(): Promise<Program[]> {
+  if (!programsPromise) {
+    programsPromise = (async () => {
+      const res = await fetch(BOOKING_WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'get_programs', location_id: GHL_LOCATION_ID }),
+      })
+      if (!res.ok) throw new Error(`get_programs → HTTP ${res.status}`)
+      const raw = (await res.json()) as { programs?: RawProgram[] }
+      return (raw.programs ?? [])
+        .filter((p): p is RawProgram & { calendar_id: string; name: string } =>
+          Boolean(p.calendar_id && p.name),
+        )
+        .filter((p) => !PROGRAM_OVERRIDES[p.calendar_id]?.hide)
+        .map((p) => ({
+          calendar_id: p.calendar_id,
+          name: p.name,
+          audience: (p.audience === 'kids' ? 'kids' : 'adults') as Audience,
+          duration_minutes: p.duration_minutes ?? null,
+          capacity: p.capacity ?? 0,
+          slots: toSlotMap(p.slots),
+          slots_error: p.slots_error ?? null,
+        }))
+    })()
+    programsPromise.catch(() => {
+      programsPromise = null // falha não envenena o cache da sessão
+    })
+  }
+  return programsPromise
 }
