@@ -10,7 +10,7 @@
 // free-slots de todos, ao vivo do GHL. Nada de lista estática no repositório.
 // =============================================================================
 
-import { getAttribution } from './attribution'
+import { getAttribution, getSourceLabel } from './attribution'
 import {
   PROGRAM_OVERRIDES,
   formatTimeLabel,
@@ -109,7 +109,7 @@ export function sendLeadWebhook(data: BookingData): void {
     audience: data.program.audience, // adults | kids, como veio do GHL → roteamento do workflow
     ...(cn ? { child_name: cn } : {}), // só quando há criança (kids)
     submittedAt: new Date().toISOString(),
-    source: SOURCE_LABEL,
+    source: getSourceLabel(SOURCE_LABEL), // dinâmico: Meta/Google quando há sinal pago
     // marketing attribution (só aqui) — espalha as chaves que vieram na URL
     ...getAttribution(),
   }
