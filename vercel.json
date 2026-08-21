@@ -11,6 +11,18 @@
     }
   ],
   "rewrites": [
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "(www\\.)?fightfactoryjiujitsu\\.com" }],
+      "destination": "/home.html"
+    },
+
+    { "source": "/home", "destination": "/home.html" },
+    { "source": "/about", "destination": "/about.html" },
+    { "source": "/programs", "destination": "/programs.html" },
+    { "source": "/schedule", "destination": "/schedule.html" },
+    { "source": "/contact", "destination": "/contact.html" },
+
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

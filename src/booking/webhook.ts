@@ -92,7 +92,12 @@ async function post(url: string, payload: Record<string, unknown>): Promise<void
 // Webhook 1 — Lead (destino: LeadConnector / GHL)
 // -----------------------------------------------------------------------------
 
-export function sendLeadWebhook(data: BookingData): void {
+/**
+ * `source` defaults to the paid-traffic landing page. Other surfaces in this
+ * repo (the institutional site) pass their own label so the CRM can tell a
+ * website enquiry from an ad lead. Nothing else about the payload changes.
+ */
+export function sendLeadWebhook(data: BookingData, source: string = SOURCE_LABEL): void {
   const { first, last } = splitName(data.name)
   const cn = childNameOrNull(data)
   const payload = {
@@ -107,7 +112,7 @@ export function sendLeadWebhook(data: BookingData): void {
     audience: PROGRAM_AUDIENCE[data.program], // adults | kids → roteamento do workflow
     ...(cn ? { child_name: cn } : {}), // só quando há criança (kids)
     submittedAt: new Date().toISOString(),
-    source: SOURCE_LABEL,
+    source,
     // marketing attribution (só aqui) — espalha as chaves que vieram na URL
     ...getAttribution(),
   }
@@ -118,7 +123,7 @@ export function sendLeadWebhook(data: BookingData): void {
 // Webhook 2 — Agendamento (destino: workflow n8n compartilhado) ⚠️ CONTRATO
 // -----------------------------------------------------------------------------
 
-export function sendBookingWebhook(data: BookingData): void {
+export function sendBookingWebhook(data: BookingData, source: string = SOURCE_LABEL): void {
   if (!data.date || !data.time) {
     console.warn('[webhook] booking sem data/hora — ignorado')
     return
@@ -134,7 +139,7 @@ export function sendBookingWebhook(data: BookingData): void {
     stage: 'appointment_selected', // ignorado pelo workflow; valor fixo
     appointment_date: isoDate(data.date), // YYYY-MM-DD local
     appointment_time: formatTimeLabel(data.time), // h:mm AM/PM
-    source: SOURCE_LABEL,
+    source, // campo JÁ EXISTENTE do contrato — muda o valor, nunca o conjunto
   }
   void post(BOOKING_WEBHOOK_URL, payload)
 }

@@ -58,9 +58,11 @@ interface BookingFormProps {
   /** Chamado após o reset, ao concluir. No modal: fecha. No /book: undefined (fica na Etapa 1). */
   onDone?: () => void
   kidsMode?: boolean
+  /** Rótulo de origem gravado nos 2 webhooks. Omitido = landing page. */
+  source?: string
 }
 
-export function BookingForm({ onDone, kidsMode }: BookingFormProps) {
+export function BookingForm({ onDone, kidsMode, source }: BookingFormProps) {
   const [step, setStep] = useState<Step>(1)
   const [data, setData] = useState<BookingData>(() => makeInitial(kidsMode))
   const leadSent = useRef(false) // dedupe do Webhook 1 (1x por sessão de booking)
@@ -77,7 +79,7 @@ export function BookingForm({ onDone, kidsMode }: BookingFormProps) {
       const audience = PROGRAM_AUDIENCE[data.program]
       // Enhanced Conversions: setar antes da conversão de Lead cobre as duas da sessão.
       setUserData(data.email, toE164(data.phone))
-      sendLeadWebhook(data) // fire-and-forget
+      sendLeadWebhook(data, source) // fire-and-forget
       fbqTrack('Lead', { content_category: audience })
       ga4Event('generate_lead', { audience })
       gtagConversion(GADS_LEAD)
@@ -91,7 +93,7 @@ export function BookingForm({ onDone, kidsMode }: BookingFormProps) {
     fbqTrack('Schedule', { content_category: audience }) // sem value — trial é grátis
     ga4Event('trial_booked', { audience })
     gtagConversion(GADS_BOOKING)
-    sendBookingWebhook(data) // fire-and-forget
+    sendBookingWebhook(data, source) // fire-and-forget
     setStep('success')
   }
 

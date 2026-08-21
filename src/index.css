@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+/* The institutional site under src/site has its own stylesheet (src/site/site.css)
+   with its own @source list. Excluding the folder here keeps this sheet — the one
+   the paid-traffic landing page loads — byte-for-byte what it was before the site
+   was added. */
+@source not "./site";
+/* Root-level development scripts are prose, not markup. Excluding them is the
+   durable fix for a word in a comment turning into a rule in this bundle. */
+@source not "../*.mjs";
+
 @theme {
   --color-bg: #FFFFFF;
   --color-bg-subtle: #F5F5F5;
