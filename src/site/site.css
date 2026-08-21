@@ -155,6 +155,16 @@
   line-height: 0.9;
   letter-spacing: -0.024em;
 }
+/* The hero headline. Sized against BOTH axes: on a short laptop screen a
+   headline that only answers to viewport width pushes the record strip out of a
+   100svh hero. min() lets whichever axis is tighter win, so the first screen
+   always holds its contents without a single height media query. */
+@utility t-hero {
+  font-size: clamp(2rem, min(5.1vw, 8.2vh), 4.35rem);
+  line-height: 0.9;
+  letter-spacing: -0.024em;
+}
+
 @utility t-display {
   font-size: clamp(1.95rem, 4vw, 3.4rem);
   line-height: 0.9;

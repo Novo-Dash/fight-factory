@@ -172,6 +172,30 @@ panels that trade width, so five rooms cost one screen rather than two. Below
 `md` there is no hover to lean on, so the panels stack and open on tap — never
 make a phone user guess at a hover.
 
+**The hero is one viewport tall.** `min-h-[100svh]`, not `100vh`: on iOS the
+`vh` unit includes the address bar, so a `100vh` hero has its own foot pushed
+off the screen. The section is a flex column — the headline block centres itself
+and the record strip parks on the floor — and `t-hero` is sized with
+`min(5.1vw, 8.2vh)`, so on a short laptop the axis that is tighter wins and the
+first screen holds its contents without a single height media query.
+
+Verified at 1920×1080, 1512×945, 1440×900, 1440×780, 1366×720, 1280×800,
+1024×768, 768×1024, 430×932 and 390×844: the hero measures the viewport exactly
+and nothing overflows it. Below about 700px of viewport height (a 360×640
+handset) the content cannot fit, and `min-h` lets the hero grow rather than
+clipping anything — growing is the safe failure here.
+
+Below `md` the review card collapses to a band — score, stars, count, one line
+of quote — because the full card is 321px of a 844px screen on its own.
+
+⚠️ **Anything on the first screen has to reveal on load, not on scroll.**
+The shared observer used `top 88%` as its trigger, which is right for a section
+further down the page and wrong for the foot of a 100svh hero: the record strip
+landed 2px inside the line and sat at zero opacity until the visitor scrolled.
+`components/scroll.ts` now splits the nodes at boot — anything whose top is
+within 97% of the viewport reveals immediately, staggered — and `MaskHeading`
+does the same for a heading already in view.
+
 ⚠️ **The hero's review card must live in a fixed track and a fixed frame.**
 The five quotes it cycles through run from 30 to 166 characters. Two separate
 things moved the page because of that, and only the first is obvious:

@@ -24,6 +24,21 @@ export function useScrollReveals(): void {
       return
     }
 
+    // Anything already on the first screen reveals on load, staggered. Without
+    // this, a block sitting right on the trigger line — the hero's record strip
+    // at the foot of a 100svh hero, for instance — stays at zero opacity until
+    // the visitor happens to scroll, which reads as a hole in the design.
+    const onFirstScreen: HTMLElement[] = []
+    const rest: HTMLElement[] = []
+    for (const el of nodes()) {
+      const rect = el.getBoundingClientRect()
+      if (rect.top < window.innerHeight * 0.97) onFirstScreen.push(el)
+      else rest.push(el)
+    }
+    onFirstScreen.forEach((el, i) => {
+      window.setTimeout(() => el.classList.add('is-in'), 90 + i * 55)
+    })
+
     // Fallback first: whatever happens to GSAP below, these fire.
     const io = new IntersectionObserver(
       (entries) => {
@@ -35,7 +50,7 @@ export function useScrollReveals(): void {
       },
       { rootMargin: '0px 0px -12% 0px', threshold: 0.06 },
     )
-    nodes().forEach((el) => io.observe(el))
+    rest.forEach((el) => io.observe(el))
 
     let killed = false
     let cleanupGsap: (() => void) | undefined
@@ -50,7 +65,7 @@ export function useScrollReveals(): void {
         gsap.registerPlugin(ScrollTrigger)
         // GSAP takes over: same class, but batched and with proper refresh
         // handling for images that resize the document as they decode.
-        ScrollTrigger.batch(nodes(), {
+        ScrollTrigger.batch(rest, {
           start: 'top 88%',
           once: true,
           batchMax: 6,

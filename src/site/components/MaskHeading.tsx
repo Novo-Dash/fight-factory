@@ -79,6 +79,13 @@ export function MaskHeading({
       }
     }
 
+    // Already on the first screen: play immediately rather than waiting for a
+    // scroll that may never come.
+    if (host.getBoundingClientRect().top < window.innerHeight * 0.97) {
+      void play()
+      return
+    }
+
     const io = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {

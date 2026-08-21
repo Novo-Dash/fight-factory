@@ -86,7 +86,7 @@ export function GoogleRating({ className = '' }: { className?: string }) {
 
   return (
     <figure
-      className={`w-full max-w-sm border border-white/15 bg-ink/72 p-6 backdrop-blur-md md:p-7 lg:max-w-none ${className}`}
+      className={`w-full max-w-sm border border-white/15 bg-ink/72 p-4 backdrop-blur-md md:p-7 lg:max-w-none ${className}`}
     >
       <div className="flex items-center justify-between gap-4">
         <span className="label-sm flex items-center gap-2.5 text-white/70">
@@ -96,33 +96,46 @@ export function GoogleRating({ className = '' }: { className?: string }) {
         <span className="label-sm nums text-white/40">{PROOF.googleReviews}+</span>
       </div>
 
-      <div className="mt-5 flex items-end gap-4">
-        <span className="display-line text-white" style={{ fontSize: 'clamp(2.6rem,4vw,3.4rem)' }}>
+      <div className="mt-3 flex items-end gap-4 md:mt-5">
+        <span
+          className="display-line text-white"
+          style={{ fontSize: 'clamp(2rem,4vw,3.4rem)' }}
+        >
           {PROOF.googleRating}
         </span>
-        <div className="pb-1.5">
+        <div className="pb-1 md:pb-1.5">
           <Stars size={14} className="text-white" />
           <span className="label-sm mt-2 block text-white/45">out of five</span>
         </div>
+        {/* On a phone the footer's link has nowhere of its own to go. */}
+        <a
+          href={ACADEMY.mapsUrl}
+          target="_blank"
+          rel="noreferrer noopener"
+          className="label-sm ml-auto inline-flex items-center gap-2 pb-1 text-white/70 transition-colors hover:text-white md:hidden [--icon-accent:currentColor]"
+        >
+          Read all
+          <Icon name="arrow" size={14} />
+        </a>
       </div>
 
-      {/* A fixed frame, in two parts of their own fixed height. The quote is
-          clamped as a belt-and-braces measure; the trim above is what actually
-          guarantees it. */}
+      {/* Fixed height, contents centred: the five quotes run one to three lines,
+          and centring shares the slack instead of leaving a hole above the
+          attribution on the short ones. One line on a phone, three above it —
+          either way the height is fixed, so the card never resizes the hero. */}
       <div
-        className="mt-6 transition-opacity"
+        className="mt-3 transition-opacity md:mt-6"
         style={{ opacity: visible ? 1 : 0, transitionDuration: `${FADE_MS}ms` }}
       >
-        {/* Fixed height, contents centred: the five quotes run one to three
-            lines, and centring shares the slack instead of leaving a hole above
-            the attribution on the short ones. */}
-        <blockquote className="flex h-[4.35rem] items-center overflow-hidden text-[0.92rem] leading-[1.55] text-white/80">
-          <p className="line-clamp-3">&ldquo;{quote}&rdquo;</p>
+        <blockquote className="flex h-[1.45rem] items-center overflow-hidden text-[0.86rem] leading-[1.45] text-white/80 md:h-[4.35rem] md:text-[0.92rem] md:leading-[1.55]">
+          <p className="line-clamp-1 md:line-clamp-3">&ldquo;{quote}&rdquo;</p>
         </blockquote>
-        <figcaption className="label-sm mt-2.5 h-[0.7rem] text-white/45">{review.name}</figcaption>
+        <figcaption className="label-sm mt-2 h-[0.7rem] text-white/45 md:mt-2.5">
+          {review.name}
+        </figcaption>
       </div>
 
-      <div className="mt-6 flex items-center justify-between gap-4 border-t border-white/12 pt-5">
+      <div className="mt-6 hidden items-center justify-between gap-4 border-t border-white/12 pt-5 md:flex">
         <Faces />
         <a
           href={ACADEMY.mapsUrl}

@@ -28,18 +28,20 @@ function Hero() {
   const { openModal } = useModal()
 
   return (
-    <section className="relative isolate overflow-hidden bg-ink">
-      {/* Ground */}
+    <section className="relative isolate flex min-h-[100svh] flex-col overflow-hidden bg-ink">
+      {/* Ground. The desktop file keeps the source's own 1.6:1 framing, which is
+          what a 100svh hero measures on most laptops, so object-cover barely
+          crops. The mobile file is a portrait crop placed around the subject. */}
       <picture>
         <source media="(max-width: 767px)" srcSet="/site/home/hero-bg-sm.webp" />
         <img
           src="/site/home/hero-bg.webp"
           alt=""
           aria-hidden="true"
-          width={2048}
-          height={1152}
+          width={2000}
+          height={1250}
           fetchPriority="high"
-          className="absolute inset-0 -z-20 h-full w-full object-cover object-[52%_38%]"
+          className="absolute inset-0 -z-20 h-full w-full object-cover object-[54%_30%] md:object-[50%_38%]"
         />
       </picture>
 
@@ -63,63 +65,77 @@ function Hero() {
         }}
       />
 
-      {/* The masthead sits above this section, which is pulled up behind it,
-          so the top padding has to carry the masthead height too. */}
-      <div className="wrap pb-10 pt-[calc(4rem+2.75rem)] md:pb-12 md:pt-[calc(74px+3.5rem)]">
-        <div className="grid grid-cols-1 items-end gap-10 lg:grid-cols-[minmax(0,1fr)_23rem] lg:gap-14">
-          <div className="min-w-0">
-            <Reveal>
-              <Tag invert>
-                {ACADEMY.city}, {ACADEMY.state} &nbsp;·&nbsp; Est. {ACADEMY.founded}
-              </Tag>
-            </Reveal>
+      {/* The masthead sits above this section, which is pulled up behind it, so
+          the top padding has to carry the masthead height too. The column then
+          centres its own content and parks the record strip on the floor. */}
+      <div className="wrap flex flex-1 flex-col pb-[clamp(1.5rem,3.5vh,2.5rem)] pt-[calc(4rem+clamp(1rem,3vh,2.5rem))] md:pt-[calc(74px+clamp(1rem,3vh,3rem))]">
+        <div className="flex flex-1 flex-col justify-center">
+          <div className="grid grid-cols-1 items-end gap-[clamp(1.1rem,3.4vh,2.5rem)] lg:grid-cols-[minmax(0,1fr)_23rem] lg:gap-14">
+            <div className="min-w-0">
+              <Reveal>
+                <Tag invert>
+                  {ACADEMY.city}, {ACADEMY.state} &nbsp;·&nbsp; Est. {ACADEMY.founded}
+                </Tag>
+              </Reveal>
 
-            <MaskHeading
-              as="h1"
-              text={'No ego.\nNo drama.\nJust Jiu-Jitsu.'}
-              className="t-mega mt-6 text-white"
-            />
+              <MaskHeading
+                as="h1"
+                text={'No ego.\nNo drama.\nJust Jiu-Jitsu.'}
+                className="t-hero mt-[clamp(1rem,2.5vh,1.5rem)] text-white"
+              />
 
-            <Reveal delay={120}>
-              {/* Smaller than the standfirst elsewhere, and directly under the
-                  headline, so the two read as one block. */}
-              <p className="mt-6 max-w-lg text-[0.98rem] leading-[1.62] text-white/72 md:text-[1.02rem]">
-                A Brazilian Jiu-Jitsu academy in north-west Austin where a first-timer and a
-                world champion warm up in the same line. Beginners are the point, not an
-                afterthought.
-              </p>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <Btn onClick={openModal}>Book a free trial</Btn>
-                <Btn href="/schedule" variant="ghost-invert" icon="calendar">
-                  See the schedule
-                </Btn>
-              </div>
+              <Reveal delay={120}>
+                {/* Smaller than the standfirst elsewhere, and directly under the
+                    headline, so the two read as one block. */}
+                <p className="mt-[clamp(0.85rem,2.2vh,1.5rem)] max-w-lg text-[0.9rem] leading-[1.55] text-white/72 md:text-[1.02rem] md:leading-[1.6]">
+                  A Brazilian Jiu-Jitsu academy in north-west Austin where a first-timer and a
+                  world champion warm up in the same line. Beginners are the point, not an
+                  afterthought.
+                </p>
+                <div className="mt-[clamp(1.25rem,3vh,2rem)] flex flex-wrap gap-2.5 sm:gap-3">
+                  <Btn onClick={openModal} className="!px-4 sm:!px-6">
+                    Book a free trial
+                  </Btn>
+                  <Btn
+                    href="/schedule"
+                    variant="ghost-invert"
+                    icon="calendar"
+                    className="!px-4 sm:!px-6"
+                  >
+                    Schedule
+                  </Btn>
+                </div>
+              </Reveal>
+            </div>
+
+            <Reveal delay={180} className="min-w-0 lg:justify-self-stretch">
+              <GoogleRating />
             </Reveal>
           </div>
-
-          <Reveal delay={180} className="min-w-0 lg:justify-self-stretch">
-            <GoogleRating />
-          </Reveal>
         </div>
 
-        {/* The record strip, on the same dark ground. */}
-        <Rule invert className="mt-12 md:mt-14" />
-        <dl className="grid grid-cols-2 gap-x-8 gap-y-7 pt-7 md:grid-cols-4">
-          {[
-            { v: <Counter to={PROOF.students} suffix="+" />, l: 'Students on the mats' },
-            { v: <Counter to={PROOF.yearsCoaching} suffix=" yr" />, l: 'Coaching, since 1996' },
-            { v: 'UFC BJJ', l: 'Champion coached here' },
-            { v: <Counter to={31} />, l: 'Classes every week' },
-          ].map((s, i) => (
-            <Reveal key={i} delay={i * 70}>
-              <dt className="label mb-3 text-white/35">{String(i + 1).padStart(2, '0')}</dt>
-              <dd>
-                <span className="display-line t-sub nums block text-white">{s.v}</span>
-                <span className="t-body mt-1.5 block text-white/60">{s.l}</span>
-              </dd>
-            </Reveal>
-          ))}
-        </dl>
+        {/* The record strip, on the floor of the first screen. */}
+        <div className="mt-[clamp(1.75rem,4vh,3.5rem)]">
+          <Rule invert />
+          <dl className="grid grid-cols-2 gap-x-8 gap-y-[clamp(1rem,2.5vh,1.75rem)] pt-[clamp(1.25rem,3vh,1.75rem)] md:grid-cols-4">
+            {[
+              { v: <Counter to={PROOF.students} suffix="+" />, l: 'Students on the mats' },
+              { v: <Counter to={PROOF.yearsCoaching} suffix=" yr" />, l: 'Coaching, since 1996' },
+              { v: 'UFC BJJ', l: 'Champion coached here' },
+              { v: <Counter to={31} />, l: 'Classes every week' },
+            ].map((s, i) => (
+              <Reveal key={i} delay={i * 70}>
+                <dt className="label mb-2.5 text-white/35">{String(i + 1).padStart(2, '0')}</dt>
+                <dd>
+                  <span className="display-line t-sub nums block text-white">{s.v}</span>
+                  <span className="mt-1.5 block text-[0.9rem] leading-[1.5] text-white/60">
+                    {s.l}
+                  </span>
+                </dd>
+              </Reveal>
+            ))}
+          </dl>
+        </div>
       </div>
     </section>
   )
