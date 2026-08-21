@@ -52,10 +52,15 @@ export function DragRail({
     active: false,
     startX: 0,
     startScroll: 0,
+    startIndex: 0,
     lastX: 0,
     lastT: 0,
     velocity: 0,
     travelled: 0,
+    /** +1 when the content was pulled left (moving forward), -1 the other way. */
+    dir: 0,
+    /** Set on release; the click that follows a drag consumes this flag. */
+    swallowClick: false,
     frame: 0,
   })
 
@@ -64,24 +69,37 @@ export function DragRail({
     return el ? (Array.from(el.querySelectorAll<HTMLElement>(itemSelector)) as HTMLElement[]) : []
   }, [itemSelector])
 
-  const measure = useCallback(() => {
+  /**
+   * Index of the frame closest to the rail's leading edge.
+   *
+   * Leading edge, not centre: `go()` aligns a frame to the left of the
+   * scrollport and the CSS snaps to `snap-start`, so measuring from the centre
+   * would pick one frame and land on another.
+   */
+  const nearest = useCallback(() => {
     const el = rail.current
-    if (!el) return
-    const max = el.scrollWidth - el.clientWidth
-    setProgress(max > 0 ? Math.min(1, Math.max(0, el.scrollLeft / max)) : 1)
-    const mid = el.scrollLeft + el.clientWidth / 2
+    if (!el) return 0
+    const list = items()
     let best = 0
     let bestDist = Infinity
-    items().forEach((node, i) => {
-      const centre = node.offsetLeft - el.offsetLeft + node.clientWidth / 2
-      const d = Math.abs(centre - mid)
+    list.forEach((node, i) => {
+      const left = node.offsetLeft - el.offsetLeft
+      const d = Math.abs(left - el.scrollLeft)
       if (d < bestDist) {
         bestDist = d
         best = i
       }
     })
-    setIndex(best)
+    return best
   }, [items])
+
+  const measure = useCallback(() => {
+    const el = rail.current
+    if (!el) return
+    const max = el.scrollWidth - el.clientWidth
+    setProgress(max > 0 ? Math.min(1, Math.max(0, el.scrollLeft / max)) : 1)
+    setIndex(nearest())
+  }, [nearest])
 
   /** Scroll so that `i` sits at the rail's left edge (or as close as it can). */
   const go = useCallback(
@@ -129,35 +147,121 @@ export function DragRail({
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const d = drag.current
 
-    /** Land on the nearest frame once the throw has run down. */
+    /**
+     * Land on the nearest frame once the throw has run down.
+     *
+     * Snapping stays OFF until the scroll has actually stopped. Restoring it
+     * first hands the moving rail to the browser mid-flight, which yanks it to
+     * a different frame — the glitch-then-jump-back.
+     */
     const settle = () => {
       const list = items()
-      if (!list.length) return
-      const mid = el.scrollLeft + el.clientWidth / 2
-      let best = 0
-      let bestDist = Infinity
-      list.forEach((node, i) => {
-        const centre = node.offsetLeft - el.offsetLeft + node.clientWidth / 2
-        const dist = Math.abs(centre - mid)
-        if (dist < bestDist) {
-          bestDist = dist
-          best = i
+      if (!list.length) {
+        el.style.scrollSnapType = ''
+        return
+      }
+
+      // At either end there is no frame left to align to, and forcing one would
+      // read as the rail refusing the gesture. Leave it where it is.
+      const max = el.scrollWidth - el.clientWidth
+      if (el.scrollLeft <= 1 || el.scrollLeft >= max - 1) {
+        el.style.scrollSnapType = ''
+        setIndex(nearest())
+        return
+      }
+
+      // Round in the direction the gesture was going, rather than to whichever
+      // frame is nearest in absolute terms. Absolute rounding makes a throw
+      // that coasts a little past a frame get pulled backwards into it, which
+      // is the visible "it jumps and comes back". Going with the gesture, the
+      // rail only ever finishes the movement it was already making.
+      let best = nearest()
+      if (d.dir !== 0) {
+        const from = el.scrollLeft
+        const lefts = list.map((n) => n.offsetLeft - el.offsetLeft)
+        // A frame is "reached" once the rail is within a third of it.
+        const slack = (list[best]?.clientWidth ?? 0) / 3
+        if (d.dir > 0) {
+          const ahead = lefts.findIndex((l) => l > from + slack)
+          best = ahead === -1 ? list.length - 1 : ahead
+        } else {
+          let behind = 0
+          lefts.forEach((l, i) => {
+            if (l < from - slack) behind = i
+          })
+          best = behind
         }
-      })
-      el.style.scrollSnapType = ''
-      go(best, !reduce)
+        // A deliberate nudge always moves at least one frame.
+        if (d.travelled > 24 && best === d.startIndex) {
+          best = Math.max(0, Math.min(list.length - 1, d.startIndex + d.dir))
+        }
+      }
+      const target = list[best]
+      if (!target) {
+        el.style.scrollSnapType = ''
+        return
+      }
+      const left = target.offsetLeft - el.offsetLeft
+      // Already there: give snapping straight back.
+      if (Math.abs(left - el.scrollLeft) < 2) {
+        el.style.scrollSnapType = ''
+        return
+      }
+      el.scrollTo({ left, behavior: reduce ? 'auto' : 'smooth' })
+      restoreSnapWhenStill()
+    }
+
+    /**
+     * Give snapping back only once the rail has been still for two frames.
+     * `scrollend` is the right event for this but is not everywhere yet, so a
+     * position watcher backs it up, with a hard ceiling so the rail can never
+     * be left un-snapping.
+     */
+    let restoreFrame = 0
+    let restoreTimer: ReturnType<typeof setTimeout> | undefined
+    const restoreSnapWhenStill = () => {
+      if (restoreFrame) cancelAnimationFrame(restoreFrame)
+      if (restoreTimer) clearTimeout(restoreTimer)
+      let last = el.scrollLeft
+      let still = 0
+      const check = () => {
+        const now = el.scrollLeft
+        still = Math.abs(now - last) < 0.5 ? still + 1 : 0
+        last = now
+        if (still >= 2) {
+          restoreFrame = 0
+          el.style.scrollSnapType = ''
+          return
+        }
+        restoreFrame = requestAnimationFrame(check)
+      }
+      restoreFrame = requestAnimationFrame(check)
+      restoreTimer = setTimeout(() => {
+        if (restoreFrame) cancelAnimationFrame(restoreFrame)
+        restoreFrame = 0
+        el.style.scrollSnapType = ''
+      }, 1200)
     }
 
     const glide = () => {
       d.frame = 0
       d.velocity *= FRICTION
       el.scrollLeft -= d.velocity
-      const atEdge = el.scrollLeft <= 0 || el.scrollLeft >= el.scrollWidth - el.clientWidth - 1
+      const atEdge =
+        el.scrollLeft <= 0 || el.scrollLeft >= el.scrollWidth - el.clientWidth - 1
       if (Math.abs(d.velocity) > 0.45 && !atEdge) {
         d.frame = requestAnimationFrame(glide)
-      } else {
-        settle()
+        return
       }
+      if (atEdge) {
+        // Arrived at the end under its own momentum: nothing to correct, and a
+        // correction here would look like the rail rebounding.
+        d.velocity = 0
+        el.style.scrollSnapType = ''
+        setIndex(nearest())
+        return
+      }
+      settle()
     }
 
     const onDown = (e: PointerEvent) => {
@@ -169,8 +273,10 @@ export function DragRail({
       d.lastX = e.clientX
       d.lastT = e.timeStamp
       d.startScroll = el.scrollLeft
+      d.startIndex = nearest()
       d.velocity = 0
       d.travelled = 0
+      d.dir = 0
       // Snapping has to be off while scrollLeft is written by hand, or the
       // browser pulls against every frame of the drag.
       el.style.scrollSnapType = 'none'
@@ -182,9 +288,15 @@ export function DragRail({
       if (!d.active) return
       const dx = e.clientX - d.startX
       d.travelled = Math.max(d.travelled, Math.abs(dx))
+      if (Math.abs(dx) > 6) d.dir = dx < 0 ? 1 : -1
       el.scrollLeft = d.startScroll - dx
       const dt = e.timeStamp - d.lastT
-      if (dt > 0) d.velocity = ((e.clientX - d.lastX) / dt) * 16 // px per frame
+      if (dt > 0) {
+        // Clamped: a sub-millisecond gap between two moves otherwise produces a
+        // velocity of hundreds of px per frame and the rail is flung off the end.
+        const v = ((e.clientX - d.lastX) / dt) * 16
+        d.velocity = Math.max(-58, Math.min(58, v))
+      }
       d.lastX = e.clientX
       d.lastT = e.timeStamp
       e.preventDefault()
@@ -195,17 +307,25 @@ export function DragRail({
       d.active = false
       setDragging(false)
       if (el.hasPointerCapture(e.pointerId)) el.releasePointerCapture(e.pointerId)
+      d.swallowClick = d.travelled > SNAP_THRESHOLD
       if (reduce || Math.abs(d.velocity) < 1.2) settle()
       else d.frame = requestAnimationFrame(glide)
     }
 
-    /** A throw must not also count as a click on the card it started from. */
+    /**
+     * A throw must not also count as a click on the card it started from.
+     *
+     * This consumes its own flag and leaves `travelled` alone. Clearing
+     * `travelled` here was a real bug: the click fires immediately after
+     * pointerup, before the first frame of the glide, so it wiped the very
+     * measurement `settle()` reads to decide whether the gesture meant to
+     * advance — and every mouse drag fell back to springing into place.
+     */
     const onClick = (e: MouseEvent) => {
-      if (d.travelled > SNAP_THRESHOLD) {
-        e.preventDefault()
-        e.stopPropagation()
-        d.travelled = 0
-      }
+      if (!d.swallowClick) return
+      d.swallowClick = false
+      e.preventDefault()
+      e.stopPropagation()
     }
 
     el.addEventListener('pointerdown', onDown)
@@ -220,8 +340,11 @@ export function DragRail({
       el.removeEventListener('pointercancel', onUp)
       el.removeEventListener('click', onClick, true)
       if (d.frame) cancelAnimationFrame(d.frame)
+      if (restoreFrame) cancelAnimationFrame(restoreFrame)
+      if (restoreTimer) clearTimeout(restoreTimer)
+      el.style.scrollSnapType = ''
     }
-  }, [go, items])
+  }, [items, nearest])
 
   const atStart = progress <= 0.001
   const atEnd = progress >= 0.999

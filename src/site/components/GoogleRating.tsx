@@ -19,6 +19,10 @@ import { Stars } from './ui'
 
 const HOLD_MS = 4800
 const FADE_MS = 320
+/** Longest quote the frame will show. Trimming on a word boundary here rather
+ *  than leaning on line-clamp alone makes the height deterministic at every
+ *  width, not just the one it was checked at. */
+const QUOTE_MAX = 104
 
 function GoogleG({ size = 18 }: { size?: number }) {
   return (
@@ -70,12 +74,19 @@ export function GoogleRating({ className = '' }: { className?: string }) {
   }, [])
 
   const review = REVIEWS[i]
-  // First sentence only: the card is evidence, the full reviews are further down.
-  const quote = review.text.split(/(?<=[.!?])\s/)[0]
+  // First sentence only — the card is evidence, the full reviews are further
+  // down the page. The five first sentences run from 30 to 166 characters, so
+  // without a cap the card grew by four lines on one of them and pushed the
+  // whole hero down with it.
+  const first = review.text.split(/(?<=[.!?])\s/)[0]
+  const quote =
+    first.length <= QUOTE_MAX
+      ? first
+      : `${first.slice(0, first.lastIndexOf(' ', QUOTE_MAX))}…`
 
   return (
     <figure
-      className={`w-full max-w-sm border border-white/15 bg-ink/72 p-6 backdrop-blur-md md:p-7 ${className}`}
+      className={`w-full max-w-sm border border-white/15 bg-ink/72 p-6 backdrop-blur-md md:p-7 lg:max-w-none ${className}`}
     >
       <div className="flex items-center justify-between gap-4">
         <span className="label-sm flex items-center gap-2.5 text-white/70">
@@ -95,13 +106,21 @@ export function GoogleRating({ className = '' }: { className?: string }) {
         </div>
       </div>
 
-      <blockquote
-        className="mt-6 min-h-[4.5rem] text-[0.92rem] leading-[1.55] text-white/80 transition-opacity"
+      {/* A fixed frame, in two parts of their own fixed height. The quote is
+          clamped as a belt-and-braces measure; the trim above is what actually
+          guarantees it. */}
+      <div
+        className="mt-6 transition-opacity"
         style={{ opacity: visible ? 1 : 0, transitionDuration: `${FADE_MS}ms` }}
       >
-        <p>&ldquo;{quote}&rdquo;</p>
-        <figcaption className="label-sm mt-3 text-white/45">{review.name}</figcaption>
-      </blockquote>
+        {/* Fixed height, contents centred: the five quotes run one to three
+            lines, and centring shares the slack instead of leaving a hole above
+            the attribution on the short ones. */}
+        <blockquote className="flex h-[4.35rem] items-center overflow-hidden text-[0.92rem] leading-[1.55] text-white/80">
+          <p className="line-clamp-3">&ldquo;{quote}&rdquo;</p>
+        </blockquote>
+        <figcaption className="label-sm mt-2.5 h-[0.7rem] text-white/45">{review.name}</figcaption>
+      </div>
 
       <div className="mt-6 flex items-center justify-between gap-4 border-t border-white/12 pt-5">
         <Faces />

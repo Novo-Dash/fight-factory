@@ -147,18 +147,47 @@ without any of the component's code running. On top of that it adds what a mouse
 cannot otherwise do — press-and-drag with momentum, and a magnetic settle onto
 the nearest frame when the throw runs down.
 
-Two details are load-bearing:
+Three details are load-bearing:
 
 - **Scroll snapping is switched off for the duration of a drag.** Left on, the
   browser pulls against every `scrollLeft` write and the rail stutters.
 - **A drag that travelled more than a few pixels swallows the click after it**,
-  or throwing the rail by a card would also open that card. No rail card is a
-  link today, so nothing exercises this yet — keep it if one becomes a link.
+  or throwing the rail by a card would also open that card. It does that through
+  a flag of its own and must never clear `travelled`: the click fires
+  immediately after `pointerup`, before the first frame of the glide, so
+  clearing it there wiped the measurement the settle reads and every mouse drag
+  fell back to springing into place.
+- **The settle rounds in the direction of the gesture**, not to whichever frame
+  is nearest in absolute terms, and it measures from the frame's leading edge
+  because `go()` aligns left and the CSS snaps to `snap-start`. Absolute
+  rounding, or measuring from the centre while aligning to the left, is what
+  makes a throw coast past a frame and get yanked backwards into it — the
+  "it glitches and goes back". Snapping is also handed back only once the rail
+  has been still for two frames; restoring it mid-flight lets the browser grab
+  the moving rail and pull it somewhere else. Verified by throwing each rail and
+  checking the rebound against the frame width: 0px on all six cases.
 
 The programme section uses `components/ExpandRail.tsx` instead: five compressed
 panels that trade width, so five rooms cost one screen rather than two. Below
 `md` there is no hover to lean on, so the panels stack and open on tap — never
 make a phone user guess at a hover.
+
+⚠️ **The hero's review card must live in a fixed track and a fixed frame.**
+The five quotes it cycles through run from 30 to 166 characters. Two separate
+things moved the page because of that, and only the first is obvious:
+
+- The quote block resized the card. It now has a fixed height with the quote
+  centred in it, and the quote is trimmed on a word boundary at 104 characters
+  rather than relying on `line-clamp` alone, so the height is deterministic at
+  every width instead of only the one it was checked at.
+- **The card's grid track was `auto`.** An `auto` track resolves to the
+  max-content of its contents, so a short quote shrank the card's column, the
+  headline's `1fr` column grew, and the headline reflowed from four lines to
+  three — moving the hero by a whole line even though the card itself never
+  changed height. The track is pinned at `23rem`.
+
+Checked by watching card, hero and document height across every quote at seven
+widths: one value each.
 
 ## Design notes
 

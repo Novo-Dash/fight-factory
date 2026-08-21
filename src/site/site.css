@@ -151,9 +151,9 @@
    Deliberately extreme: an 11px letterspaced label against display sizes that
    run past 130px. The distance between the two IS the design. */
 @utility t-mega {
-  font-size: clamp(2.45rem, 6.4vw, 5.6rem);
-  line-height: 0.87;
-  letter-spacing: -0.026em;
+  font-size: clamp(2.15rem, 5.1vw, 4.35rem);
+  line-height: 0.9;
+  letter-spacing: -0.024em;
 }
 @utility t-display {
   font-size: clamp(1.95rem, 4vw, 3.4rem);

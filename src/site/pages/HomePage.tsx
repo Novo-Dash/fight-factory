@@ -66,7 +66,7 @@ function Hero() {
       {/* The masthead sits above this section, which is pulled up behind it,
           so the top padding has to carry the masthead height too. */}
       <div className="wrap pb-10 pt-[calc(4rem+2.75rem)] md:pb-12 md:pt-[calc(74px+3.5rem)]">
-        <div className="grid grid-cols-1 items-end gap-10 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-14">
+        <div className="grid grid-cols-1 items-end gap-10 lg:grid-cols-[minmax(0,1fr)_23rem] lg:gap-14">
           <div className="min-w-0">
             <Reveal>
               <Tag invert>
@@ -97,7 +97,7 @@ function Hero() {
             </Reveal>
           </div>
 
-          <Reveal delay={180} className="lg:justify-self-end">
+          <Reveal delay={180} className="min-w-0 lg:justify-self-stretch">
             <GoogleRating />
           </Reveal>
         </div>
