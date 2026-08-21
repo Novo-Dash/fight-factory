@@ -58,19 +58,39 @@ for (const route of routes) {
 
   const report = await page.evaluate(() => {
     const de = document.documentElement
-    const overflow = []
-    if (de.scrollWidth > de.clientWidth + 1) {
-      for (const el of document.querySelectorAll('body *')) {
-        const r = el.getBoundingClientRect()
-        if (r.width === 0) continue
-        if (r.right > de.clientWidth + 2 || r.left < -2) {
-          overflow.push(
-            `${el.tagName.toLowerCase()}.${String(el.className).slice(0, 60)} → ${Math.round(r.left)}…${Math.round(r.right)}`,
-          )
-        }
-        if (overflow.length > 6) break
+    const vw = de.clientWidth
+
+    // The page shell clips sideways so that sticky keeps working, which means
+    // horizontal overflow never appears as document scrollWidth — it is just
+    // silently guillotined. So look for boxes whose right edge is past the
+    // viewport.
+    //
+    // The distinction that matters: is the overflow CONTAINED by something that
+    // scrolls or clips it on purpose? A carousel card, a wide schedule grid and
+    // an overscanned parallax image all sit inside their own scroller or their
+    // own overflow-hidden frame, and are fine. What is NOT fine is a box that
+    // nothing contains except the shell's clip — that is text being cut off with
+    // no way to reach it, and it is invisible to any check that watches
+    // scrollWidth alone.
+    const containedByOwnFrame = (el) => {
+      for (let n = el.parentElement; n && n.id !== 'root'; n = n.parentElement) {
+        const ox = getComputedStyle(n).overflowX
+        if (ox === 'auto' || ox === 'scroll' || ox === 'hidden' || ox === 'clip') return true
       }
+      return false
     }
+
+    const overflow = []
+    for (const el of document.querySelectorAll('body *')) {
+      const r = el.getBoundingClientRect()
+      if (r.width === 0 || r.height === 0) continue
+      if (r.right <= vw + 2 && r.left >= -2) continue
+      if (containedByOwnFrame(el)) continue
+      overflow.push(
+        `${el.tagName.toLowerCase()}.${String(el.className).slice(0, 58)} → ${Math.round(r.left)}…${Math.round(r.right)} (vw ${vw})`,
+      )
+    }
+
     const invisible = []
     for (const el of document.querySelectorAll('.rv, .clip-in, .mask-head')) {
       const cs = getComputedStyle(el)
@@ -86,8 +106,9 @@ for (const route of routes) {
     ).length
     return {
       scrollWidth: de.scrollWidth,
-      clientWidth: de.clientWidth,
-      overflow,
+      clientWidth: vw,
+      overflow: overflow.slice(0, 8),
+      overflowCount: overflow.length,
       invisible,
       dimLines: lines,
       title: document.title,
@@ -99,7 +120,7 @@ for (const route of routes) {
   await page.screenshot({ path: `${OUT}/${width}${name}.png`, fullPage: full })
 
   const issues = [
-    report.overflow.length ? `OVERFLOW ${report.scrollWidth}>${report.clientWidth}` : '',
+    report.overflowCount ? `CLIPPED ${report.overflowCount} box(es) past the viewport` : '',
     report.invisible.length ? `INVISIBLE ${report.invisible.length}` : '',
     report.dimLines ? `DIM LINES ${report.dimLines}` : '',
     report.h1 !== 1 ? `H1 COUNT ${report.h1}` : '',

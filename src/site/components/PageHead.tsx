@@ -25,7 +25,7 @@ export function PageHead({
       <Reveal>
         <Tag>{tag}</Tag>
       </Reveal>
-      <div className="mt-7 grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-end lg:gap-14">
+      <div className="mt-7 grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-end lg:gap-14">
         <MaskHeading as="h1" text={title} className="t-mega min-w-0" />
         {standfirst ? (
           <Reveal delay={110}>

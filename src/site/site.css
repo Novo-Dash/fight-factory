@@ -374,6 +374,9 @@
   background: var(--color-red);
   color: #fff;
   --icon-accent: #fff;
+  /* The panel that wipes up is ink, so the label has to stay white for the
+     whole interaction — it must never inherit its way to a dark-on-dark frame. */
+  &:hover, &:focus-visible { color: #fff; }
   &::before {
     content: "";
     position: absolute;
@@ -389,6 +392,7 @@
 @utility btn-ink {
   background: var(--color-ink);
   color: var(--color-shell);
+  &:hover, &:focus-visible { color: #fff; --icon-accent: #fff; }
   &::before {
     content: "";
     position: absolute;
@@ -444,9 +448,13 @@
     display: block;
     transition: transform 0.42s var(--ease-out-quint);
   }
+  /* One line BELOW the original, not on top of it. Both then travel up by one
+     line: the first leaves, the second takes its place. */
   & > span:last-child {
     position: absolute;
-    inset: 0;
+    left: 0;
+    top: 100%;
+    width: 100%;
   }
 }
 .btn:hover .btn-roll > span,
@@ -502,6 +510,53 @@
     object-fit: cover;
   }
 }
+
+
+/* ══ Rails ═══════════════════════════════════════════════════════════════
+   A draggable rail. The scrollbar is hidden because the arrows and the
+   progress bar already say where you are, the ends are feathered so a frame
+   leaves the measure instead of being guillotined by it, and the cursor states
+   advertise that the thing can be grabbed. */
+@utility rail {
+  scrollbar-width: none;
+  cursor: grab;
+  scroll-snap-type: x proximity;
+  overscroll-behavior-x: contain;
+  &::-webkit-scrollbar { display: none; }
+  &.is-dragging {
+    cursor: grabbing;
+    scroll-snap-type: none;
+    user-select: none;
+  }
+  /* Media inside a rail must not start the browser's own image drag. */
+  & img { -webkit-user-drag: none; user-select: none; }
+}
+
+/* Feathered ends. Applied to the rail's wrapper, not the scroller, so the mask
+   does not travel with the content. */
+@utility fade-x {
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 var(--fade-in, 5%),
+    #000 calc(100% - var(--fade-out, 9%)),
+    transparent 100%
+  );
+}
+@utility fade-x-end {
+  mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 9%), transparent 100%);
+}
+
+/* A frame in a rail lifts under the cursor, so the rail answers the pointer
+   before it is grabbed. Suppressed while dragging: the card under the finger
+   should not be growing as it is thrown. */
+@utility rail-card {
+  transition:
+    transform 0.45s var(--ease-out-quint),
+    box-shadow 0.45s var(--ease-out-quint);
+  &:hover { transform: translateY(-6px); }
+}
+.rail.is-dragging .rail-card:hover { transform: none; }
 
 /* ══ Marquee ═════════════════════════════════════════════════════════════ */
 @keyframes band-scroll {

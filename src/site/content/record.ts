@@ -89,3 +89,54 @@ export const TICKER = [
   'ADCC competitors on the mat',
   'Est. Austin 2013',
 ]
+
+/**
+ * The academy's milestones. Every year here is one the academy states itself in
+ * Rodrigo's biography — nothing is dated by inference. The UFC BJJ title has no
+ * published date on their site, so it is marked "Now" rather than guessed.
+ */
+export interface Milestone {
+  year: string
+  title: string
+  text: string
+  photo: string
+  alt: string
+}
+
+export const MILESTONES: Milestone[] = [
+  {
+    year: '1996',
+    title: 'First class',
+    text: 'Rodrigo begins training in Rio de Janeiro under Ricardo Holanda “Ricardão”, where he earns his blue belt.',
+    photo: '/site/rail/backlit.webp',
+    alt: 'A gi lit from behind at the edge of the mat',
+  },
+  {
+    year: '2005',
+    title: 'Black belt',
+    text: 'Awarded by Léo Vieira — multiple-time ADCC and World Champion, and one of the most accomplished athletes in the sport.',
+    photo: '/site/home/rodrigo-mat.webp',
+    alt: 'Rodrigo Cabral in his black gi',
+  },
+  {
+    year: '2013',
+    title: 'Austin',
+    text: 'Fight Factory Jiu Jitsu opens on Research Boulevard, after teaching stints in London, Russia, Singapore, Italy, Sweden and Spain.',
+    photo: '/site/facility/mat-a.webp',
+    alt: 'The main mat at the Austin academy',
+  },
+  {
+    year: '2021',
+    title: 'Home-grown black belt',
+    text: 'William Tackett receives his black belt from Rodrigo, four years after walking in as a blue belt.',
+    photo: '/site/team/william-tackett.webp',
+    alt: 'William Tackett in his black gi',
+  },
+  {
+    year: 'Now',
+    title: 'UFC BJJ champion',
+    text: 'Andrew Tackett — coached here since he was a child — holds the UFC BJJ title, alongside three Jiu-Jitsu world titles.',
+    photo: '/site/home/ufc-bjj.webp',
+    alt: 'Andrew Tackett with the UFC BJJ championship belt',
+  },
+]

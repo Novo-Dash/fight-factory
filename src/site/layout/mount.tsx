@@ -11,7 +11,7 @@ import { captureAttribution } from '../../booking/attribution'
  * so a visitor who arrives from an ad and books from the site still carries
  * their click ids into the CRM.
  */
-export function mountPage(current: string, page: ReactNode): void {
+export function mountPage(current: string, page: ReactNode, overDark = false): void {
   captureAttribution()
 
   const root = document.getElementById('root')
@@ -19,7 +19,9 @@ export function mountPage(current: string, page: ReactNode): void {
 
   createRoot(root).render(
     <StrictMode>
-      <SiteShell current={current}>{page}</SiteShell>
+      <SiteShell current={current} overDark={overDark}>
+        {page}
+      </SiteShell>
     </StrictMode>,
   )
 }

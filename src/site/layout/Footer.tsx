@@ -1,7 +1,7 @@
 import { ACADEMY, HOURS, NAV, PROOF } from '../content/site'
 import { Icon } from '../components/Icon'
-import { MiniMap } from '../components/MiniMap'
-import { Diamond, Rule } from '../components/ui'
+import { MapEmbed } from '../components/MapEmbed'
+import { Rule } from '../components/ui'
 
 /**
  * The colophon. Straight to the point: where the academy is, when it is open,
@@ -12,7 +12,7 @@ export function Footer() {
   return (
     <footer className="vt-colophon bg-ink text-white">
       <div className="wrap py-16 md:py-20">
-        <div className="grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-16">
           {/* Left: identity and the record line */}
           <div>
             <img
@@ -49,28 +49,13 @@ export function Footer() {
             </a>
           </div>
 
-          {/* Right: the drawn map */}
-          <div className="border border-white/12 bg-ink-2 p-5 md:p-7">
-            <div className="label-sm mb-5 flex items-center gap-2 text-white/45">
-              <Diamond className="text-red" />
-              North-west Austin
-            </div>
-            <MiniMap className="[--color-rule:rgba(255,255,255,0.22)] [--color-shell-2:rgba(255,255,255,0.045)] [--color-muted:rgba(255,255,255,0.4)] [--color-ink:#fff] [--color-body:rgba(255,255,255,0.55)]" />
-            <a
-              href={ACADEMY.mapsUrl}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="label-sm mt-5 inline-flex items-center gap-2 text-white/70 underline decoration-white/25 transition-colors hover:text-white"
-            >
-              <Icon name="pin" size={15} />
-              Open in Google Maps
-            </a>
-          </div>
+          {/* Right: the real map. */}
+          <MapEmbed invert />
         </div>
 
         <Rule invert className="mt-14" />
 
-        <div className="grid gap-10 pt-10 md:grid-cols-4">
+        <div className="grid grid-cols-1 gap-10 pt-10 md:grid-cols-4">
           <div>
             <h3 className="label mb-5 text-white/40">Visit</h3>
             <address className="t-body not-italic text-white/75">

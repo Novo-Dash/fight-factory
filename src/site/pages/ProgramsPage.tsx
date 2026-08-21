@@ -41,7 +41,7 @@ function ProgramBlock({
       <Chapter n={n} label={label} />
 
       <div
-        className={`mt-10 grid gap-10 lg:gap-16 ${
+        className={`mt-10 grid grid-cols-1 gap-10 lg:gap-16 ${
           flip ? 'lg:grid-cols-[1fr_0.95fr]' : 'lg:grid-cols-[0.95fr_1fr]'
         }`}
       >
@@ -62,7 +62,7 @@ function ProgramBlock({
           </Reveal>
         </div>
 
-        <div className={`photo-row grid gap-4 ${flip ? 'lg:order-1' : ''}`}>
+        <div className={`photo-row grid grid-cols-1 gap-4 ${flip ? 'lg:order-1' : ''}`}>
           {photos.map((p, i) => (
             <Uncover
               key={p.src}
@@ -108,7 +108,7 @@ function StartHere() {
     <section className="bg-ink text-white">
       <div className="wrap py-20 md:py-28">
         <Chapter n="03" label="Start here" invert />
-        <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_0.85fr] lg:items-end lg:gap-16">
+        <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)] lg:items-end lg:gap-16">
           <MaskHeading text={'Which class\nis yours'} className="t-display text-white" />
           <Reveal>
             <p className="standfirst max-w-md text-white/60">
@@ -166,7 +166,7 @@ function FirstVisit() {
 
       <MaskHeading text={'Three steps, and\nnone of them cost\nanything'} className="t-display mt-9 max-w-4xl" />
 
-      <ol className="mt-14 grid gap-x-12 gap-y-2 md:grid-cols-3">
+      <ol className="mt-14 grid grid-cols-1 gap-x-12 gap-y-2 md:grid-cols-3">
         {FIRST_CLASS.map((s, i) => (
           <Reveal as="li" key={s.n} delay={i * 80}>
             <div className="record-row grid-cols-1">

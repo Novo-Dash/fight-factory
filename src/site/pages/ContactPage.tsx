@@ -6,7 +6,7 @@ import { PageHead } from '../components/PageHead'
 import { Reveal, Uncover } from '../components/motion'
 import { Chapter, Diamond, Pending, Rule } from '../components/ui'
 import { Icon } from '../components/Icon'
-import { MiniMap } from '../components/MiniMap'
+import { MapEmbed } from '../components/MapEmbed'
 import {
   ACADEMY,
   CONTACT_COPY,
@@ -63,7 +63,7 @@ export function ContactPage() {
 
       {/* ── The form is the point of the page, so it comes first. ────────── */}
       <section className="wrap py-16 md:py-20">
-        <div className="grid gap-10 lg:grid-cols-[1fr_1.05fr] lg:gap-14">
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-14">
           <div>
             <Chapter n="01" label="Book a free class" />
             <MaskHeading text={'Two steps.\nNo card,\nno catch.'} className="t-display mt-9" />
@@ -133,7 +133,7 @@ export function ContactPage() {
       <section className="bg-shell-2">
         <div className="wrap py-20 md:py-24">
           <Chapter n="02" label="Find the door" />
-          <div className="mt-10 grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:gap-14">
+          <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-14">
             <div>
               <MaskHeading text={'North-west\nAustin, off\nUS-183'} className="t-display" />
               <Reveal delay={80}>
@@ -156,9 +156,7 @@ export function ContactPage() {
               </Reveal>
             </div>
             <Reveal delay={60}>
-              <div className="border border-rule bg-shell p-5 md:p-8">
-                <MiniMap />
-              </div>
+              <MapEmbed />
             </Reveal>
           </div>
 
@@ -181,7 +179,7 @@ export function ContactPage() {
         <Chapter n="03" label="Before you come in" />
         <MaskHeading text={'Common\nquestions'} className="t-display mt-9" />
 
-        <dl className="mt-12 grid gap-x-16 lg:grid-cols-2">
+        <dl className="mt-12 grid grid-cols-1 gap-x-16 lg:grid-cols-2">
           {FAQ.map((f, i) => (
             <Reveal key={f.q} delay={i * 45}>
               <div className="record-row grid-cols-1">

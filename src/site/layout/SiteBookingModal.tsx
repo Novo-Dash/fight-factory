@@ -4,6 +4,7 @@ import { BookingForm } from '../../booking/BookingForm'
 import { trackViewContent } from '../../booking/analytics'
 import { ACADEMY, PROOF, SITE_SOURCE } from '../content/site'
 import { Diamond } from '../components/ui'
+import { MaskHeading } from '../components/MaskHeading'
 
 /**
  * The site's shell around the SHARED booking form.
@@ -71,13 +72,7 @@ export function SiteBookingModal({ isOpen, onClose }: { isOpen: boolean; onClose
               height={56}
               className="h-7 w-auto"
             />
-            <h2 className="t-title mt-9 text-white">
-              Your first
-              <br />
-              class is
-              <br />
-              on us
-            </h2>
+            <MaskHeading text={'Your first\nclass is\non us'} className="t-title mt-9 text-white" />
             <p className="t-body mt-4 text-white/55">
               Pick a programme, then a real time from the academy&rsquo;s calendar.
             </p>

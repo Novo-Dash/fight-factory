@@ -91,6 +91,28 @@ export function Rule({ invert = false, className = '' }: { invert?: boolean; cla
   return <div aria-hidden="true" className={`rule-ticks ${invert ? 'rule-ticks-invert' : ''} ${className}`} />
 }
 
+/**
+ * A rating, not an ornament. Filled stars, because an outline reads as a
+ * decorative glyph rather than as "five out of five".
+ */
+export function Stars({
+  size = 13,
+  className = 'text-red',
+}: {
+  size?: number
+  className?: string
+}) {
+  return (
+    <span className={`flex items-center gap-1 ${className}`} aria-hidden="true">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <svg key={i} width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+          <path d="m12 2.6 2.85 5.98 6.35.88-4.68 4.5 1.16 6.44L12 17.2l-5.68 3.2 1.16-6.44-4.68-4.5 6.35-.88z" />
+        </svg>
+      ))}
+    </span>
+  )
+}
+
 /** The diamond off the wordmark — bullet, separator and datum mark. */
 export function Diamond({ className = 'text-red' }: { className?: string }) {
   return <span aria-hidden="true" className={`diamond ${className}`} />
@@ -204,11 +226,14 @@ export function Carousel({
   children,
   label,
   invert = false,
+  fade = false,
 }: {
   count: number
   children: ReactNode
   label: string
   invert?: boolean
+  /** Feather the ends, so a card leaves the measure instead of being cut. */
+  fade?: boolean
 }) {
   const track = useRef<HTMLDivElement>(null)
   const [index, setIndex] = useState(0)
@@ -259,13 +284,15 @@ export function Carousel({
 
   return (
     <div>
-      <div
-        ref={track}
-        className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-1 md:gap-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-        role="group"
-        aria-label={label}
-      >
-        {children}
+      <div className={fade ? 'fade-x-end' : undefined}>
+        <div
+          ref={track}
+          className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-1 md:gap-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          role="group"
+          aria-label={label}
+        >
+          {children}
+        </div>
       </div>
 
       <div className="mt-7 flex items-center gap-5">

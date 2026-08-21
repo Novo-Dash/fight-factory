@@ -12,7 +12,7 @@ import { Diamond } from '../components/ui'
  * light asset over a dark panel paints it black, which is the wrong way round
  * and easy to miss.
  */
-export function Header({ current }: { current: string }) {
+export function Header({ current, overDark = false }: { current: string; overDark?: boolean }) {
   const { openModal } = useModal()
   const [scrolled, setScrolled] = useState(false)
   const [menu, setMenu] = useState(false)
@@ -36,6 +36,11 @@ export function Header({ current }: { current: string }) {
     }
   }, [menu])
 
+  // The home page opens on a photograph, so at the top of that page the
+  // masthead sits on a dark ground and has to switch to its light artwork.
+  // Once the page has scrolled it is back over the shell either way.
+  const onDark = overDark && !scrolled
+
   return (
     <>
       <header
@@ -47,16 +52,20 @@ export function Header({ current }: { current: string }) {
       >
         <div className="wrap flex h-16 items-center justify-between gap-6 md:h-[74px]">
           <a href="/home" className="flex shrink-0 items-center" aria-label={`${ACADEMY.name} — home`}>
+            {/* Sized by WIDTH, not height. The dark and light wordmarks are
+                different artwork with different proportions (5.3:1 and 7.1:1),
+                so matching their heights makes one of them 50px wider than the
+                other — enough to push the masthead off the screen at 768px. */}
             <img
-              src="/site/brand/wordmark-ink.webp"
+              src={onDark ? '/site/brand/wordmark-light.webp' : '/site/brand/wordmark-ink.webp'}
               alt={ACADEMY.name}
-              width={548}
-              height={101}
-              className="h-[26px] w-auto md:h-[30px]"
+              width={onDark ? 400 : 548}
+              height={onDark ? 56 : 101}
+              className="h-auto w-[148px] md:w-[164px]"
             />
           </a>
 
-          <nav className="hidden items-center gap-1 md:flex" aria-label="Main">
+          <nav className="hidden items-center md:flex md:gap-0 lg:gap-1" aria-label="Main">
             {NAV.map((item) => {
               const active = item.href === current
               return (
@@ -64,8 +73,14 @@ export function Header({ current }: { current: string }) {
                   key={item.href}
                   href={item.href}
                   aria-current={active ? 'page' : undefined}
-                  className={`label relative px-3.5 py-3 transition-colors duration-200 ${
-                    active ? 'text-ink' : 'text-body hover:text-ink'
+                  className={`label relative px-2.5 py-3 transition-colors duration-200 lg:px-3.5 ${
+                    onDark
+                      ? active
+                        ? 'text-white'
+                        : 'text-white/65 hover:text-white'
+                      : active
+                        ? 'text-ink'
+                        : 'text-body hover:text-ink'
                   }`}
                 >
                   {item.label}
@@ -83,7 +98,9 @@ export function Header({ current }: { current: string }) {
           <div className="flex items-center gap-2">
             <a
               href={ACADEMY.phoneHref}
-              className="label hidden items-center gap-2 px-3 py-3 text-body transition-colors duration-200 hover:text-ink lg:inline-flex"
+              className={`label hidden items-center gap-2 px-3 py-3 transition-colors duration-200 lg:inline-flex ${
+                onDark ? 'text-white/70 hover:text-white [--icon-accent:currentColor]' : 'text-body hover:text-ink'
+              }`}
             >
               <Icon name="phone" size={16} />
               <span className="nums">{ACADEMY.phone}</span>
@@ -91,7 +108,7 @@ export function Header({ current }: { current: string }) {
             <button
               type="button"
               onClick={openModal}
-              className="btn btn-red hidden !min-h-[44px] !px-5 !py-3 sm:inline-flex"
+              className="btn btn-red hidden !min-h-[44px] whitespace-nowrap !px-5 !py-3 sm:inline-flex"
             >
               <span className="btn-roll">
                 <span>Free trial</span>
@@ -103,7 +120,9 @@ export function Header({ current }: { current: string }) {
               onClick={() => setMenu(true)}
               aria-label="Open menu"
               aria-expanded={menu}
-              className="flex h-11 w-11 items-center justify-center border border-rule text-ink md:hidden"
+              className={`flex h-11 w-11 items-center justify-center border md:hidden ${
+                onDark ? 'border-white/30 text-white' : 'border-rule text-ink'
+              }`}
             >
               <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
                 <path d="M2 5h16M2 10h16M2 15h11" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" fill="none" />

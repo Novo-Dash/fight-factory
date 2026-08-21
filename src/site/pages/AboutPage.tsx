@@ -34,7 +34,7 @@ function Founder() {
     <section className="wrap py-20 md:py-28">
       <Chapter n="02" label="Head instructor & founder" />
 
-      <div className="mt-10 grid gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:gap-16">
+      <div className="mt-10 grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.18fr)] lg:gap-16">
         <div>
           <Uncover>
             <img
@@ -115,7 +115,7 @@ function Values() {
         <Chapter n="03" label="Why it’s important" invert />
         <MaskHeading text={'What the mat\ngives back'} className="t-display mt-9 text-white" />
 
-        <ol className="mt-14 grid gap-x-16 lg:grid-cols-2">
+        <ol className="mt-14 grid grid-cols-1 gap-x-16 lg:grid-cols-2">
           {VALUES.map((v, i) => (
             <Reveal as="li" key={v.name} delay={i * 55}>
               <div className="record-row record-row-invert grid-cols-[auto_1fr] items-start">
@@ -146,7 +146,7 @@ function Staff() {
     <section className="wrap py-20 md:py-28">
       <Chapter n="04" label="Our trainers" />
 
-      <div className="mt-10 grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] lg:items-start lg:gap-16">
+      <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] lg:items-start lg:gap-16">
         <MaskHeading text={'Coached by\npeople who\nstill compete'} className="t-display" />
         <div className="copy t-body max-w-md text-body">
           {TEAM_COPY.map((p, i) => (
@@ -194,7 +194,7 @@ function Staff() {
                 </button>
 
                 {isOpen ? (
-                  <div className="mt-8 grid gap-8 md:grid-cols-[0.34fr_0.66fr] md:gap-12">
+                  <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-[minmax(0,0.34fr)_minmax(0,0.66fr)] md:gap-12">
                     <div>
                       {c.photo ? (
                         <img
@@ -261,7 +261,7 @@ function Results() {
 
         <MaskHeading text={'The record keeps\ngetting written'} className="t-display mt-9 max-w-3xl" />
 
-        <ul className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <ul className="mt-14 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {RESULTS.map((r, i) => (
             <Reveal as="li" key={r.event} delay={i * 60}>
               <article className="flex h-full flex-col border border-rule bg-shell">
@@ -297,7 +297,7 @@ function Approach() {
     <>
       <section className="wrap py-20 md:py-28">
         <Chapter n="06" label="How we train" />
-        <div className="mt-10 grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:gap-16">
+        <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-16">
           <MaskHeading text={'Self-defence,\nnot aggression'} className="t-display" />
           <div className="copy t-lead max-w-2xl">
             <Reveal as="p">{APPROACH_COPY}</Reveal>

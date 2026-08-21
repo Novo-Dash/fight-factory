@@ -228,7 +228,7 @@ export function SchedulePage() {
       <section className="bg-ink text-white">
         <div className="wrap py-20 md:py-24">
           <Chapter n="02" label="Book a slot" invert />
-          <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_0.9fr] lg:items-end lg:gap-16">
+          <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)] lg:items-end lg:gap-16">
             <MaskHeading text={'Pick a class,\npick a time'} className="t-display text-white" />
             <Reveal>
               <p className="standfirst text-white/60">
@@ -250,7 +250,7 @@ export function SchedulePage() {
       {/* ── The academy's own words about training here ──────────────────── */}
       <section className="wrap py-20 md:py-24">
         <Chapter n="03" label="Start your journey today" />
-        <div className="mt-10 grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-14">
+        <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-14">
           <MaskHeading text={'Everyone has\nthe capacity\nfor success'} className="t-display" />
           <div className="copy t-lead max-w-2xl">
             <Reveal as="p">{SCHEDULE_COPY}</Reveal>

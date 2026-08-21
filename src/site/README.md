@@ -138,6 +138,28 @@ Rendered as visible `Pending` markers, never invented:
 | GA4 Measurement ID | the five `.html` documents |
 | A photograph of the women's class itself | `pages/HomePage.tsx` bento tile |
 
+## Carousels
+
+Three sections use `components/DragRail.tsx`: the academy timeline, the photo
+strip under it and the gallery in section 05. Native horizontal scrolling does
+the moving, so a trackpad, a touch swipe, the arrow keys and the scrollbar work
+without any of the component's code running. On top of that it adds what a mouse
+cannot otherwise do — press-and-drag with momentum, and a magnetic settle onto
+the nearest frame when the throw runs down.
+
+Two details are load-bearing:
+
+- **Scroll snapping is switched off for the duration of a drag.** Left on, the
+  browser pulls against every `scrollLeft` write and the rail stutters.
+- **A drag that travelled more than a few pixels swallows the click after it**,
+  or throwing the rail by a card would also open that card. No rail card is a
+  link today, so nothing exercises this yet — keep it if one becomes a link.
+
+The programme section uses `components/ExpandRail.tsx` instead: five compressed
+panels that trade width, so five rooms cost one screen rather than two. Below
+`md` there is no hover to lean on, so the panels stack and open on tap — never
+make a phone user guess at a hover.
+
 ## Design notes
 
 Direction: **"THE RECORD"** — the academy's differentiator is a written
@@ -172,6 +194,34 @@ compare `@utility` declarations in `site.css` against the built stylesheet.
 ⚠️ **The wordmark ships in two files and neither takes a CSS filter.**
 `brand/wordmark-ink.webp` is for light surfaces, `brand/wordmark-light.webp`
 for dark ones. `invert` on the light asset over a dark panel paints it black.
+The two are also **different artwork with different proportions** (5.3:1 and
+7.1:1), so the masthead sizes the wordmark by **width**, not height — matching
+their heights makes one of them 50px wider than the other, which was enough to
+push the masthead off the screen at 768px.
+
+⚠️ **A rolling label needs its duplicate one line BELOW, not on top.** The
+button hover moves both copies up by one line: the first leaves, the second
+arrives. With the duplicate at `inset: 0` both travel out of the window together
+and the button goes blank mid-hover — which is exactly how it first shipped.
+`.btn-red` and `.btn-ink` also state their hover colour explicitly, because the
+panel that wipes up behind the label is dark.
+
+⚠️ **Every grid needs a base column count, and it must use `minmax(0, …)`.**
+A grid with only `lg:grid-cols-…` gets one implicit `auto` track on small
+screens, and a grid item's default `min-width: auto` lets it grow to its
+min-content width. A rail of 15rem cards blew its column out to 1290px inside a
+353px measure, and `#root { overflow-x: clip }` — which the site needs so that
+`position: sticky` keeps working — hid the whole thing: no scrollbar, no
+document overflow, just body copy silently guillotined at the right edge on
+mobile. `grid-cols-1` is `repeat(1, minmax(0, 1fr))`, and the `minmax(0, …)` is
+what caps it.
+
+`shot.mjs` now catches this class of bug. It looks for boxes whose right edge is
+past the viewport and asks whether the overflow is **contained by something that
+scrolls or clips it on purpose** — a carousel card, the wide schedule grid, an
+overscanned parallax image all sit inside their own frame and are fine. A box
+that nothing contains except the shell's clip is the real defect. A checker that
+only watches `document.scrollWidth` will never see it.
 
 ## Local development
 

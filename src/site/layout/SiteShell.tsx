@@ -9,7 +9,16 @@ import { useScrollReveals } from '../components/scroll'
  * Graph — and every one of them mounts this shell. The browser cross-fades
  * between them through the view-transition rules in site.css.
  */
-export function SiteShell({ current, children }: { current: string; children: ReactNode }) {
+export function SiteShell({
+  current,
+  children,
+  overDark = false,
+}: {
+  current: string
+  children: ReactNode
+  /** The page opens on a photograph, so the masthead starts in its light artwork. */
+  overDark?: boolean
+}) {
   useScrollReveals()
 
   return (
@@ -21,8 +30,11 @@ export function SiteShell({ current, children }: { current: string; children: Re
         >
           Skip to content
         </a>
-        <Header current={current} />
-        <main id="main" className="flex-1">
+        <Header current={current} overDark={overDark} />
+        {/* A sticky masthead still occupies its space in the flow. When the page
+            opens on a photograph, pull the content up by exactly that height so
+            the image runs behind the masthead instead of starting under it. */}
+        <main id="main" className={`flex-1 ${overDark ? '-mt-16 md:-mt-[74px]' : ''}`}>
           {children}
         </main>
         <Footer />
